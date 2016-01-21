@@ -1,4 +1,4 @@
-package de.lebenshilfe_muenster.uk_gebaerden_muensterland;
+package de.lebenshilfe_muenster.uk_gebaerden_muensterland.sample;
 
 import android.content.Context;
 
@@ -7,12 +7,14 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.when;
 
 /**
- * Copyright (c) 2016 MatthiasTon
+ * Copyright (c) 2016 Matthias Tonhäuser
  * <p/>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +30,7 @@ import static org.mockito.Mockito.when;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 @RunWith(MockitoJUnitRunner.class)
-public class ClassUnderTestMockTest {
+public class MockedUnitTest {
 
     private static final String FAKE_STRING = "de.lebenshilfe_muenster.uk_gebaerden_muensterland";
 
@@ -39,7 +41,7 @@ public class ClassUnderTestMockTest {
     public void readStringFromContext_LocalizedString() {
         // Given a mocked Context injected into the object under test...
         when(mMockContext.getString(R.string.app_name)).thenReturn(FAKE_STRING);
-        ClassUnderTest myObjectUnderTest = new ClassUnderTest(mMockContext);
+        ClassUnderMockedUnitTest myObjectUnderTest = new ClassUnderMockedUnitTest(mMockContext);
 
         // ...when the string is returned from the object under test...
         String result = myObjectUnderTest.getAppName();

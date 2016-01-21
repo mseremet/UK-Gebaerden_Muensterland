@@ -3,7 +3,7 @@ package de.lebenshilfe_muenster.uk_gebaerden_muensterland;
 import org.apache.commons.lang3.Validate;
 
 /**
- * Copyright (c) 2016 MatthiasTon
+ * Copyright (c) 2016 Matthias Tonhäuser
  * <p/>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

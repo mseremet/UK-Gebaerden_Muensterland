@@ -10,7 +10,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 /**
- * Copyright (c) 2016 MatthiasTon
+ * Copyright (c) 2016 Matthias Tonhäuser
  * <p/>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +27,8 @@ import static org.hamcrest.core.Is.is;
  */
 public class SignTest {
 
+    public static final String FOOTBALL = "football";
+
     @Test(expected = NullPointerException.class)
     public void testNameCannotBeNull() {
         new Sign(null);
@@ -39,20 +41,20 @@ public class SignTest {
 
     @Test
     public void testObjectsAreEqual() {
-        final Sign footballOne = new Sign(SignTestFixture.FOOTBALL);
-        final Sign footballTwo = new Sign(SignTestFixture.FOOTBALL);
+        final Sign footballOne = new Sign(FOOTBALL);
+        final Sign footballTwo = new Sign(FOOTBALL);
         assertThat(footballOne, is(equalTo(footballTwo)));
     }
 
     @Test
     public void testToStringContainsName() {
-        final Sign football = new Sign(SignTestFixture.FOOTBALL);
-        assertThat(football.toString(),containsString(SignTestFixture.FOOTBALL));
+        final Sign football = new Sign(FOOTBALL);
+        assertThat(football.toString(),containsString(FOOTBALL));
     }
 
     @Test
     public void testGetName() {
-        final Sign football = new Sign(SignTestFixture.FOOTBALL);
-        assertThat(SignTestFixture.FOOTBALL, is(equalTo(football.getName())));
+        final Sign football = new Sign(FOOTBALL);
+        assertThat(FOOTBALL, is(equalTo(football.getName())));
     }
 }
