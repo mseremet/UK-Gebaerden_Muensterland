@@ -10,11 +10,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import de.lebenshilfe_muenster.uk_gebaerden_muensterland.MainActivity;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.MenuActivity;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
 
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -42,7 +41,7 @@ import static org.hamcrest.CoreMatchers.allOf;
 public class EspressoUITest {
 
     @Rule
-    public ActivityTestRule<MainActivity> mainActivityActivityTestRule = new ActivityTestRule<MainActivity>(MainActivity.class);
+    public ActivityTestRule<MenuActivity> mainActivityActivityTestRule = new ActivityTestRule<>(MenuActivity.class);
 
     @Test(timeout = 1000)
     public void clickFloatingActionButton() {
