@@ -5,19 +5,19 @@
         <item
             android:id="@+id/nav_sign_browser"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Browse signs" />
+            android:title="@string/browse_signs" />
         <item
             android:id="@+id/nav_sign_trainer"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Train signs" />
+            android:title="@string/train_signs" />
         <item
             android:id="@+id/nav_sign_info"
             android:icon="@drawable/ic_menu_share"
-            android:title="About signs" />
+            android:title="@string/about_signs" />
         <item
             android:id="@+id/nav_sign_settings"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Settings" />
+            android:title="@string/settings" />
     </group>
 
 </menu>

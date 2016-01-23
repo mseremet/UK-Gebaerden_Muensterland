@@ -5,4 +5,9 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string name="browse_signs">Browse signs</string>
+    <string name="train_signs">Train signs</string>
+    <string name="about_signs">About signs</string>
+    <string name="settings">Settings</string>
+    <string name="sign_browser">Sign Browser</string>
 </resources>

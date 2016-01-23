@@ -1,11 +1,10 @@
 package de.lebenshilfe_muenster.uk_gebaerden_muensterland;
 
-import android.support.test.espresso.action.ViewActions;
-import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
 
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,17 +12,13 @@ import org.junit.runner.RunWith;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
-import static android.support.test.espresso.matcher.ViewMatchers.withChild;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.allOf;
-import static org.hamcrest.CoreMatchers.describedAs;
 import static org.hamcrest.CoreMatchers.not;
 
 /**
@@ -44,30 +39,34 @@ import static org.hamcrest.CoreMatchers.not;
  */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class MenuActivityTest {
+public class MainActivityTest {
 
     @Rule
-    public ActivityTestRule<MenuActivity> menuActivityTestRule = new ActivityTestRule<>(MenuActivity.class);
+    public ActivityTestRule<MainActivity> menuActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
-    @Test(timeout = 3000)
+    // TODO: Check that the sign browser is displayed on app startup
+
+    @Test(timeout = 5000)
     public void testAllMenuItemsArePresent() {
         openNavigationDrawer();
-        onView(withText("Browse signs")).check(matches(allOf(isDisplayed(), isEnabled())));
-        onView(withText("Train signs")).check((matches(allOf(isDisplayed(), isEnabled()))));
-        onView(withText("About signs")).check((matches(allOf(isDisplayed(), isEnabled()))));
-        onView(withText("Settings")).check((matches(allOf(isDisplayed(), isEnabled()))));
+        onView(withText(R.string.browse_signs)).check(matches(allOf(isDisplayed(), isEnabled())));
+        onView(withText(R.string.train_signs)).check((matches(allOf(isDisplayed(), isEnabled()))));
+        onView(withText(R.string.about_signs)).check((matches(allOf(isDisplayed(), isEnabled()))));
+        onView(withText(R.string.settings)).check((matches(allOf(isDisplayed(), isEnabled()))));
         closeNavigationDrawer();
     }
 
     @Test(timeout = 3000)
     public void clickBrowseSignsButton() {
         openNavigationDrawer();
-        onView(withText("Browse signs")).perform(click());
-        onView(withText("Sign Browser")).check(matches(isDisplayed()));
+        onView(withText(R.string.browse_signs)).perform(click());
+        onView(withText(R.string.sign_browser)).check(matches(isDisplayed()));
     }
 
+    // TODO: Add tests for clicking the other navigation buttons here.
+
     private void openNavigationDrawer() {
-        onView(withContentDescription("Open navigation drawer")).perform(click());
+        onView(withContentDescription(R.string.navigation_drawer_open)).perform(click());
         onView(withId(R.id.nav_view)).check(matches(isDisplayed()));
     }
 

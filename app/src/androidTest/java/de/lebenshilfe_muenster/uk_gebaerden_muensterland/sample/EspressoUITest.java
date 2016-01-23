@@ -10,7 +10,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import de.lebenshilfe_muenster.uk_gebaerden_muensterland.MenuActivity;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.MainActivity;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -41,7 +41,7 @@ import static org.hamcrest.CoreMatchers.allOf;
 public class EspressoUITest {
 
     @Rule
-    public ActivityTestRule<MenuActivity> mainActivityActivityTestRule = new ActivityTestRule<>(MenuActivity.class);
+    public ActivityTestRule<MainActivity> mainActivityActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test(timeout = 1000)
     public void clickFloatingActionButton() {
