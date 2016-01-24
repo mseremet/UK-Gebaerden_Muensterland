@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="de.lebenshilfe_muenster.uk_gebaerden_muensterland">
-    <!-- minSdkVersion for the app is api 15, but uiautomator is only available in api 18++.-->
-    <!-- not needed right now
-    <uses-sdk tools:overrideLibrary="android.support.test.uiautomator.v18"/>
-    -->
-</manifest>

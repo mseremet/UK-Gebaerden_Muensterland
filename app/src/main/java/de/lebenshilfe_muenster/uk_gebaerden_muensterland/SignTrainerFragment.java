@@ -23,13 +23,13 @@ import android.view.ViewGroup;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class SignBrowserFragment extends Fragment {
+public class SignTrainerFragment extends Fragment {
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_sign_browser, container, false);
+        return inflater.inflate(R.layout.fragment_sign_trainer, container, false);
     }
 
 }

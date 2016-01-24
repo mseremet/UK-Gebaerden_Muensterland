@@ -2,9 +2,9 @@ package de.lebenshilfe_muenster.uk_gebaerden_muensterland;
 
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.test.suitebuilder.annotation.LargeTest;
 
-import org.junit.BeforeClass;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +17,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.not;
@@ -38,41 +39,63 @@ import static org.hamcrest.CoreMatchers.not;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 @RunWith(AndroidJUnit4.class)
-@LargeTest
 public class MainActivityTest {
 
     @Rule
     public ActivityTestRule<MainActivity> menuActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
-    // TODO: Check that the sign browser is displayed on app startup
+    // FIXME: See pending question http://stackoverflow.com/q/34981738/2906739
+    //    @BeforeClass
+    //    public static void checkSignBrowserIsDisplayedOnAppStartup() {
+    //      onView(withText(R.string.sign_browser)).check(matches(isDisplayed()));
+    //    }
 
-    @Test(timeout = 5000)
-    public void testAllMenuItemsArePresent() {
-        openNavigationDrawer();
-        onView(withText(R.string.browse_signs)).check(matches(allOf(isDisplayed(), isEnabled())));
-        onView(withText(R.string.train_signs)).check((matches(allOf(isDisplayed(), isEnabled()))));
-        onView(withText(R.string.about_signs)).check((matches(allOf(isDisplayed(), isEnabled()))));
-        onView(withText(R.string.settings)).check((matches(allOf(isDisplayed(), isEnabled()))));
-        closeNavigationDrawer();
-    }
-
-    @Test(timeout = 3000)
-    public void clickBrowseSignsButton() {
-        openNavigationDrawer();
-        onView(withText(R.string.browse_signs)).perform(click());
-        onView(withText(R.string.sign_browser)).check(matches(isDisplayed()));
-    }
-
-    // TODO: Add tests for clicking the other navigation buttons here.
-
-    private void openNavigationDrawer() {
+    @Before
+    public void openNavigationDrawer() {
         onView(withContentDescription(R.string.navigation_drawer_open)).perform(click());
         onView(withId(R.id.nav_view)).check(matches(isDisplayed()));
     }
 
-    private void closeNavigationDrawer() {
-        pressBack();
+    @After
+    public void checkNavigationDrawerIsClosed() {
         onView(withId(R.id.nav_view)).check(matches(not(isDisplayed())));
     }
+
+    @Test(timeout = 3000)
+    public void testAllMenuItemsArePresent() {
+        onView(withText(R.string.browse_signs)).check(matches(allOf(isDisplayed(), isEnabled())));
+        onView(withText(R.string.train_signs)).check((matches(allOf(isDisplayed(), isEnabled()))));
+        onView(withText(R.string.about_signs)).check((matches(allOf(isDisplayed(), isEnabled()))));
+        onView(withText(R.string.settings)).check((matches(allOf(isDisplayed(), isEnabled()))));
+        pressBack(); // close navigation drawer
+    }
+
+    @Test(timeout = 3000)
+    public void clickBrowseSignsButton() {
+        clickNavigationButtonAndCheckToolbarTitle((R.string.browse_signs), R.string.sign_browser);
+    }
+
+    @Test(timeout = 3000)
+    public void clickTrainSignsButton() {
+        clickNavigationButtonAndCheckToolbarTitle((R.string.train_signs), R.string.sign_trainer);
+    }
+
+    @Test(timeout = 3000)
+    public void clickAboutSignsButton() {
+        clickNavigationButtonAndCheckToolbarTitle((R.string.about_signs), R.string.about_signs);
+    }
+
+    @Test(timeout = 3000)
+    public void clickSettingsButton() {
+        clickNavigationButtonAndCheckToolbarTitle((R.string.settings), R.string.settings);
+    }
+
+    private void clickNavigationButtonAndCheckToolbarTitle(final int navigationButtonTextId, final int toolbarTitleId) {
+        final String navigationButtonText = menuActivityTestRule.getActivity().getResources().getString(navigationButtonTextId);
+        final String toolbarTitle = menuActivityTestRule.getActivity().getResources().getString(toolbarTitleId);
+        onView(withText(navigationButtonText)).perform(click());
+        onView(allOf(withText(toolbarTitle), withParent((withId(R.id.toolbar))))).check(matches(isDisplayed()));
+    }
+
 
 }
