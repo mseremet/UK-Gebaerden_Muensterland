@@ -5,6 +5,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,16 +40,10 @@ import static org.hamcrest.CoreMatchers.not;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 @RunWith(AndroidJUnit4.class)
-public class MainActivityTest {
+public class NavigationDrawerTest {
 
     @Rule
-    public ActivityTestRule<MainActivity> menuActivityTestRule = new ActivityTestRule<>(MainActivity.class);
-
-    // FIXME: See pending question http://stackoverflow.com/q/34981738/2906739
-    //    @BeforeClass
-    //    public static void checkSignBrowserIsDisplayedOnAppStartup() {
-    //      onView(withText(R.string.sign_browser)).check(matches(isDisplayed()));
-    //    }
+    public ActivityTestRule<MainActivity> mainActivityActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Before
     public void openNavigationDrawer() {
@@ -91,8 +86,8 @@ public class MainActivityTest {
     }
 
     private void clickNavigationButtonAndCheckToolbarTitle(final int navigationButtonTextId, final int toolbarTitleId) {
-        final String navigationButtonText = menuActivityTestRule.getActivity().getResources().getString(navigationButtonTextId);
-        final String toolbarTitle = menuActivityTestRule.getActivity().getResources().getString(toolbarTitleId);
+        final String navigationButtonText = mainActivityActivityTestRule.getActivity().getResources().getString(navigationButtonTextId);
+        final String toolbarTitle = mainActivityActivityTestRule.getActivity().getResources().getString(toolbarTitleId);
         onView(withText(navigationButtonText)).perform(click());
         onView(allOf(withText(toolbarTitle), withParent((withId(R.id.toolbar))))).check(matches(isDisplayed()));
     }

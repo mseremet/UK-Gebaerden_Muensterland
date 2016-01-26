@@ -36,19 +36,18 @@ import static org.hamcrest.CoreMatchers.allOf;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-@RunWith(AndroidJUnit4.class)
-@LargeTest
+//@RunWith(AndroidJUnit4.class)
+//@LargeTest
 public class EspressoUITest {
-
-    @Rule
-    public ActivityTestRule<MainActivity> mainActivityActivityTestRule = new ActivityTestRule<>(MainActivity.class);
-
-    @Test(timeout = 1000)
-    public void clickFloatingActionButton() {
-        onView(ViewMatchers.withId(R.id.fab)).perform(ViewActions.click());
-
-        onView(allOf(withId(android.support.design.R.id.snackbar_text), withText("Replace with your own action")))
-                .check(matches(isDisplayed()));
-    }
-
+//    Sample Espresso UI Test
+//    @Rule
+//    public ActivityTestRule<MainActivity> mainActivityActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+//
+//    @Test(timeout = 1000)
+//    public void clickFloatingActionButton() {
+//        onView(ViewMatchers.withId(R.id.fab)).perform(ViewActions.click());
+//
+//        onView(allOf(withId(android.support.design.R.id.snackbar_text), withText("Replace with your own action")))
+//                .check(matches(isDisplayed()));
+//    }
 }
