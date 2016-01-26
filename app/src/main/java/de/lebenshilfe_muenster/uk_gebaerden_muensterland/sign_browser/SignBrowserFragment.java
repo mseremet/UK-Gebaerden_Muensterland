@@ -32,9 +32,9 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
  */
 public class SignBrowserFragment extends Fragment {
 
-    private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter adapter;
+    private RecyclerView.LayoutManager layoutManager;
     // TODO: Replace with calls to actual dataset
     private List<String> dataSet = new ArrayList<>();
 
@@ -55,24 +55,16 @@ public class SignBrowserFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.signRecyclerView);
-        if (null == mRecyclerView) {
-            throw new IllegalStateException("Recycler view not found by activity. Should have been " +
-                    "created by onCreateView() method.");
+        this.recyclerView = (RecyclerView) getActivity().findViewById(R.id.signRecyclerView);
+        if (null == this.recyclerView) {
+            throw new IllegalStateException("Recycler view not found by MainActivity. Should have " +
+                    "been created by fragment's onCreateView() method.");
         }
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
-        mRecyclerView.setHasFixedSize(true);
-
-        // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(mLayoutManager);
-
-        // specify an adapter (see also next example)
-        mAdapter = new SignBrowserDataAdapter(this.dataSet);
-        mRecyclerView.setAdapter(mAdapter);
-
+        this.recyclerView.setHasFixedSize(true); // performance fix
+        this.layoutManager = new LinearLayoutManager(getActivity());
+        this.recyclerView.setLayoutManager(this.layoutManager);
+        this.adapter = new SignBrowserAdapter(this.dataSet);
+        this.recyclerView.setAdapter(this.adapter);
     }
 
     @Override
