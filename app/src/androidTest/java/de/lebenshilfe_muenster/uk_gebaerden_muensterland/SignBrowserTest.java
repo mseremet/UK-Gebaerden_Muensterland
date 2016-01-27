@@ -7,19 +7,16 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.pressBack;
-import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
 
 /**
@@ -40,6 +37,13 @@ import static org.hamcrest.CoreMatchers.not;
  */
 @RunWith(AndroidJUnit4.class)
 public class SignBrowserTest {
+
+    public static final String FOO = "foo";
+    public static final String BAR = "bar";
+    public static final String BAZ = "baz";
+    public static final String FOO_MNEMONIC = "foo mnemonic";
+    public static final String BAR_MNEMONIC = "bar mnemonic";
+    public static final String BAZ_MNEMONIC = "baz mnemonic";
 
     @Rule
     public ActivityTestRule<MainActivity> mainActivityActivityTestRule = new ActivityTestRule<>(MainActivity.class);
@@ -71,9 +75,23 @@ public class SignBrowserTest {
 
     @Test
     public void checkSignRecyclerViewHasListElements() {
-        onView(allOf(withId(R.id.signRecyclerView), hasDescendant((withText("foo"))))).check(matches(isDisplayed()));
-        onView(allOf(withId(R.id.signRecyclerView), hasDescendant((withText("bar"))))).check(matches(isDisplayed()));
-        onView(allOf(withId(R.id.signRecyclerView), hasDescendant((withText("baz"))))).check(matches(isDisplayed()));
+        onView(allOf(withId(R.id.signRecyclerView), hasDescendant((withText(FOO))))).check(matches(isDisplayed()));
+        onView(allOf(withId(R.id.signRecyclerView), hasDescendant((withText(BAR))))).check(matches(isDisplayed()));
+        onView(allOf(withId(R.id.signRecyclerView), hasDescendant((withText(BAZ))))).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void checkSignHasMnemonic() {
+        onView(allOf(withText(FOO), hasSibling(withText(containsString(FOO_MNEMONIC))))).check(matches(isDisplayed()));
+        onView(allOf(withText(BAR), hasSibling(withText(containsString(BAR_MNEMONIC))))).check(matches(isDisplayed()));
+        onView(allOf(withText(BAZ), hasSibling(withText(containsString(BAZ_MNEMONIC))))).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void checkSignHasStarredInformation() {
+        onView(allOf(withText(FOO), hasSibling(withText(containsString(FOO_MNEMONIC))))).check(matches(isDisplayed()));
+        onView(allOf(withText(BAR), hasSibling(withText(containsString(BAR_MNEMONIC))))).check(matches(isDisplayed()));
+        onView(allOf(withText(BAZ), hasSibling(withText(containsString(BAZ_MNEMONIC))))).check(matches(isDisplayed()));
     }
 
 }

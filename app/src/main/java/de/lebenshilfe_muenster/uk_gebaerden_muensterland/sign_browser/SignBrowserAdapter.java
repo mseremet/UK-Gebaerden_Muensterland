@@ -9,6 +9,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.Sign;
 
 /**
  * Copyright (c) 2016 Matthias Tonhäuser
@@ -28,9 +29,9 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
  */
 public class SignBrowserAdapter extends RecyclerView.Adapter<SignBrowserAdapter.ViewHolder> {
 
-    private List<String> dataset;
+    private List<Sign> dataset;
 
-    public SignBrowserAdapter(List<String> dataset) {
+    public SignBrowserAdapter(List<Sign> dataset) {
         this.dataset = dataset;
     }
 
@@ -43,20 +44,20 @@ public class SignBrowserAdapter extends RecyclerView.Adapter<SignBrowserAdapter.
     public void handleClick(String item) {
         int position = this.dataset.indexOf(item);
         // TODO: handle Click on item here
-        notifyItemRemoved(position);
+        // notifyItemRemoved(position);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final String name = dataset.get(position);
-        holder.txtHeader.setText(dataset.get(position));
+        final String name = dataset.get(position).getName();
+        holder.txtHeader.setText(name);
         holder.txtHeader.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 handleClick(name);
             }
         });
-        holder.txtFooter.setText("Footer: " + dataset.get(position));
+        holder.txtFooter.setText("Mnemonic: " + dataset.get(position).getMnemonic());
     }
 
     @Override

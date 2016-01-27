@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.Sign;
 
 /**
  * Copyright (c) 2016 Matthias Tonhäuser
@@ -36,14 +37,14 @@ public class SignBrowserFragment extends Fragment {
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     // TODO: Replace with calls to actual dataset
-    private List<String> dataSet = new ArrayList<>();
+    private List<Sign> dataSet = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.dataSet.add("foo");
-        this.dataSet.add("bar");
-        this.dataSet.add("baz");
+        this.dataSet.add(new Sign("foo", "foo mnemonic", false, 0));
+        this.dataSet.add(new Sign("bar", "bar mnemonic", false, 0));
+        this.dataSet.add(new Sign("baz", "baz mnemonic", false, 0));
     }
 
     @Nullable

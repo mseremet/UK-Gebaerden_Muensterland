@@ -21,26 +21,52 @@ import org.apache.commons.lang3.Validate;
 public class Sign {
 
     private final String name;
+    private boolean starred;
+    private int learningProgress;
+    private String mnemonic;
 
-    public Sign(String name) {
+    /**
+     * Constructor for a sign ('Gebärde')
+     *
+     * @param name             the name, has to be unique within the app
+     * @param mnemonic         the mnemonic ('Eselsbrücke')
+     * @param starred          whether the user has starred this sign (added to his favorites)
+     * @param learningProgress the learning progress for this sign. Must not be < -10 or > 10
+     */
+    public Sign(String name, String mnemonic, boolean starred, int learningProgress) {
         Validate.notNull(name, "Name must not be null");
         Validate.notBlank(name, "Name must not be empty.");
+        Validate.notNull(mnemonic, "Mnemonic must not be null");
+        Validate.notBlank(mnemonic, "Mnemonic must not be empty.");
+        Validate.inclusiveBetween(-10, 10, learningProgress, "Learning progress cannot be < -10 or > 10");
         this.name = name;
+        this.mnemonic = mnemonic;
+        this.starred = starred;
+        this.learningProgress = learningProgress;
     }
 
     public String getName() {
         return this.name;
     }
 
+    public boolean isStarred() {
+        return starred;
+    }
+
+    public int getLearningProgress() {
+        return learningProgress;
+    }
+
+    public String getMnemonic() {
+        return mnemonic;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Sign sign = (Sign) o;
-
         return name.equals(sign.name);
-
     }
 
     @Override
@@ -52,6 +78,9 @@ public class Sign {
     public String toString() {
         return "Sign{" +
                 "name='" + name + '\'' +
+                ", mnemonic='" + mnemonic + '\'' +
+                ", starred=" + starred +
+                ", learningProgress=" + learningProgress +
                 '}';
     }
 }
