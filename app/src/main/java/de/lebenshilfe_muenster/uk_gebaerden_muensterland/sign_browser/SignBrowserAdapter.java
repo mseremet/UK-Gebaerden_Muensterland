@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.util.List;
@@ -50,14 +51,16 @@ public class SignBrowserAdapter extends RecyclerView.Adapter<SignBrowserAdapter.
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final String name = dataset.get(position).getName();
-        holder.txtHeader.setText(name);
-        holder.txtHeader.setOnClickListener(new View.OnClickListener() {
+        holder.txtSignName.setText(name);
+        holder.txtSignName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 handleClick(name);
             }
         });
-        holder.txtFooter.setText("Mnemonic: " + dataset.get(position).getMnemonic());
+        holder.txtSignMnemonic.setText(dataset.get(position).getMnemonic());
+        holder.txtSignLearningProgress.setText(Integer.toString(dataset.get(position).getLearningProgress()));
+        holder.checkBoxStarred.setChecked(dataset.get(position).isStarred());
     }
 
     @Override
@@ -66,13 +69,17 @@ public class SignBrowserAdapter extends RecyclerView.Adapter<SignBrowserAdapter.
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView txtHeader;
-        public TextView txtFooter;
+        public TextView txtSignName;
+        public TextView txtSignMnemonic;
+        public TextView txtSignLearningProgress;
+        public CheckBox checkBoxStarred;
 
         public ViewHolder(View v) {
             super(v);
-            this.txtHeader = (TextView) v.findViewById(R.id.firstLine);
-            this.txtFooter = (TextView) v.findViewById(R.id.secondLine);
+            this.txtSignName = (TextView) v.findViewById(R.id.signName);
+            this.txtSignMnemonic = (TextView) v.findViewById(R.id.mnemonic);
+            this.txtSignLearningProgress = (TextView) v.findViewById(R.id.learningProgressValue);
+            this.checkBoxStarred = (CheckBox) v.findViewById(R.id.starred);
         }
     }
 
