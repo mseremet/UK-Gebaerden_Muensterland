@@ -10,7 +10,7 @@ import org.junit.runner.RunWith;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
-import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
+import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -44,6 +44,9 @@ public class SignBrowserTest {
     public static final String FOO_MNEMONIC = "foo mnemonic";
     public static final String BAR_MNEMONIC = "bar mnemonic";
     public static final String BAZ_MNEMONIC = "baz mnemonic";
+    public static final String STARRED = "Starred";
+    public static final String PROGRESS = "Progress";
+    public static final String SIGN_ICON = "signIcon";
 
     @Rule
     public ActivityTestRule<MainActivity> mainActivityActivityTestRule = new ActivityTestRule<>(MainActivity.class);
@@ -82,16 +85,23 @@ public class SignBrowserTest {
 
     @Test
     public void checkSignHasMnemonic() {
-        onView(allOf(withText(FOO), hasSibling(withText(containsString(FOO_MNEMONIC))))).check(matches(isDisplayed()));
-        onView(allOf(withText(BAR), hasSibling(withText(containsString(BAR_MNEMONIC))))).check(matches(isDisplayed()));
-        onView(allOf(withText(BAZ), hasSibling(withText(containsString(BAZ_MNEMONIC))))).check(matches(isDisplayed()));
+        onView(allOf(withId(R.id.signBrowserSingleRow), hasDescendant(withText(containsString(FOO_MNEMONIC))))).check(matches(isDisplayed()));
+        onView(allOf(withId(R.id.signBrowserSingleRow), hasDescendant(withText(containsString(BAR_MNEMONIC))))).check(matches(isDisplayed()));
+        onView(allOf(withId(R.id.signBrowserSingleRow), hasDescendant(withText(containsString(BAZ_MNEMONIC))))).check(matches(isDisplayed()));
     }
 
     @Test
     public void checkSignHasStarredInformation() {
-        onView(allOf(withText(FOO), hasSibling(withText(containsString(FOO_MNEMONIC))))).check(matches(isDisplayed()));
-        onView(allOf(withText(BAR), hasSibling(withText(containsString(BAR_MNEMONIC))))).check(matches(isDisplayed()));
-        onView(allOf(withText(BAZ), hasSibling(withText(containsString(BAZ_MNEMONIC))))).check(matches(isDisplayed()));
+        onView(allOf(withId(R.id.signBrowserSingleRow), hasDescendant(withText(FOO)), hasDescendant(withText(containsString(STARRED))))).check(matches(isDisplayed()));
+        onView(allOf(withId(R.id.signBrowserSingleRow), hasDescendant(withText(BAR)),hasDescendant(withText(containsString(STARRED))))).check(matches(isDisplayed()));
+        onView(allOf(withId(R.id.signBrowserSingleRow), hasDescendant(withText(BAZ)),hasDescendant(withText(containsString(STARRED))))).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void checkSignHasLearningProgressInformation() {
+        onView(allOf(withId(R.id.signBrowserSingleRow), hasDescendant(withText(FOO)),hasDescendant(withText(containsString(PROGRESS))))).check(matches(isDisplayed()));
+        onView(allOf(withId(R.id.signBrowserSingleRow), hasDescendant(withText(BAR)),hasDescendant(withText(containsString(PROGRESS))))).check(matches(isDisplayed()));
+        onView(allOf(withId(R.id.signBrowserSingleRow), hasDescendant(withText(BAZ)),hasDescendant(withText(containsString(PROGRESS))))).check(matches(isDisplayed()));
     }
 
 }

@@ -11,4 +11,6 @@
 
     <string name="sign_browser">Sign browser</string>
     <string name="sign_trainer">Sign trainer</string>
+    <string name="signIconDescription">signIcon</string>
+    <string name="signBrowserSingleRow">signBrowserSingleRow</string>
 </resources>
