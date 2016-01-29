@@ -42,9 +42,9 @@ public class SignBrowserFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.dataSet.add(new Sign("foo", "foo mnemonic", false, 0));
-        this.dataSet.add(new Sign("bar", "bar mnemonic", false, 0));
-        this.dataSet.add(new Sign("baz", "baz mnemonic", false, 0));
+        this.dataSet.add(new Sign("foo", "foo mnemonic", true, 0));
+        this.dataSet.add(new Sign("bar", "bar mnemonic", false, 7));
+        this.dataSet.add(new Sign("baz", "baz mnemonic", false, -10));
     }
 
     @Nullable

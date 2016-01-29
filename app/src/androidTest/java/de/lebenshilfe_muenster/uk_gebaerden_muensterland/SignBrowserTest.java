@@ -100,8 +100,8 @@ public class SignBrowserTest {
     @Test
     public void checkSignHasLearningProgressInformation() {
         onView(allOf(withId(R.id.signBrowserSingleRow), hasDescendant(withText(FOO)),hasDescendant(withText(containsString(PROGRESS))))).check(matches(isDisplayed()));
-        onView(allOf(withId(R.id.signBrowserSingleRow), hasDescendant(withText(BAR)),hasDescendant(withText(containsString(PROGRESS))))).check(matches(isDisplayed()));
-        onView(allOf(withId(R.id.signBrowserSingleRow), hasDescendant(withText(BAZ)),hasDescendant(withText(containsString(PROGRESS))))).check(matches(isDisplayed()));
+        onView(allOf(withId(R.id.signBrowserSingleRow), hasDescendant(withText(BAR)),hasDescendant(withText(containsString("7"))))).check(matches(isDisplayed()));
+        onView(allOf(withId(R.id.signBrowserSingleRow), hasDescendant(withText(BAZ)),hasDescendant(withText(containsString("-10"))))).check(matches(isDisplayed()));
     }
 
 }
