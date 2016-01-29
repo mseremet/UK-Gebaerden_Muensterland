@@ -31,7 +31,7 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.Sign;
  */
 public class SignBrowserAdapter extends RecyclerView.Adapter<SignBrowserAdapter.ViewHolder> {
 
-    private List<Sign> dataset;
+    private final List<Sign> dataset;
 
     public SignBrowserAdapter(List<Sign> dataset) {
         this.dataset = dataset;
@@ -71,10 +71,10 @@ public class SignBrowserAdapter extends RecyclerView.Adapter<SignBrowserAdapter.
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView txtSignName;
-        public TextView txtSignMnemonic;
-        public TextView txtSignLearningProgress;
-        public CheckBox checkBoxStarred;
+        public final TextView txtSignName;
+        public final TextView txtSignMnemonic;
+        public final TextView txtSignLearningProgress;
+        public final CheckBox checkBoxStarred;
 
         public ViewHolder(View v) {
             super(v);

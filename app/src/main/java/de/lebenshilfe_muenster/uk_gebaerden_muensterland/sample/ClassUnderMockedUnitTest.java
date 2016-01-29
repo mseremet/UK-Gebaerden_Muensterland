@@ -22,7 +22,7 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
  */
 public class ClassUnderMockedUnitTest {
 
-    final Context context;
+    private final Context context;
 
     public ClassUnderMockedUnitTest(Context context) {
         this.context = context;

@@ -84,7 +84,7 @@ public class ClassUnderInstrumentedUnitTest implements Parcelable {
      * @param timestamp the current time in milliseconds since January 1, 1970 00:00:00.0 UTC.
      */
     public void addEntry(String text, long timestamp) {
-        mData.add(new Pair<String, Long>(text, timestamp));
+        mData.add(new Pair<>(text, timestamp));
     }
 
     // Constructor used from the CREATOR field that unpacks a Parcel.

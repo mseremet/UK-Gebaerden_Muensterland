@@ -5,8 +5,6 @@ import org.junit.runners.Suite;
 
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.NavigationDrawerTest;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.SignBrowserTest;
-import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sample.ApplicationTest;
-import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sample.InstrumentedUnitTest;
 
 /**
  * Copyright (c) 2016 Matthias Tonhäuser

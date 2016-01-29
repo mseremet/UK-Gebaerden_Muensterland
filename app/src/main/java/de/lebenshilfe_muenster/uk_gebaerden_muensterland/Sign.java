@@ -21,9 +21,9 @@ import org.apache.commons.lang3.Validate;
 public class Sign {
 
     private final String name;
-    private boolean starred;
-    private int learningProgress;
-    private String mnemonic;
+    private final boolean starred;
+    private final int learningProgress;
+    private final String mnemonic;
 
     /**
      * Constructor for a sign ('Gebärde')

@@ -10,7 +10,6 @@ import org.junit.runner.RunWith;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
-import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -42,15 +41,14 @@ import static org.hamcrest.CoreMatchers.not;
 @RunWith(AndroidJUnit4.class)
 public class SignBrowserTest {
 
-    public static final String FOO = "foo";
-    public static final String BAR = "bar";
-    public static final String BAZ = "baz";
-    public static final String FOO_MNEMONIC = "foo mnemonic";
-    public static final String BAR_MNEMONIC = "bar mnemonic";
-    public static final String BAZ_MNEMONIC = "baz mnemonic";
-    public static final String STARRED = "Starred";
-    public static final String PROGRESS = "Progress";
-    public static final String SIGN_ICON = "signIcon";
+    private static final String FOO = "foo";
+    private static final String BAR = "bar";
+    private static final String BAZ = "baz";
+    private static final String FOO_MNEMONIC = "foo mnemonic";
+    private static final String BAR_MNEMONIC = "bar mnemonic";
+    private static final String BAZ_MNEMONIC = "baz mnemonic";
+    private static final String STARRED = "Starred";
+    private static final String PROGRESS = "Progress";
 
     @Rule
     public ActivityTestRule<MainActivity> mainActivityActivityTestRule = new ActivityTestRule<>(MainActivity.class);

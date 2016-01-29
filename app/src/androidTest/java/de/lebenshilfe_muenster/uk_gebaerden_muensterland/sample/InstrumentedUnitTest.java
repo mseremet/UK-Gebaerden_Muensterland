@@ -39,8 +39,8 @@ import static org.junit.Assert.assertThat;
 @SmallTest
 public class InstrumentedUnitTest {
 
-    public static final String TEST_STRING = "This is a string";
-    public static final long TEST_LONG = 12345678L;
+    private static final String TEST_STRING = "This is a string";
+    private static final long TEST_LONG = 12345678L;
     private ClassUnderInstrumentedUnitTest mClassUnderInstrumentedUnitTest;
 
     @Before

@@ -37,7 +37,7 @@ public class SignBrowserFragment extends Fragment {
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     // TODO: Replace with calls to actual dataset
-    private List<Sign> dataSet = new ArrayList<>();
+    private final List<Sign> dataSet = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,9 +68,5 @@ public class SignBrowserFragment extends Fragment {
         this.recyclerView.setAdapter(this.adapter);
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
 }
 
