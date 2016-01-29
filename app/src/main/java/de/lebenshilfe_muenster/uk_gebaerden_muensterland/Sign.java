@@ -38,7 +38,7 @@ public class Sign {
         Validate.notBlank(name, "Name must not be empty.");
         Validate.notNull(mnemonic, "Mnemonic must not be null");
         Validate.notBlank(mnemonic, "Mnemonic must not be empty.");
-        Validate.inclusiveBetween(-10, 10, learningProgress, "Learning progress cannot be < -10 or > 10");
+        Validate.inclusiveBetween(-5, 5, learningProgress, "Learning progress cannot be < -5 or > 5");
         this.name = name;
         this.mnemonic = mnemonic;
         this.starred = starred;

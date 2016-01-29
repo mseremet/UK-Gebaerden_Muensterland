@@ -71,17 +71,18 @@ public class SignTest {
 
     @Test
     public void testGetLearningProgress() {
-        final Sign football = new Sign(FOOTBALL, KICK_A_BALL, true,10);
-        assertThat(football.getLearningProgress(), is(equalTo(10)));
+        final Sign football = new Sign(FOOTBALL, KICK_A_BALL, true,5);
+        assertThat(football.getLearningProgress(), is(equalTo(5)));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testGetLearningProgressUpperBoundary() {
-        new Sign(FOOTBALL, KICK_A_BALL, true,11);
+        new Sign(FOOTBALL, KICK_A_BALL, true,6);
     }
+
     @Test(expected = IllegalArgumentException.class)
     public void testGetLearningProgressLowerBoundary() {
-        new Sign(FOOTBALL, KICK_A_BALL, true,-11);
+        new Sign(FOOTBALL, KICK_A_BALL, true,-6);
     }
 
     @Test

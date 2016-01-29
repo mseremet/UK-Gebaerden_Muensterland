@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
@@ -59,7 +60,8 @@ public class SignBrowserAdapter extends RecyclerView.Adapter<SignBrowserAdapter.
             }
         });
         holder.txtSignMnemonic.setText(dataset.get(position).getMnemonic());
-        holder.txtSignLearningProgress.setText(Integer.toString(dataset.get(position).getLearningProgress()));
+        final DecimalFormat decimalFormat = new DecimalFormat(" 0;-0");
+        holder.txtSignLearningProgress.setText(decimalFormat.format(dataset.get(position).getLearningProgress()));
         holder.checkBoxStarred.setChecked(dataset.get(position).isStarred());
     }
 
