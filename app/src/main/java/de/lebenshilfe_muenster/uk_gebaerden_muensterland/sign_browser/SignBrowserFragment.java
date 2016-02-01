@@ -42,9 +42,9 @@ public class SignBrowserFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.dataSet.add(new Sign("foo", "foo mnemonic", true, 0));
-        this.dataSet.add(new Sign("bar", "bar mnemonic", false, 5));
-        this.dataSet.add(new Sign("baz", "baz mnemonic", false, -3));
+        this.dataSet.add(new Sign.Builder().setId(0).setName("foo").setNameLocaleDe("").setMnemonic("foo mnemonic").setStarred(true).setLearningProgress(0).create());
+        this.dataSet.add(new Sign.Builder().setId(0).setName("bar").setNameLocaleDe("").setMnemonic("bar mnemonic").setStarred(false).setLearningProgress(5).create());
+        this.dataSet.add(new Sign.Builder().setId(0).setName("baz").setNameLocaleDe("").setMnemonic("baz mnemonic").setStarred(false).setLearningProgress(-3).create());
     }
 
     @Nullable

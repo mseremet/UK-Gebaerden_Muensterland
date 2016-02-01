@@ -28,74 +28,127 @@ import static org.hamcrest.core.Is.is;
  */
 public class SignTest {
 
-    public static final String FOOTBALL = "football";
-    public static final String KICK_A_BALL = "Kick a ball";
+    private static final String FOOTBALL = "football";
+    private static final String KICK_A_BALL = "Kick a ball";
+    private static final String FUSSBALL = "Fußball";
+
+    @Test
+    public void testGetId() {
+        final Sign sign = new Sign.Builder().setId(0).setName(FOOTBALL).setNameLocaleDe(FUSSBALL)
+                .setMnemonic(KICK_A_BALL).setStarred(false).setLearningProgress(0).create();
+        assertThat(sign.getId(), is(equalTo(0)));
+    }
 
     @Test(expected = NullPointerException.class)
     public void testNameCannotBeNull() {
-        new Sign(null, KICK_A_BALL, false, 0);
+        new Sign.Builder().setId(0).setName(null).setNameLocaleDe(FUSSBALL).setMnemonic(KICK_A_BALL)
+                .setStarred(false).setLearningProgress(0).create();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testNameCannotBeEmpty() {
-        new Sign(StringUtils.EMPTY, KICK_A_BALL, false, 0);
+        new Sign.Builder().setId(0).setName(StringUtils.EMPTY).setNameLocaleDe(FUSSBALL)
+                .setMnemonic(KICK_A_BALL).setStarred(false).setLearningProgress(0).create();
     }
 
     @Test(expected = NullPointerException.class)
     public void testMnemonicCannotBeNull() {
-        new Sign(FOOTBALL, null, false, 0);
+        new Sign.Builder().setId(0).setName(FOOTBALL).setNameLocaleDe(FUSSBALL).setMnemonic(null)
+                .setStarred(false).setLearningProgress(0).create();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testMnemonicCannotBeEmpty() {
-        new Sign(FOOTBALL, StringUtils.EMPTY, false, 0);
+        new Sign.Builder().setId(0).setName(FOOTBALL).setNameLocaleDe(FUSSBALL)
+                .setMnemonic(StringUtils.EMPTY).setStarred(false).setLearningProgress(0).create();
     }
 
     @Test
     public void testGetName() {
-        final Sign football = new Sign(FOOTBALL, KICK_A_BALL, false, 0);
-        assertThat(football.getName(), is(equalTo(FOOTBALL)));
+        final Sign football = new Sign.Builder().setId(0).setName(FOOTBALL).setNameLocaleDe(FUSSBALL)
+                .setMnemonic(KICK_A_BALL).setStarred(false).setLearningProgress(0).create();
+        assertName(football);
+    }
+
+    @Test
+    public void testGetNameLocaleDe() {
+        final Sign football = new Sign.Builder().setId(0).setName(FOOTBALL).setNameLocaleDe(FUSSBALL)
+                .setMnemonic(KICK_A_BALL).setStarred(false).setLearningProgress(0).create();
+        assertNameLocaleDe(football);
     }
 
     @Test
     public void testGetMnemonic() {
-        final Sign football = new Sign(FOOTBALL, KICK_A_BALL, false, 0);
-        assertThat(football.getMnemonic(),is(equalTo(KICK_A_BALL)));
+        final Sign football = new Sign.Builder().setId(0).setName(FOOTBALL).setNameLocaleDe(FUSSBALL)
+                .setMnemonic(KICK_A_BALL).setStarred(false).setLearningProgress(0).create();
+        assertMnemonic(football);
     }
 
     @Test
     public void testIsStarred() {
-        final Sign football = new Sign(FOOTBALL, KICK_A_BALL, true, 0);
+        final Sign football = new Sign.Builder().setId(0).setName(FOOTBALL).setNameLocaleDe(FUSSBALL)
+                .setMnemonic(KICK_A_BALL).setStarred(true).setLearningProgress(0).create();
         assertThat(football.isStarred(), is(equalTo(true)));
     }
 
     @Test
     public void testGetLearningProgress() {
-        final Sign football = new Sign(FOOTBALL, KICK_A_BALL, true,5);
+        final Sign football = new Sign.Builder().setId(0).setName(FOOTBALL).setNameLocaleDe(FUSSBALL)
+                .setMnemonic(KICK_A_BALL).setStarred(true).setLearningProgress(5).create();
         assertThat(football.getLearningProgress(), is(equalTo(5)));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testGetLearningProgressUpperBoundary() {
-        new Sign(FOOTBALL, KICK_A_BALL, true,6);
+        new Sign.Builder().setId(0).setName(FOOTBALL).setNameLocaleDe(FUSSBALL)
+                .setMnemonic(KICK_A_BALL).setStarred(true).setLearningProgress(6).create();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testGetLearningProgressLowerBoundary() {
-        new Sign(FOOTBALL, KICK_A_BALL, true,-6);
+        new Sign.Builder().setId(0).setName(FOOTBALL).setNameLocaleDe(FUSSBALL)
+                .setMnemonic(KICK_A_BALL).setStarred(true).setLearningProgress(-6).create();
     }
 
     @Test
     public void testObjectsAreEqual() {
-        final Sign footballOne = new Sign(FOOTBALL, KICK_A_BALL, false, 0);
-        final Sign footballTwo = new Sign(FOOTBALL, KICK_A_BALL, false, 0);
+        final Sign footballOne = new Sign.Builder().setId(0).setName(FOOTBALL)
+                .setNameLocaleDe(FUSSBALL).setMnemonic(KICK_A_BALL).setStarred(false).setLearningProgress(0).create();
+        final Sign footballTwo = new Sign.Builder().setId(0).setName(FOOTBALL)
+                .setNameLocaleDe(FUSSBALL).setMnemonic(KICK_A_BALL).setStarred(false).setLearningProgress(0).create();
         assertThat(footballOne, is(equalTo(footballTwo)));
     }
 
     @Test
     public void testToStringContainsFields() {
-        final Sign football = new Sign(FOOTBALL, KICK_A_BALL, false, 0);
-        assertThat(football.toString(),allOf(containsString(FOOTBALL),containsString(KICK_A_BALL),containsString("0"),containsString("false")));
+        final Sign football = new Sign.Builder().setId(0).setName(FOOTBALL).setNameLocaleDe(FUSSBALL)
+                .setMnemonic(KICK_A_BALL).setStarred(false).setLearningProgress(0).create();
+        assertThat(football.toString(), allOf(containsString("id"), containsString(FOOTBALL), containsString(FUSSBALL),
+                containsString(KICK_A_BALL), containsString("0"), containsString("false")));
     }
 
+    @Test
+    public void testBuilderWorksWithoutIdStarredAndLearningProgressParams() {
+        Sign football = new Sign.Builder().setName(FOOTBALL).setNameLocaleDe(FUSSBALL).setMnemonic(KICK_A_BALL).create();
+        assertName(football);
+        assertNameLocaleDe(football);
+        assertMnemonic(football);
+    }
+
+    @Test (expected = NullPointerException.class)
+    public void testBuilderDoesNotWorkWithoutNameLocalizedNameAndMnemonic() {
+        new Sign.Builder().setName(FOOTBALL).create();
+    }
+
+    private void assertName(Sign football) {
+        assertThat(football.getName(), is(equalTo(FOOTBALL)));
+    }
+
+    private void assertNameLocaleDe(Sign football) {
+        assertThat(football.getNameLocaleDe(), is(equalTo(FUSSBALL)));
+    }
+
+    private void assertMnemonic(Sign football) {
+        assertThat(football.getMnemonic(), is(equalTo(KICK_A_BALL)));
+    }
 }

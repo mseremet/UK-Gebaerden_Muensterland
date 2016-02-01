@@ -20,34 +20,70 @@ import org.apache.commons.lang3.Validate;
  */
 public class Sign {
 
+    private final int id;
     private final String name;
     private final boolean starred;
     private final int learningProgress;
     private final String mnemonic;
+    private final String nameLocaleDe;
 
     /**
-     * Constructor for a sign ('Gebärde')
+     * Constructor for a sign ('Gebärde'), which has <strong>not</strong> been persisted to the database. Used by the Builder.
      *
+     * @param name         the name, has to be unique within the app
+     * @param nameLocaleDe the German name
+     * @param mnemonic     the mnemonic ('Eselsbrücke')
+     */
+    private Sign(String name, String nameLocaleDe, String mnemonic) {
+        validateParameters(name, mnemonic, 0);
+        this.id = 0;
+        this.name = name;
+        this.nameLocaleDe = nameLocaleDe;
+        this.mnemonic = mnemonic;
+        this.starred = false;
+        this.learningProgress = 0;
+    }
+
+    /**
+     * Constructor for a sign ('Gebärde'), which has been persisted to the database. Used by the Builder.
+     *
+     * @param id               the database id
      * @param name             the name, has to be unique within the app
+     * @param nameLocaleDe     the German name
      * @param mnemonic         the mnemonic ('Eselsbrücke')
      * @param starred          whether the user has starred this sign (added to his favorites)
-     * @param learningProgress the learning progress for this sign. Must not be < -10 or > 10
+     * @param learningProgress the learning progress for this sign. Must not be < -5 or > 5
      */
-    public Sign(String name, String mnemonic, boolean starred, int learningProgress) {
-        Validate.notNull(name, "Name must not be null");
-        Validate.notBlank(name, "Name must not be empty.");
-        Validate.notNull(mnemonic, "Mnemonic must not be null");
-        Validate.notBlank(mnemonic, "Mnemonic must not be empty.");
-        Validate.inclusiveBetween(-5, 5, learningProgress, "Learning progress cannot be < -5 or > 5");
+    private Sign(int id, String name, String nameLocaleDe, String mnemonic, boolean starred, int learningProgress) {
+        validateParameters(name, mnemonic, learningProgress);
+        this.id = id;
         this.name = name;
+        this.nameLocaleDe = nameLocaleDe;
         this.mnemonic = mnemonic;
         this.starred = starred;
         this.learningProgress = learningProgress;
     }
 
+    private void validateParameters(String name, String mnemonic, int learningProgress) {
+        Validate.notNull(name, "Name must not be null");
+        Validate.notBlank(name, "Name must not be empty.");
+        Validate.notNull(mnemonic, "Mnemonic must not be null");
+        Validate.notBlank(mnemonic, "Mnemonic must not be empty.");
+        Validate.inclusiveBetween(-5, 5, learningProgress, "Learning progress cannot be < -5 or > 5");
+    }
+
+    public int getId() {
+        return this.id;
+    }
+
     public String getName() {
         return this.name;
     }
+
+    public String getNameLocaleDe() {
+        return this.nameLocaleDe;
+    }
+
 
     public boolean isStarred() {
         return starred;
@@ -77,10 +113,56 @@ public class Sign {
     @Override
     public String toString() {
         return "Sign{" +
-                "name='" + name + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", nameLocaleDe='" + nameLocaleDe + '\'' +
                 ", mnemonic='" + mnemonic + '\'' +
                 ", starred=" + starred +
                 ", learningProgress=" + learningProgress +
                 '}';
+    }
+
+    public static class Builder {
+        private int id = 0;
+        private String name;
+        private String nameLocaleDe;
+        private String mnemonic;
+        private boolean starred = false;
+        private int learningProgress = 0;
+
+        public Builder setId(int id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder setNameLocaleDe(String nameLocaleDe) {
+            this.nameLocaleDe = nameLocaleDe;
+            return this;
+        }
+
+        public Builder setMnemonic(String mnemonic) {
+            this.mnemonic = mnemonic;
+            return this;
+        }
+
+        public Builder setStarred(boolean starred) {
+            this.starred = starred;
+            return this;
+        }
+
+        public Builder setLearningProgress(int learningProgress) {
+            this.learningProgress = learningProgress;
+            return this;
+        }
+
+        public Sign create() {
+            return new Sign(id, name, nameLocaleDe, mnemonic, starred, learningProgress);
+        }
+
     }
 }
