@@ -92,10 +92,50 @@ public class SignTest {
     }
 
     @Test
+    public void testSetStarred() {
+        final Sign football = new Sign.Builder().setId(0).setName(FOOTBALL).setNameLocaleDe(FUSSBALL)
+                .setMnemonic(KICK_A_BALL).setStarred(true).setLearningProgress(0).create();
+        football.setStarred(false);
+        assertThat(football.isStarred(), is(equalTo(false)));
+    }
+
+    @Test
     public void testGetLearningProgress() {
         final Sign football = new Sign.Builder().setId(0).setName(FOOTBALL).setNameLocaleDe(FUSSBALL)
                 .setMnemonic(KICK_A_BALL).setStarred(true).setLearningProgress(5).create();
         assertThat(football.getLearningProgress(), is(equalTo(5)));
+    }
+
+    @Test
+    public void testIncreaseLearningProgress() {
+        final Sign football = new Sign.Builder().setId(0).setName(FOOTBALL).setNameLocaleDe(FUSSBALL)
+                .setMnemonic(KICK_A_BALL).setStarred(true).setLearningProgress(2).create();
+        football.increaseLearningProgress();
+        assertThat(football.getLearningProgress(), is(equalTo(3)));
+    }
+
+    @Test
+    public void testIncreaseLearningProgressDoesNotViolateBoundary() {
+        final Sign football = new Sign.Builder().setId(0).setName(FOOTBALL).setNameLocaleDe(FUSSBALL)
+                .setMnemonic(KICK_A_BALL).setStarred(true).setLearningProgress(5).create();
+        football.increaseLearningProgress();
+        assertThat(football.getLearningProgress(), is(equalTo(5)));
+    }
+
+    @Test
+    public void testDecreaseLearningProgress() {
+        final Sign football = new Sign.Builder().setId(0).setName(FOOTBALL).setNameLocaleDe(FUSSBALL)
+                .setMnemonic(KICK_A_BALL).setStarred(true).setLearningProgress(2).create();
+        football.decreaseLearningProgress();
+        assertThat(football.getLearningProgress(), is(equalTo(1)));
+    }
+
+    @Test
+    public void testDecreaseLearningProgressDoesNotViolateBoundary() {
+        final Sign football = new Sign.Builder().setId(0).setName(FOOTBALL).setNameLocaleDe(FUSSBALL)
+                .setMnemonic(KICK_A_BALL).setStarred(true).setLearningProgress(-5).create();
+        football.decreaseLearningProgress();
+        assertThat(football.getLearningProgress(), is(equalTo(-5)));
     }
 
     @Test(expected = IllegalArgumentException.class)

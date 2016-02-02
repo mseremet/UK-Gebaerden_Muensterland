@@ -43,7 +43,7 @@ public class DbContract {
 
         public static final String CREATE = "create table "
                 + TABLE_NAME + "(" + SignTable._ID + " integer primary key autoincrement, "
-                + COLUMN_NAME_SIGN_NAME + " text not null, "
+                + COLUMN_NAME_SIGN_NAME + " text unique not null, "
                 + COLUMN_NAME_SIGN_NAME_DE + " text not null, "
                 + COLUMN_NAME_MNEMONIC + " text not null, "
                 + COLUMN_NAME_LEARNING_PROGRESS + " integer not null, "

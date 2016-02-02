@@ -49,33 +49,42 @@ public class SignDAO {
         this.dbHelper.close();
     }
 
+    /**
+     * Persist a sign.
+     *
+     * @param sign a Sign, which has not been persisted yet.
+     * @return the persisted sign, <code>null</code> if persisting failed.
+     */
     public Sign create(Sign sign) {
         Log.d(CLASS_NAME, "Creating sign: " + sign);
-        final ContentValues values = new ContentValues();
-        values.put(DbContract.SignTable.COLUMN_NAME_SIGN_NAME, sign.getName());
-        values.put(DbContract.SignTable.COLUMN_NAME_SIGN_NAME_DE, sign.getNameLocaleDe());
-        values.put(DbContract.SignTable.COLUMN_NAME_MNEMONIC, sign.getMnemonic());
-        if (sign.isStarred()) {
-            values.put(DbContract.SignTable.COLUMN_NAME_STARRED, 1);
-        } else {
-            values.put(DbContract.SignTable.COLUMN_NAME_STARRED, 0);
+        this.database.beginTransaction();
+        Sign createdSign = null;
+        try {
+            final ContentValues values = new ContentValues();
+            values.put(DbContract.SignTable.COLUMN_NAME_SIGN_NAME, sign.getName());
+            values.put(DbContract.SignTable.COLUMN_NAME_SIGN_NAME_DE, sign.getNameLocaleDe());
+            values.put(DbContract.SignTable.COLUMN_NAME_MNEMONIC, sign.getMnemonic());
+            if (sign.isStarred()) {
+                values.put(DbContract.SignTable.COLUMN_NAME_STARRED, 1);
+            } else {
+                values.put(DbContract.SignTable.COLUMN_NAME_STARRED, 0);
+            }
+            values.put(DbContract.SignTable.COLUMN_NAME_LEARNING_PROGRESS, sign.getLearningProgress());
+            final long insertId = this.database.insert(DbContract.SignTable.TABLE_NAME, null,
+                    values);
+            if (-1 == insertId) {
+                throw new IllegalStateException(MessageFormat.format("Inserting sign: {0} failed due to" +
+                        " a database error!", sign));
+            }
+            createdSign = readSingleSign(insertId);
+            this.database.setTransactionSuccessful();
+            Log.d(CLASS_NAME, "Created sign: " + createdSign);
+        } finally {
+            this.database.endTransaction();
         }
-        values.put(DbContract.SignTable.COLUMN_NAME_LEARNING_PROGRESS, sign.getLearningProgress());
-        final long insertId = this.database.insert(DbContract.SignTable.TABLE_NAME, null,
-                values);
-        final Cursor cursor = this.database.query(DbContract.SignTable.TABLE_NAME,
-                DbContract.SignTable.ALL_COLUMNS, DbContract.SignTable._ID + DbContract.EQUAL_SIGN + insertId, null,
-                null, null, null);
-        if (0 == cursor.getCount()) {
-            throw new IllegalStateException(MessageFormat.format("Inserted sign: {0} with id: {1}, " +
-                    "but querying the table with this id yielded  no results!",sign, insertId));
-        }
-        cursor.moveToFirst();
-        final Sign createdSign = cursorToSign(cursor);
-        cursor.close();
-        Log.d(CLASS_NAME, "Created sign: " + createdSign);
         return createdSign;
     }
+
 
     public List<Sign> read() {
         Log.d(CLASS_NAME, "Reading all signs.");
@@ -90,6 +99,64 @@ public class SignDAO {
         }
         cursor.close();
         return signs;
+    }
+
+    public Sign update(Sign sign) {
+        Log.d(CLASS_NAME, "Updating sign: " + sign);
+        this.database.beginTransaction();
+        Sign updatedSign = null;
+        try {
+            final ContentValues values = new ContentValues();
+            values.put(DbContract.SignTable.COLUMN_NAME_LEARNING_PROGRESS, sign.getLearningProgress());
+            values.put(DbContract.SignTable.COLUMN_NAME_STARRED, sign.isStarred());
+            final String selection = DbContract.SignTable._ID + " LIKE ?";
+            final String[] selectionArgs = {String.valueOf(sign.getId())};
+            int rowsUpdated = this.database.update(
+                    DbContract.SignTable.TABLE_NAME,
+                    values,
+                    selection,
+                    selectionArgs);
+            if (0 == rowsUpdated) {
+                throw new IllegalStateException(MessageFormat.format("Updating sign {0} updated no rows!", sign));
+            }if (1 > rowsUpdated) {
+                throw new IllegalStateException(MessageFormat.format("Updating sign {0} updated more than " +
+                        "one row. {1} rows were updated.", sign, rowsUpdated));
+            }
+            updatedSign = readSingleSign(sign.getId());
+            this.database.setTransactionSuccessful();
+        } finally {
+            this.database.endTransaction();
+        }
+        return updatedSign;
+    }
+
+    /**
+     * For <strong>testing</strong> purposes only!
+     */
+    public void delete() {
+        Log.d(CLASS_NAME, "Deleting all signs");
+        this.database.beginTransaction();
+        try {
+            this.database.delete(DbContract.SignTable.TABLE_NAME, null, null);
+            this.database.setTransactionSuccessful();
+        } finally {
+            this.database.endTransaction();
+        }
+    }
+
+    private Sign readSingleSign(long id) {
+        final Sign createdSign;
+        final Cursor cursor = this.database.query(DbContract.SignTable.TABLE_NAME,
+                DbContract.SignTable.ALL_COLUMNS, DbContract.SignTable._ID + DbContract.EQUAL_SIGN + id, null,
+                null, null, null);
+        if (0 == cursor.getCount()) {
+            throw new IllegalStateException(MessageFormat.format("Querying for sign with id: {1} " +
+                    "yielded no results!", id));
+        }
+        cursor.moveToFirst();
+        createdSign = cursorToSign(cursor);
+        cursor.close();
+        return createdSign;
     }
 
     private Sign cursorToSign(Cursor cursor) {
@@ -107,4 +174,5 @@ public class SignDAO {
         }
         return signBuilder.create();
     }
+
 }

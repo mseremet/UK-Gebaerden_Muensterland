@@ -20,12 +20,14 @@ import org.apache.commons.lang3.Validate;
  */
 public class Sign {
 
+    private static final int LEARNING_PROGRESS_LOWER_BOUNDARY = -5;
+    private static final int LEARNING_PROGRESS_UPPER_BOUNDARY = 5;
     private final int id;
     private final String name;
-    private final boolean starred;
-    private final int learningProgress;
     private final String mnemonic;
     private final String nameLocaleDe;
+    private int learningProgress;
+    private boolean starred;
 
     /**
      * Constructor for a sign ('Gebärde'), which has <strong>not</strong> been persisted to the database. Used by the Builder.
@@ -69,7 +71,7 @@ public class Sign {
         Validate.notBlank(name, "Name must not be empty.");
         Validate.notNull(mnemonic, "Mnemonic must not be null");
         Validate.notBlank(mnemonic, "Mnemonic must not be empty.");
-        Validate.inclusiveBetween(-5, 5, learningProgress, "Learning progress cannot be < -5 or > 5");
+        Validate.inclusiveBetween(LEARNING_PROGRESS_LOWER_BOUNDARY, LEARNING_PROGRESS_UPPER_BOUNDARY, learningProgress, "Learning progress cannot be < -5 or > 5");
     }
 
     public int getId() {
@@ -89,8 +91,24 @@ public class Sign {
         return starred;
     }
 
+    public void setStarred(boolean starred) {
+        this.starred = starred;
+    }
+
     public int getLearningProgress() {
         return learningProgress;
+    }
+
+    public void increaseLearningProgress() {
+        if (this.learningProgress < LEARNING_PROGRESS_UPPER_BOUNDARY) {
+            this.learningProgress++;
+        }
+    }
+
+    public void decreaseLearningProgress() {
+        if (this.learningProgress > LEARNING_PROGRESS_LOWER_BOUNDARY) {
+            this.learningProgress--;
+        }
     }
 
     public String getMnemonic() {
@@ -121,6 +139,7 @@ public class Sign {
                 ", learningProgress=" + learningProgress +
                 '}';
     }
+
 
     public static class Builder {
         private int id = 0;
