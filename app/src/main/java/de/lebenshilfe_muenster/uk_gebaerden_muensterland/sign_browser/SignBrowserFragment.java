@@ -1,6 +1,7 @@
 package de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser;
 
 import android.app.Fragment;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +15,7 @@ import java.util.List;
 
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.Sign;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.SignDAO;
 
 /**
  * Copyright (c) 2016 Matthias Tonhäuser
@@ -36,16 +38,7 @@ public class SignBrowserFragment extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
-    // TODO: Replace with calls to actual dataset
-    private final List<Sign> dataSet = new ArrayList<>();
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        this.dataSet.add(new Sign.Builder().setId(0).setName("foo").setNameLocaleDe("").setMnemonic("foo mnemonic").setStarred(true).setLearningProgress(0).create());
-        this.dataSet.add(new Sign.Builder().setId(0).setName("bar").setNameLocaleDe("").setMnemonic("bar mnemonic").setStarred(false).setLearningProgress(5).create());
-        this.dataSet.add(new Sign.Builder().setId(0).setName("baz").setNameLocaleDe("").setMnemonic("baz mnemonic").setStarred(false).setLearningProgress(-3).create());
-    }
 
     @Nullable
     @Override
@@ -64,8 +57,24 @@ public class SignBrowserFragment extends Fragment {
         this.recyclerView.setHasFixedSize(true); // performance fix
         this.layoutManager = new LinearLayoutManager(getActivity());
         this.recyclerView.setLayoutManager(this.layoutManager);
-        this.adapter = new SignBrowserAdapter(this.dataSet);
+        this.adapter = new SignBrowserAdapter(new ArrayList<Sign>());
         this.recyclerView.setAdapter(this.adapter);
+        new LoadSignsTask().execute();
+    }
+
+    private class LoadSignsTask extends AsyncTask<Void, Void, List<Sign>> {
+
+        @Override
+        protected List<Sign> doInBackground(Void... params) {
+            final SignDAO signDAO = SignDAO.getInstance(getActivity());
+            signDAO.open();
+            return signDAO.read();
+        }
+
+        @Override
+        protected void onPostExecute(List<Sign> result) {
+            recyclerView.swapAdapter(new SignBrowserAdapter(result),true);
+        }
     }
 
 }

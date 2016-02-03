@@ -51,12 +51,12 @@ public class SignBrowserAdapter extends RecyclerView.Adapter<SignBrowserAdapter.
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final String name = dataset.get(position).getName();
-        holder.txtSignName.setText(name);
+        final String nameLocaleDe = dataset.get(position).getNameLocaleDe();
+        holder.txtSignName.setText(nameLocaleDe);
         holder.txtSignName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                handleClick(name);
+                handleClick(nameLocaleDe);
             }
         });
         holder.txtSignMnemonic.setText(dataset.get(position).getMnemonic());

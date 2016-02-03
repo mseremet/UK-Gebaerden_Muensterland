@@ -121,7 +121,7 @@ public class SignDAO {
         Log.d(CLASS_NAME, "Reading all signs.");
         final List<Sign> signs = new ArrayList<>();
         final Cursor cursor = database.query(DbContract.SignTable.TABLE_NAME,
-                DbContract.SignTable.ALL_COLUMNS, null, null, null, null, null);
+                DbContract.SignTable.ALL_COLUMNS, null, null, null, null, DbContract.SignTable.ORDER_BY_NAME_DE_ASC);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             final Sign sign = cursorToSign(cursor);

@@ -11,7 +11,6 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
-import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
@@ -44,13 +43,11 @@ public class SignBrowserTest {
     private static final String MAMA = "Mama";
     private static final String PAPA = "Papa";
     private static final String FOOTBALL = "Fußball";
-    private static final String MAMA_MNEMONIC = "Wange kreisend streicheln";
-    private static final String PAPA_MNEMONIC = "Schnauzbart andeuten";
+    private static final String MAMA_MNEMONIC = "Wange streicheln";
+    private static final String PAPA_MNEMONIC = "Schnurrbart";
     private static final String FOOTBALL_MNEMONIC = "Faust tritt in Handfläche";
     private static final String STARRED = "Starred";
     private static final String PROGRESS_0 = "0";
-    private static final String PROGRESS_PLUS_5 = "5";
-    private static final String PROGRESS_MINUS_3 = "-3";
 
     @Rule
     public ActivityTestRule<MainActivity> mainActivityActivityTestRule = new ActivityTestRule<>(MainActivity.class);
@@ -96,7 +93,7 @@ public class SignBrowserTest {
 
     @Test
     public void checkSignHasStarredInformation() {
-        onView(allOf(withParent(withId(R.id.signBrowserSingleRow)),hasSibling(withText(MAMA)), withText(containsString(STARRED)))).check(matches(isChecked()));
+        onView(allOf(withParent(withId(R.id.signBrowserSingleRow)),hasSibling(withText(MAMA)), withText(containsString(STARRED)))).check(matches(isNotChecked()));
         onView(allOf(withParent(withId(R.id.signBrowserSingleRow)),hasSibling(withText(PAPA)), withText(containsString(STARRED)))).check(matches(isNotChecked()));
         onView(allOf(withParent(withId(R.id.signBrowserSingleRow)),hasSibling(withText(FOOTBALL)), withText(containsString(STARRED)))).check(matches(isNotChecked()));
     }
@@ -104,8 +101,8 @@ public class SignBrowserTest {
     @Test
     public void checkSignHasLearningProgressInformation() {
         onView(allOf(withId(R.id.signBrowserSingleRow), hasDescendant(withText(MAMA)),hasDescendant(withText(containsString(PROGRESS_0))))).check(matches(isDisplayed()));
-        onView(allOf(withId(R.id.signBrowserSingleRow), hasDescendant(withText(PAPA)),hasDescendant(withText(containsString(PROGRESS_PLUS_5))))).check(matches(isDisplayed()));
-        onView(allOf(withId(R.id.signBrowserSingleRow), hasDescendant(withText(FOOTBALL)),hasDescendant(withText(containsString(PROGRESS_MINUS_3))))).check(matches(isDisplayed()));
+        onView(allOf(withId(R.id.signBrowserSingleRow), hasDescendant(withText(PAPA)),hasDescendant(withText(containsString(PROGRESS_0))))).check(matches(isDisplayed()));
+        onView(allOf(withId(R.id.signBrowserSingleRow), hasDescendant(withText(FOOTBALL)),hasDescendant(withText(containsString(PROGRESS_0))))).check(matches(isDisplayed()));
     }
 
 }

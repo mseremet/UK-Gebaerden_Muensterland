@@ -24,6 +24,7 @@ public class DbContract {
     public static final int DATABASE_VERSION = 1;
     public static final String EQUAL_SIGN = " = ";
     public static final String QUESTION_MARK = "?";
+    private static final String ASCENDING = " ASC";
 
     /**
      * Empty default constructor
@@ -41,17 +42,7 @@ public class DbContract {
         public static final String COLUMN_NAME_STARRED = "starred";
         public static final String[] ALL_COLUMNS = {_ID, COLUMN_NAME_SIGN_NAME, COLUMN_NAME_SIGN_NAME_DE,
                 COLUMN_NAME_MNEMONIC, COLUMN_NAME_LEARNING_PROGRESS, COLUMN_NAME_STARRED};
-
-        public static final String CREATE = "create table "
-                + TABLE_NAME + "(" + SignTable._ID + " integer primary key autoincrement, "
-                + COLUMN_NAME_SIGN_NAME + " text unique not null, "
-                + COLUMN_NAME_SIGN_NAME_DE + " text not null, "
-                + COLUMN_NAME_MNEMONIC + " text not null, "
-                + COLUMN_NAME_LEARNING_PROGRESS + " integer not null, "
-                + COLUMN_NAME_STARRED + " integer not null "
-                + ");";
-
-        public static final String DROP = "DROP TABLE IF EXISTS " + TABLE_NAME;
+        public static final String ORDER_BY_NAME_DE_ASC = COLUMN_NAME_SIGN_NAME_DE + ASCENDING;
     }
 
 }
