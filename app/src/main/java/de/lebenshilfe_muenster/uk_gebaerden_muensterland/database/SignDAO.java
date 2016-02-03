@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.text.MessageFormat;
@@ -32,25 +33,41 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.Sign;
 public class SignDAO {
 
     public static final String CLASS_NAME = SignDAO.class.getName();
-    private final DbHelper dbHelper;
+    private static SignDAO instance;
+    private SQLiteOpenHelper openHelper;
     private SQLiteDatabase database;
 
-    public SignDAO(Context context) {
-        this.dbHelper = new DbHelper(context);
+    /**
+     * Private constructor
+     */
+    private SignDAO(Context context) {
+        this.openHelper = new DbHelper(context);
+    }
+
+    /**
+     * Singleton instance of the SignDAO
+     */
+    public static SignDAO getInstance(Context context) {
+        if (null == instance) {
+            return new SignDAO(context);
+        }
+        return instance;
     }
 
     public void open() throws SQLException {
         Log.d(CLASS_NAME, "Opening database.");
-        this.database = dbHelper.getWritableDatabase();
+        this.database = openHelper.getWritableDatabase();
     }
 
     public void close() {
         Log.d(CLASS_NAME, "Closing database.");
-        this.dbHelper.close();
+        if (null != this.database) {
+            this.openHelper.close();
+        }
     }
 
     /**
-     * Persist a list of signs.
+     * Persist a list of signs. For <strong>testing</strong> purposes only.
      *
      * @param signs a list of signs, which hast not been persisted yet.
      * @return a list of persisted signs.
@@ -64,7 +81,7 @@ public class SignDAO {
     }
 
     /**
-     * Persist a sign.
+     * Persist a sign. For <strong>testing</strong> purposes only.
      *
      * @param sign a Sign, which has not been persisted yet.
      * @return the persisted sign, <code>null</code> if persisting failed.
@@ -148,11 +165,22 @@ public class SignDAO {
     /**
      * For <strong>testing</strong> purposes only!
      */
-    public void delete() {
-        Log.d(CLASS_NAME, "Deleting all signs");
+    public void delete(List<Sign> signs) {
+        for (Sign sign : signs) {
+            delete(sign);
+        }
+    }
+
+    /**
+     * For <strong>testing</strong> purposes only!
+     */
+    public void delete(Sign sign) {
+        Log.d(CLASS_NAME, MessageFormat.format("Deleting sign {0}", sign));
         this.database.beginTransaction();
         try {
-            this.database.delete(DbContract.SignTable.TABLE_NAME, null, null);
+            this.database.delete(DbContract.SignTable.TABLE_NAME,
+                    DbContract.SignTable.COLUMN_NAME_SIGN_NAME + DbContract.EQUAL_SIGN + DbContract.QUESTION_MARK,
+                    new String[] {sign.getName()});
             this.database.setTransactionSuccessful();
         } finally {
             this.database.endTransaction();

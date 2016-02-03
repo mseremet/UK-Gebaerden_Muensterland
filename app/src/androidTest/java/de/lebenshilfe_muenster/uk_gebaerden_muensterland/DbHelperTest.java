@@ -23,6 +23,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.fail;
 
 /**
@@ -45,21 +46,22 @@ import static org.junit.Assert.fail;
 public class DbHelperTest {
 
     public static final Sign FOOTBALL = new Sign.Builder().setId(0).setName("football").setNameLocaleDe("Fußball")
-            .setMnemonic("Kick a ball").setStarred(false).setLearningProgress(0).create();
+            .setMnemonic("Faust tritt in Handfläche").setStarred(false).setLearningProgress(0).create();
     public static final Sign MAMA = new Sign.Builder().setId(0).setName("mama").setNameLocaleDe("Mama")
-            .setMnemonic("Wange kreiselnd streichen").setStarred(false).setLearningProgress(0).create();
+            .setMnemonic("Wange streicheln").setStarred(false).setLearningProgress(0).create();
     public static final Sign PAPA = new Sign.Builder().setId(0).setName("papa").setNameLocaleDe("Papa")
             .setMnemonic("Schnurrbart").setStarred(false).setLearningProgress(0).create();
+    public static final Sign TEST_SIGN = new Sign.Builder().setId(0).setName("test_sign").setNameLocaleDe("test_sign_de")
+            .setMnemonic("test_sign_mnemonic").setStarred(false).setLearningProgress(0).create();
     @Rule
     public final ActivityTestRule<MainActivity> mainActivityActivityTestRule = new ActivityTestRule<>(MainActivity.class);
-    final SignDAO signDAO = new SignDAO(mainActivityActivityTestRule.launchActivity(null));
+    final SignDAO signDAO = SignDAO.getInstance(mainActivityActivityTestRule.launchActivity(null));
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
     @Before
     public void openDatabase() {
         signDAO.open();
-        signDAO.delete();
     }
 
     @After
@@ -69,8 +71,9 @@ public class DbHelperTest {
 
     @Test
     public void testCreatedSignEqualsInsertedSign() {
-        final Sign createdFootball = signDAO.create(FOOTBALL);
-        assertThat(createdFootball, is(equalTo(FOOTBALL)));
+        final Sign sign = signDAO.create(TEST_SIGN);
+        assertThat(sign, is(equalTo(TEST_SIGN)));
+        signDAO.delete(sign);
     }
 
     @Test
@@ -78,10 +81,9 @@ public class DbHelperTest {
         thrown.expect(IllegalStateException.class);
         thrown.expectMessage(allOf(startsWith("Inserting sign"), endsWith("a database error!")));
         signDAO.create(FOOTBALL);
-        signDAO.create(FOOTBALL);
     }
 
-    @Test
+    // @Test - disabled because the app is shipped with an existing database and this test is very slow.
     public void testCreatingManySigns() {
         final List<Sign> signs = new ArrayList<>();
         for (int i = 0; i < 300; i++) {
@@ -100,7 +102,11 @@ public class DbHelperTest {
         final List<Sign> signsFromDb = signDAO.read();
         stopWatch.stop();
         Log.d(DbHelperTest.class.getName(), "Reading the signs took " + stopWatch.getTime() + " milliseconds");
-        assertThat(signsFromDb.toArray(), is(equalTo(signs.toArray())));
+        signsFromDb.remove(FOOTBALL);
+        signsFromDb.remove(MAMA);
+        signsFromDb.remove(PAPA);
+        assertThat(signsFromDb, containsInAnyOrder(signs.toArray(new Sign[signs.size()])));
+        signDAO.delete(signs);
     }
 
     @Test
@@ -109,38 +115,40 @@ public class DbHelperTest {
         signs.add(FOOTBALL);
         signs.add(PAPA);
         signs.add(MAMA);
-        signDAO.create(signs);
         List<Sign> signsFromDb = signDAO.read();
-        assertThat(signsFromDb.toArray(), is(equalTo(signs.toArray())));
+        assertThat(signsFromDb, containsInAnyOrder(signs.toArray(new Sign[signs.size()])));
     }
 
 
     @Test
-    public void testDeleteEmptiesTheTable() {
-        signDAO.create(FOOTBALL);
-        signDAO.delete();
-        int numberOfSignsLeft = signDAO.read().size();
-        if (0 > numberOfSignsLeft) {
-            fail("Deleted all signs, but reading returns a list with size: " + numberOfSignsLeft);
+    public void testDelete() {
+        final Sign sign = signDAO.create(TEST_SIGN);
+        final int numberOfSignsBefore = signDAO.read().size();
+        signDAO.delete(sign);
+        final int numberOfSignsAfter = signDAO.read().size();
+        if (numberOfSignsAfter != (numberOfSignsBefore -1)) {
+            fail("Deleted sign, but reading returns a list with the same size");
         }
     }
 
     @Test
     public void testUpdateChangesLearningProgress() {
-        final Sign createdSign = signDAO.create(FOOTBALL);
+        final Sign createdSign = signDAO.create(TEST_SIGN);
         createdSign.increaseLearningProgress();
         final Sign updatedSign = signDAO.update(createdSign);
         assertThat(updatedSign.getId(), is(equalTo(createdSign.getId())));
         assertThat(updatedSign.getLearningProgress(), is(equalTo(createdSign.getLearningProgress())));
+        signDAO.delete(createdSign);
     }
 
     @Test
     public void testUpdateChangesStarred() {
-        final Sign createdSign = signDAO.create(FOOTBALL);
+        final Sign createdSign = signDAO.create(TEST_SIGN);
         createdSign.setStarred(true);
         final Sign updatedSign = signDAO.update(createdSign);
         assertThat(updatedSign.getId(), is(equalTo(createdSign.getId())));
         assertThat(updatedSign.isStarred(), is(equalTo(true)));
+        signDAO.delete(createdSign);
     }
 
     @Test
