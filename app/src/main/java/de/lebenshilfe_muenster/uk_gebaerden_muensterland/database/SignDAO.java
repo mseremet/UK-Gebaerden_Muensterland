@@ -50,6 +50,20 @@ public class SignDAO {
     }
 
     /**
+     * Persist a list of signs.
+     *
+     * @param signs a list of signs, which hast not been persisted yet.
+     * @return a list of persisted signs.
+     */
+    public List<Sign> create(List<Sign> signs) {
+        final List<Sign> createdSigns = new ArrayList<>();
+        for (Sign sign : signs) {
+            createdSigns.add(create(sign));
+        }
+        return createdSigns;
+    }
+
+    /**
      * Persist a sign.
      *
      * @param sign a Sign, which has not been persisted yet.
@@ -118,7 +132,8 @@ public class SignDAO {
                     selectionArgs);
             if (0 == rowsUpdated) {
                 throw new IllegalStateException(MessageFormat.format("Updating sign {0} updated no rows!", sign));
-            }if (1 > rowsUpdated) {
+            }
+            if (1 > rowsUpdated) {
                 throw new IllegalStateException(MessageFormat.format("Updating sign {0} updated more than " +
                         "one row. {1} rows were updated.", sign, rowsUpdated));
             }

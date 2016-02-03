@@ -2,13 +2,18 @@ package de.lebenshilfe_muenster.uk_gebaerden_muensterland;
 
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
 
+import org.apache.commons.lang3.time.StopWatch;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.SignDAO;
 
@@ -41,6 +46,10 @@ public class DbHelperTest {
 
     public static final Sign FOOTBALL = new Sign.Builder().setId(0).setName("football").setNameLocaleDe("Fußball")
             .setMnemonic("Kick a ball").setStarred(false).setLearningProgress(0).create();
+    public static final Sign MAMA = new Sign.Builder().setId(0).setName("mama").setNameLocaleDe("Mama")
+            .setMnemonic("Wange kreiselnd streichen").setStarred(false).setLearningProgress(0).create();
+    public static final Sign PAPA = new Sign.Builder().setId(0).setName("papa").setNameLocaleDe("Papa")
+            .setMnemonic("Schnurrbart").setStarred(false).setLearningProgress(0).create();
     @Rule
     public final ActivityTestRule<MainActivity> mainActivityActivityTestRule = new ActivityTestRule<>(MainActivity.class);
     final SignDAO signDAO = new SignDAO(mainActivityActivityTestRule.launchActivity(null));
@@ -71,6 +80,40 @@ public class DbHelperTest {
         signDAO.create(FOOTBALL);
         signDAO.create(FOOTBALL);
     }
+
+    @Test
+    public void testCreatingManySigns() {
+        final List<Sign> signs = new ArrayList<>();
+        for (int i = 0; i < 300; i++) {
+            final String name = "sign_" + i;
+            signs.add(new Sign.Builder().setId(0).setName(name).setNameLocaleDe(name + "_de")
+                    .setMnemonic(name + "_mnemonic").setStarred(false).setLearningProgress(0).create());
+
+        }
+        final StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        signDAO.create(signs);
+        stopWatch.stop();
+        Log.d(DbHelperTest.class.getName(), "Creating the signs took " + stopWatch.getTime() + " milliseconds");
+        stopWatch.reset();
+        stopWatch.start();
+        final List<Sign> signsFromDb = signDAO.read();
+        stopWatch.stop();
+        Log.d(DbHelperTest.class.getName(), "Reading the signs took " + stopWatch.getTime() + " milliseconds");
+        assertThat(signsFromDb.toArray(), is(equalTo(signs.toArray())));
+    }
+
+    @Test
+    public void testReadReturnsList() {
+        List<Sign> signs = new ArrayList<>();
+        signs.add(FOOTBALL);
+        signs.add(PAPA);
+        signs.add(MAMA);
+        signDAO.create(signs);
+        List<Sign> signsFromDb = signDAO.read();
+        assertThat(signsFromDb.toArray(), is(equalTo(signs.toArray())));
+    }
+
 
     @Test
     public void testDeleteEmptiesTheTable() {
@@ -106,7 +149,7 @@ public class DbHelperTest {
         thrown.expectMessage(allOf(startsWith("Updating sign"), endsWith("no rows!")));
         final Sign illegalSign = new Sign.Builder().setId(Integer.MAX_VALUE).setName("football").setNameLocaleDe("Fußball")
                 .setMnemonic("Kick a ball").setStarred(false).setLearningProgress(0).create();
-         signDAO.update(illegalSign);
+        signDAO.update(illegalSign);
     }
 
 }
