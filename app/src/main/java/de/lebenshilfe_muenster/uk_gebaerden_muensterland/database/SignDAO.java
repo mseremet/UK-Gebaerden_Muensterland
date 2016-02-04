@@ -32,9 +32,9 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.Sign;
  */
 public class SignDAO {
 
-    public static final String CLASS_NAME = SignDAO.class.getName();
+    private static final String CLASS_NAME = SignDAO.class.getName();
     private static SignDAO instance;
-    private SQLiteOpenHelper openHelper;
+    private final SQLiteOpenHelper openHelper;
     private SQLiteDatabase database;
 
     /**
@@ -49,7 +49,7 @@ public class SignDAO {
      */
     public static synchronized SignDAO getInstance(Context context) {
         if (null == instance) {
-            return new SignDAO(context);
+            instance = new SignDAO(context);
         }
         return instance;
     }
@@ -72,6 +72,7 @@ public class SignDAO {
      * @param signs a list of signs, which hast not been persisted yet.
      * @return a list of persisted signs.
      */
+    @SuppressWarnings("UnusedReturnValue")
     public List<Sign> create(List<Sign> signs) {
         final List<Sign> createdSigns = new ArrayList<>();
         for (Sign sign : signs) {

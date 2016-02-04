@@ -30,23 +30,6 @@ public class Sign {
     private boolean starred;
 
     /**
-     * Constructor for a sign ('Gebärde'), which has <strong>not</strong> been persisted to the database. Used by the Builder.
-     *
-     * @param name         the name, has to be unique within the app
-     * @param nameLocaleDe the German name
-     * @param mnemonic     the mnemonic ('Eselsbrücke')
-     */
-    private Sign(String name, String nameLocaleDe, String mnemonic) {
-        validateParameters(name, mnemonic, 0);
-        this.id = 0;
-        this.name = name;
-        this.nameLocaleDe = nameLocaleDe;
-        this.mnemonic = mnemonic;
-        this.starred = false;
-        this.learningProgress = 0;
-    }
-
-    /**
      * Constructor for a sign ('Gebärde'), which has been persisted to the database. Used by the Builder.
      *
      * @param id               the database id

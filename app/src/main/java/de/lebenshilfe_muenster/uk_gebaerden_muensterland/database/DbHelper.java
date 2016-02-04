@@ -20,9 +20,7 @@ import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class DbHelper extends SQLiteAssetHelper {
-
-    public static final String CLASS_NAME = DbHelper.class.getName();
+class DbHelper extends SQLiteAssetHelper {
 
     public DbHelper(Context context) {
         super(context, DbContract.DATABASE_NAME, null, DbContract.DATABASE_VERSION);

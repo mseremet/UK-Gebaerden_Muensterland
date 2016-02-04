@@ -18,7 +18,7 @@ import android.provider.BaseColumns;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class DbContract {
+class DbContract {
 
     public static final String DATABASE_NAME = "signs.db";
     public static final int DATABASE_VERSION = 1;
@@ -29,6 +29,7 @@ public class DbContract {
     /**
      * Empty default constructor
      */
+    @SuppressWarnings("unused")
     public DbContract() {
     }
 

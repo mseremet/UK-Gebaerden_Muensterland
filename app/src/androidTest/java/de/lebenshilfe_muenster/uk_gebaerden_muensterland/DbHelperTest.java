@@ -45,19 +45,19 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class DbHelperTest {
 
-    public static final Sign FOOTBALL = new Sign.Builder().setId(0).setName("football").setNameLocaleDe("Fußball")
+    private static final Sign FOOTBALL = new Sign.Builder().setId(0).setName("football").setNameLocaleDe("Fußball")
             .setMnemonic("Faust tritt in Handfläche").setStarred(false).setLearningProgress(0).create();
-    public static final Sign MAMA = new Sign.Builder().setId(0).setName("mama").setNameLocaleDe("Mama")
+    private static final Sign MAMA = new Sign.Builder().setId(0).setName("mama").setNameLocaleDe("Mama")
             .setMnemonic("Wange streicheln").setStarred(false).setLearningProgress(0).create();
-    public static final Sign PAPA = new Sign.Builder().setId(0).setName("papa").setNameLocaleDe("Papa")
+    private static final Sign PAPA = new Sign.Builder().setId(0).setName("papa").setNameLocaleDe("Papa")
             .setMnemonic("Schnurrbart").setStarred(false).setLearningProgress(0).create();
-    public static final Sign TEST_SIGN = new Sign.Builder().setId(0).setName("test_sign").setNameLocaleDe("test_sign_de")
+    private static final Sign TEST_SIGN = new Sign.Builder().setId(0).setName("test_sign").setNameLocaleDe("test_sign_de")
             .setMnemonic("test_sign_mnemonic").setStarred(false).setLearningProgress(0).create();
     @Rule
     public final ActivityTestRule<MainActivity> mainActivityActivityTestRule = new ActivityTestRule<>(MainActivity.class);
-    final SignDAO signDAO = SignDAO.getInstance(mainActivityActivityTestRule.launchActivity(null));
+    private final SignDAO signDAO = SignDAO.getInstance(mainActivityActivityTestRule.launchActivity(null));
     @Rule
-    public ExpectedException thrown = ExpectedException.none();
+    public final ExpectedException thrown = ExpectedException.none();
 
     @Before
     public void openDatabase() {

@@ -70,7 +70,7 @@ public class SignBrowserAdapter extends RecyclerView.Adapter<SignBrowserAdapter.
         });
     }
 
-    public void handleClickOnTxtSignName(String item) {
+    private void handleClickOnTxtSignName(String item) {
         int position = this.dataset.indexOf(item);
         // TODO: handle Click on item here
         // notifyItemRemoved(position);

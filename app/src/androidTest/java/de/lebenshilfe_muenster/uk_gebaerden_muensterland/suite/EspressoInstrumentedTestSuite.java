@@ -24,5 +24,5 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.SignBrowserTest;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({NavigationDrawerTest.class, SignBrowserTest.class})
-public class EspressoUnitTestSuite {
+public class EspressoInstrumentedTestSuite {
 }

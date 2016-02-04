@@ -1,4 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/signBrowserSingleRow"
     android:layout_width="fill_parent"
     android:layout_height="?android:attr/listPreferredItemHeight"
@@ -10,71 +11,74 @@
         android:id="@+id/icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="6dip"
-        android:layout_marginEnd="6dip"
-        android:contentDescription="@string/signIconDescription"
-        android:src="@drawable/ic_menu_gallery"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="6dip"
+        android:layout_marginRight="6dip"
+        android:contentDescription="@string/signIconDescription"
+        android:src="@drawable/ic_menu_gallery" />
 
 
     <TextView
         android:id="@+id/signName"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/mnemonic"
+        android:layout_alignStart="@+id/mnemonic"
+        android:layout_alignTop="@+id/icon"
         android:ellipsize="marquee"
         android:singleLine="true"
         android:text="Example sign"
         android:textSize="16sp"
-        android:layout_alignTop="@+id/icon"
-        android:layout_alignLeft="@+id/mnemonic"
-        android:layout_alignStart="@+id/mnemonic" />
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/mnemonic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/icon"
+        android:layout_toEndOf="@+id/icon"
+        android:layout_toRightOf="@+id/icon"
         android:ellipsize="marquee"
         android:singleLine="true"
-        android:text="Description"
+        android:text="Mnemonic"
         android:textSize="12sp"
-        android:layout_below="@+id/icon"
-        android:layout_toRightOf="@+id/icon"
-        android:layout_toEndOf="@+id/icon" />
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/learningProgressLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Progress: "
-        android:textSize="12sp"
         android:layout_alignBaseline="@+id/mnemonic"
         android:layout_toLeftOf="@+id/learningProgressValue"
-        android:layout_toStartOf="@+id/learningProgressValue" />
+        android:layout_toStartOf="@+id/learningProgressValue"
+        android:text="Progress: "
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/learningProgressValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="7"
-        android:textSize="12sp"
         android:layout_alignBaseline="@+id/mnemonic"
         android:layout_toLeftOf="@+id/starred"
-        android:layout_toStartOf="@+id/starred" />
+        android:layout_toStartOf="@+id/starred"
+        android:text="7"
+        android:textSize="12sp"
+        tools:ignore="HardcodedText" />
 
     <CheckBox
         android:id="@+id/starred"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/mnemonic"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_marginLeft="6dip"
         android:layout_marginStart="6dip"
         android:contentDescription="signStarred"
         android:text="Starred"
-        android:textSize="12sp"
-        android:layout_alignBaseline="@+id/mnemonic"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:textSize="12sp" />
 
 </RelativeLayout>
 

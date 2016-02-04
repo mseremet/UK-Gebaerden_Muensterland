@@ -25,6 +25,7 @@ import java.util.List;
 /**
  * Model that stores a parcelable log of entries, each with a timestamp.
  */
+@SuppressWarnings("SameParameterValue")
 public class ClassUnderInstrumentedUnitTest implements Parcelable {
 
     // Used to store the data to be used by the activity.

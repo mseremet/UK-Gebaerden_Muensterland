@@ -38,6 +38,7 @@ import static org.hamcrest.CoreMatchers.allOf;
  */
 //@RunWith(AndroidJUnit4.class)
 //@LargeTest
+@SuppressWarnings("ALL")
 public class EspressoUITest {
 //    Sample Espresso UI Test
 //    @Rule
