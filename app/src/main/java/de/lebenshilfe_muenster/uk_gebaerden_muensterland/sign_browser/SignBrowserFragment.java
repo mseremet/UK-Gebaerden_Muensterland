@@ -7,6 +7,9 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -46,6 +49,7 @@ public class SignBrowserFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        setHasOptionsMenu(true);
         this.recyclerView = (RecyclerView) getActivity().findViewById(R.id.signRecyclerView);
         if (null == this.recyclerView) {
             throw new IllegalStateException("Recycler view not found by MainActivity. Should have " +
@@ -74,5 +78,15 @@ public class SignBrowserFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.options_sign_browser, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // TODO
+        return super.onOptionsItemSelected(item);
+    }
 }
 

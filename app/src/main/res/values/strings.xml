@@ -13,4 +13,5 @@
     <string name="sign_trainer">Sign trainer</string>
     <string name="signIconDescription">signIcon</string>
     <string name="signBrowserSingleRow">signBrowserSingleRow</string>
+    <string name="action_search">Search</string>
 </resources>

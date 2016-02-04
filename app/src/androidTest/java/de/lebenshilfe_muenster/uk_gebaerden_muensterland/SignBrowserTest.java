@@ -75,6 +75,11 @@ public class SignBrowserTest {
     }
 
     @Test
+    public void checkSearchIsPresent() {
+        onView(withId(R.id.action_search)).check(matches(isDisplayed()));
+    }
+
+    @Test
     public void checkSignRecyclerViewIsDisplayed() {
         onView(withId(R.id.signRecyclerView)).check(matches(isDisplayed()));
     }
