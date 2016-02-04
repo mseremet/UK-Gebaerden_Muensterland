@@ -8,9 +8,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
+import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
@@ -96,6 +98,17 @@ public class SignBrowserTest {
         onView(allOf(withParent(withId(R.id.signBrowserSingleRow)),hasSibling(withText(MAMA)), withText(containsString(STARRED)))).check(matches(isNotChecked()));
         onView(allOf(withParent(withId(R.id.signBrowserSingleRow)),hasSibling(withText(PAPA)), withText(containsString(STARRED)))).check(matches(isNotChecked()));
         onView(allOf(withParent(withId(R.id.signBrowserSingleRow)),hasSibling(withText(FOOTBALL)), withText(containsString(STARRED)))).check(matches(isNotChecked()));
+    }
+
+    @Test
+    public void checkSignStarredInformationCanBePersisted() {
+        onView(allOf(withParent(withId(R.id.signBrowserSingleRow)),hasSibling(withText(MAMA)), withText(containsString(STARRED)))).check(matches(isNotChecked())).perform(click());
+        onView(allOf(withParent(withId(R.id.signBrowserSingleRow)),hasSibling(withText(MAMA)), withText(containsString(STARRED)))).check(matches(isChecked()));
+        onView(withContentDescription(R.string.navigation_drawer_open)).perform(click());
+        onView(withText(R.string.train_signs)).perform(click());
+        onView(withContentDescription(R.string.navigation_drawer_open)).perform(click());
+        onView(withText(R.string.browse_signs)).perform(click());
+        onView(allOf(withParent(withId(R.id.signBrowserSingleRow)),hasSibling(withText(MAMA)), withText(containsString(STARRED)))).check(matches(isChecked())).perform(click());
     }
 
     @Test

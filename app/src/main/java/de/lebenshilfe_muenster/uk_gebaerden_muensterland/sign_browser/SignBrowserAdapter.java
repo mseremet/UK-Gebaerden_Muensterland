@@ -12,6 +12,7 @@ import java.util.List;
 
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.Sign;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.SignDAO;
 
 /**
  * Copyright (c) 2016 Matthias Tonhäuser
@@ -32,6 +33,7 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.Sign;
 public class SignBrowserAdapter extends RecyclerView.Adapter<SignBrowserAdapter.ViewHolder> {
 
     private final List<Sign> dataset;
+    private ViewGroup parent;
 
     public SignBrowserAdapter(List<Sign> dataset) {
         this.dataset = dataset;
@@ -40,29 +42,50 @@ public class SignBrowserAdapter extends RecyclerView.Adapter<SignBrowserAdapter.
     @Override
     public SignBrowserAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                             int viewType) {
-        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.row_layout_sign_browser, parent, false));
+        this.parent = parent;
+        return new ViewHolder(LayoutInflater.from(this.parent.getContext()).inflate(R.layout.row_layout_sign_browser, parent, false));
     }
 
-    public void handleClick(String item) {
-        int position = this.dataset.indexOf(item);
-        // TODO: handle Click on item here
-        // notifyItemRemoved(position);
-    }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
+        final String name = dataset.get(position).getName();
         final String nameLocaleDe = dataset.get(position).getNameLocaleDe();
         holder.txtSignName.setText(nameLocaleDe);
         holder.txtSignName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                handleClick(nameLocaleDe);
+                handleClickOnTxtSignName(name);
             }
         });
         holder.txtSignMnemonic.setText(dataset.get(position).getMnemonic());
         final DecimalFormat decimalFormat = new DecimalFormat(" 0;-0");
         holder.txtSignLearningProgress.setText(decimalFormat.format(dataset.get(position).getLearningProgress()));
         holder.checkBoxStarred.setChecked(dataset.get(position).isStarred());
+        holder.checkBoxStarred.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+             handleClickOnCheckBoxStarred(dataset.get(position));
+            }
+        });
+    }
+
+    public void handleClickOnTxtSignName(String item) {
+        int position = this.dataset.indexOf(item);
+        // TODO: handle Click on item here
+        // notifyItemRemoved(position);
+    }
+
+    private void handleClickOnCheckBoxStarred(Sign sign) {
+        if(sign.isStarred()) {
+            sign.setStarred(false);
+        } else {
+            sign.setStarred(true);
+        }
+        SignDAO signDAO = SignDAO.getInstance(this.parent.getContext());
+        signDAO.open();
+        signDAO.update(sign);
+        signDAO.close();
     }
 
     @Override

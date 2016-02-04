@@ -36,9 +36,6 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.SignDAO;
 public class SignBrowserFragment extends Fragment {
 
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter adapter;
-    private RecyclerView.LayoutManager layoutManager;
-
 
     @Nullable
     @Override
@@ -55,10 +52,8 @@ public class SignBrowserFragment extends Fragment {
                     "been created by fragment's onCreateView() method.");
         }
         this.recyclerView.setHasFixedSize(true); // performance fix
-        this.layoutManager = new LinearLayoutManager(getActivity());
-        this.recyclerView.setLayoutManager(this.layoutManager);
-        this.adapter = new SignBrowserAdapter(new ArrayList<Sign>());
-        this.recyclerView.setAdapter(this.adapter);
+        this.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        this.recyclerView.setAdapter(new SignBrowserAdapter(new ArrayList<Sign>()));
         new LoadSignsTask().execute();
     }
 
@@ -68,7 +63,9 @@ public class SignBrowserFragment extends Fragment {
         protected List<Sign> doInBackground(Void... params) {
             final SignDAO signDAO = SignDAO.getInstance(getActivity());
             signDAO.open();
-            return signDAO.read();
+            final List<Sign> signs = signDAO.read();
+            signDAO.close();
+            return signs;
         }
 
         @Override

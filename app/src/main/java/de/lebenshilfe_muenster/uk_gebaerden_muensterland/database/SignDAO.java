@@ -47,7 +47,7 @@ public class SignDAO {
     /**
      * Singleton instance of the SignDAO
      */
-    public static SignDAO getInstance(Context context) {
+    public static synchronized SignDAO getInstance(Context context) {
         if (null == instance) {
             return new SignDAO(context);
         }
