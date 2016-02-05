@@ -44,6 +44,7 @@ import static org.hamcrest.CoreMatchers.not;
 @RunWith(AndroidJUnit4.class)
 public class SignBrowserTest {
 
+    public static final String ENTER = "\n";
     private static final String MAMA = "Mama";
     private static final String PAPA = "Papa";
     private static final String FOOTBALL = "Fußball";
@@ -52,8 +53,6 @@ public class SignBrowserTest {
     private static final String FOOTBALL_MNEMONIC = "Faust tritt in Handfläche";
     private static final String STARRED = "Starred";
     private static final String PROGRESS_0 = "0";
-    public static final String ENTER = "\n";
-
     @Rule
     public ActivityTestRule<MainActivity> mainActivityActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
@@ -83,12 +82,18 @@ public class SignBrowserTest {
     }
 
     @Test
-    public void checkSearchingForSignsWorks() throws InterruptedException {
+    public void checkSearchingForSignsWorks() {
+        // Search from sign browser
         onView(withId(R.id.action_search)).check(matches(isDisplayed())).perform(click());
-        onView(withId(android.support.design.R.id.search_bar)).check(matches(isDisplayed()));
-        onView(withId(android.support.design.R.id.search_src_text)).check(matches(isDisplayed())).perform(typeText(MAMA + ENTER));
+        onView(withId(android.support.design.R.id.search_src_text)).check(matches(isDisplayed())).perform(typeText("mam" + ENTER));
         onView(allOf(withId(R.id.signSearchRecyclerView), hasDescendant((withText(MAMA))))).check(matches(isDisplayed()));
         onView(allOf(withId(R.id.signSearchRecyclerView), hasDescendant((withText(PAPA))))).check(doesNotExist());
+        onView(allOf(withId(R.id.signSearchRecyclerView), hasDescendant((withText(FOOTBALL))))).check(doesNotExist());
+        // Search from the list of results again
+        onView(withId(R.id.action_search)).check(matches(isDisplayed())).perform(click());
+        onView(withId(android.support.design.R.id.search_src_text)).check(matches(isDisplayed())).perform(typeText("paP" + ENTER));
+        onView(allOf(withId(R.id.signSearchRecyclerView), hasDescendant((withText(MAMA))))).check(doesNotExist());
+        onView(allOf(withId(R.id.signSearchRecyclerView), hasDescendant((withText(PAPA))))).check(matches(isDisplayed()));
         onView(allOf(withId(R.id.signSearchRecyclerView), hasDescendant((withText(FOOTBALL))))).check(doesNotExist());
     }
 
@@ -113,27 +118,27 @@ public class SignBrowserTest {
 
     @Test
     public void checkSignHasStarredInformation() {
-        onView(allOf(withParent(withId(R.id.signBrowserSingleRow)),hasSibling(withText(MAMA)), withText(containsString(STARRED)))).check(matches(isNotChecked()));
-        onView(allOf(withParent(withId(R.id.signBrowserSingleRow)),hasSibling(withText(PAPA)), withText(containsString(STARRED)))).check(matches(isNotChecked()));
-        onView(allOf(withParent(withId(R.id.signBrowserSingleRow)),hasSibling(withText(FOOTBALL)), withText(containsString(STARRED)))).check(matches(isNotChecked()));
+        onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(MAMA)), withText(containsString(STARRED)))).check(matches(isNotChecked()));
+        onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(PAPA)), withText(containsString(STARRED)))).check(matches(isNotChecked()));
+        onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(FOOTBALL)), withText(containsString(STARRED)))).check(matches(isNotChecked()));
     }
 
     @Test
     public void checkSignStarredInformationCanBePersisted() {
-        onView(allOf(withParent(withId(R.id.signBrowserSingleRow)),hasSibling(withText(MAMA)), withText(containsString(STARRED)))).check(matches(isNotChecked())).perform(click());
-        onView(allOf(withParent(withId(R.id.signBrowserSingleRow)),hasSibling(withText(MAMA)), withText(containsString(STARRED)))).check(matches(isChecked()));
+        onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(MAMA)), withText(containsString(STARRED)))).check(matches(isNotChecked())).perform(click());
+        onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(MAMA)), withText(containsString(STARRED)))).check(matches(isChecked()));
         onView(withContentDescription(R.string.navigation_drawer_open)).perform(click());
         onView(withText(R.string.train_signs)).perform(click());
         onView(withContentDescription(R.string.navigation_drawer_open)).perform(click());
         onView(withText(R.string.browse_signs)).perform(click());
-        onView(allOf(withParent(withId(R.id.signBrowserSingleRow)),hasSibling(withText(MAMA)), withText(containsString(STARRED)))).check(matches(isChecked())).perform(click());
+        onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(MAMA)), withText(containsString(STARRED)))).check(matches(isChecked())).perform(click());
     }
 
     @Test
     public void checkSignHasLearningProgressInformation() {
-        onView(allOf(withId(R.id.signBrowserSingleRow), hasDescendant(withText(MAMA)),hasDescendant(withText(containsString(PROGRESS_0))))).check(matches(isDisplayed()));
-        onView(allOf(withId(R.id.signBrowserSingleRow), hasDescendant(withText(PAPA)),hasDescendant(withText(containsString(PROGRESS_0))))).check(matches(isDisplayed()));
-        onView(allOf(withId(R.id.signBrowserSingleRow), hasDescendant(withText(FOOTBALL)),hasDescendant(withText(containsString(PROGRESS_0))))).check(matches(isDisplayed()));
+        onView(allOf(withId(R.id.signBrowserSingleRow), hasDescendant(withText(MAMA)), hasDescendant(withText(containsString(PROGRESS_0))))).check(matches(isDisplayed()));
+        onView(allOf(withId(R.id.signBrowserSingleRow), hasDescendant(withText(PAPA)), hasDescendant(withText(containsString(PROGRESS_0))))).check(matches(isDisplayed()));
+        onView(allOf(withId(R.id.signBrowserSingleRow), hasDescendant(withText(FOOTBALL)), hasDescendant(withText(containsString(PROGRESS_0))))).check(matches(isDisplayed()));
     }
 
 }
