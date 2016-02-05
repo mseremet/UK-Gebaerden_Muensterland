@@ -11,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -51,7 +50,7 @@ public class SignBrowserSearchActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.options_sign_browser, menu);
+        inflater.inflate(R.menu.options_sign_browser_search, menu);
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
@@ -71,16 +70,21 @@ public class SignBrowserSearchActivity extends AppCompatActivity {
 
         @Override
         protected List<Sign> doInBackground(String... params) {
-            final SignDAO signDAO = SignDAO.getInstance(SignBrowserSearchActivity.this);
-            signDAO.open();
-            final List<Sign> signs = signDAO.read(params[0]);
-            signDAO.close();
+            final List<Sign> signs = new ArrayList<>();
+            if (1 == params.length) {
+                final SignDAO signDAO = SignDAO.getInstance(SignBrowserSearchActivity.this);
+                signDAO.open();
+                signs.addAll(signDAO.read(params[0]));
+                signDAO.close();
+            }
             return signs;
         }
 
         @Override
         protected void onPostExecute(List<Sign> result) {
-            recyclerView.swapAdapter(new SignBrowserSearchAdapter(result), true);
+            if (null != SignBrowserSearchActivity.this) {
+                SignBrowserSearchActivity.this.recyclerView.swapAdapter(new SignBrowserSearchAdapter(result), true);
+            }
         }
     }
 }

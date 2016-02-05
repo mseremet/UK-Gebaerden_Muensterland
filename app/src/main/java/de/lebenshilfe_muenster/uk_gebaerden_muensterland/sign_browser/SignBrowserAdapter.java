@@ -1,5 +1,6 @@
 package de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,17 +34,17 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.SignDAO;
 public class SignBrowserAdapter extends RecyclerView.Adapter<SignBrowserAdapter.ViewHolder> {
 
     private final List<Sign> dataset;
-    private ViewGroup parent;
+    private final Context context;
 
-    public SignBrowserAdapter(List<Sign> dataset) {
+    public SignBrowserAdapter(List<Sign> dataset, Context context) {
         this.dataset = dataset;
+        this.context = context;
     }
 
     @Override
     public SignBrowserAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                             int viewType) {
-        this.parent = parent;
-        return new ViewHolder(LayoutInflater.from(this.parent.getContext()).inflate(R.layout.row_layout_sign_browser, parent, false));
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.row_layout_sign_browser, parent, false));
     }
 
 
@@ -82,7 +83,7 @@ public class SignBrowserAdapter extends RecyclerView.Adapter<SignBrowserAdapter.
         } else {
             sign.setStarred(true);
         }
-        SignDAO signDAO = SignDAO.getInstance(this.parent.getContext());
+        SignDAO signDAO = SignDAO.getInstance(this.context);
         signDAO.open();
         signDAO.update(sign);
         signDAO.close();

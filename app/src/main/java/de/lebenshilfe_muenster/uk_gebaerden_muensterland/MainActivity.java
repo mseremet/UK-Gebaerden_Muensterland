@@ -1,7 +1,7 @@
 package de.lebenshilfe_muenster.uk_gebaerden_muensterland;
 
 import android.app.Fragment;
-import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -69,8 +69,12 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void showFragmentAndSetToolbarTitle(Fragment fragment, int actionBarTitleStringId) {
-        final FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+        final FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.content_frame, fragment);
+        // TODO: https://github.com/Scaronthesky/UK-Gebaerden_Muensterland/issues/7
+        // transaction.addToBackStack(null);
+        transaction.commit();
+
         final ActionBar supportActionBar = getSupportActionBar();
         if (null == supportActionBar) {
             throw new IllegalStateException("SupportActionBar is null. Should be set in onCreate() method.");

@@ -3,6 +3,7 @@ package de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser;
 import android.app.Fragment;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -26,23 +27,25 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.SignDAO;
 
 /**
  * Copyright (c) 2016 Matthias Tonhäuser
- * <p>
+ * <p/>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * <p>
+ * <p/>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ * <p/>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 public class SignBrowserFragment extends Fragment {
 
+    public static final String SHOW_STARRED_ONLY = "SHOW_STARRED_ONLY";
     private RecyclerView recyclerView;
+    private boolean showStarredOnly = false;
 
     @Nullable
     @Override
@@ -57,33 +60,76 @@ public class SignBrowserFragment extends Fragment {
         this.recyclerView = (RecyclerView) getActivity().findViewById(R.id.signRecyclerView);
         this.recyclerView.setHasFixedSize(true); // performance fix
         this.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        this.recyclerView.setAdapter(new SignBrowserAdapter(new ArrayList<Sign>()));
-        new LoadSignsTask().execute();
+        this.recyclerView.setAdapter(new SignBrowserAdapter(new ArrayList<Sign>(), null));
+        final SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        this.showStarredOnly = sharedPref.getBoolean(SHOW_STARRED_ONLY,false);
+        new LoadSignsTask().execute(this.showStarredOnly);
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.options_sign_browser, menu);
-        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-        SearchView searchView =(SearchView) MenuItemCompat.getActionView(searchItem);
+        final MenuItem item = menu.findItem(R.id.action_toggle_starred);
+        if (this.showStarredOnly) {
+            item.setIcon(R.drawable.ic_sign_browser_grade_enabled);
+        } else {
+            item.setIcon(R.drawable.ic_sign_browser_grade);
+        }
+        final SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        final MenuItem searchItem = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
     }
 
-    private class LoadSignsTask extends AsyncTask<Void, Void, List<Sign>> {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_toggle_starred) {
+            if (!this.showStarredOnly) {
+                this.showStarredOnly = true;
+                item.setIcon(R.drawable.ic_sign_browser_grade_enabled);
+            } else {
+                this.showStarredOnly = false;
+                item.setIcon(R.drawable.ic_sign_browser_grade);
+            }
+            final SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+            final SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putBoolean(SHOW_STARRED_ONLY, this.showStarredOnly);
+            editor.commit();
+            new LoadSignsTask().execute(this.showStarredOnly);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * If the first parameter Boolean is true, only starred signs will be loaded.
+     */
+    private class LoadSignsTask extends AsyncTask<Boolean, Void, List<Sign>> {
 
         @Override
-        protected List<Sign> doInBackground(Void... params) {
+        protected List<Sign> doInBackground(Boolean... params) {
             final SignDAO signDAO = SignDAO.getInstance(getActivity());
             signDAO.open();
             final List<Sign> signs = signDAO.read();
             signDAO.close();
+            if (1 == params.length) {
+                if (params[0].booleanValue()) {
+                    final List<Sign> signsToRemove = new ArrayList<>();
+                    for (Sign sign : signs) {
+                        if (!sign.isStarred()) {
+                            signsToRemove.add(sign);
+                        }
+                    }
+                    signs.removeAll(signsToRemove);
+                }
+            }
             return signs;
         }
 
         @Override
         protected void onPostExecute(List<Sign> result) {
-            recyclerView.swapAdapter(new SignBrowserAdapter(result), true);
+            if (null != SignBrowserFragment.this) {
+                SignBrowserFragment.this.recyclerView.swapAdapter(new SignBrowserAdapter(result, getActivity()), false);
+            }
         }
     }
 }

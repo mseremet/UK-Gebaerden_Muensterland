@@ -86,6 +86,11 @@ public class SignBrowserTest {
     }
 
     @Test
+    public void checkToggleStarredButtonsIsPresent() {
+        onView(withId(R.id.action_toggle_starred)).check(matches(isDisplayed()));
+    }
+
+    @Test
     public void checkSearchingForSignsWorks() {
         // Search from sign browser
         onView(withId(R.id.action_search)).check(matches(isDisplayed())).perform(click());
@@ -106,6 +111,24 @@ public class SignBrowserTest {
         // Navigate back to the sign browser -- Up button is only accessible via a localized content description ('Nach oben')
         onView(withContentDescription(getStringResource(R.string.navigate_up))).perform(click());
         onView(withText(R.string.sign_browser)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void checkTogglingStarredSignsWorks() {
+        // check toggle on works
+        onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(MAMA)),
+                withText(containsString(STARRED)))).check(matches(isNotChecked())).perform(click());
+        onView(withId(R.id.action_toggle_starred)).check(matches(isDisplayed())).perform(click());
+        checkOnlyStarredSignsAreShown();
+        // check toggle state is persisted
+        recreateTheSignBrowserByNavigation();
+        checkOnlyStarredSignsAreShown();
+        // check toggle off works
+        onView(withId(R.id.action_toggle_starred)).check(matches(isDisplayed())).perform(click());
+        checkSignRecyclerViewHasListElements();
+        // reset
+        onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(MAMA)),
+                withText(containsString(STARRED)))).check(matches(isChecked())).perform(click());
     }
 
     @Test
@@ -138,10 +161,7 @@ public class SignBrowserTest {
     public void checkSignStarredInformationCanBePersisted() {
         onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(MAMA)), withText(containsString(STARRED)))).check(matches(isNotChecked())).perform(click());
         onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(MAMA)), withText(containsString(STARRED)))).check(matches(isChecked()));
-        onView(withContentDescription(R.string.navigation_drawer_open)).perform(click());
-        onView(withText(R.string.train_signs)).perform(click());
-        onView(withContentDescription(R.string.navigation_drawer_open)).perform(click());
-        onView(withText(R.string.browse_signs)).perform(click());
+        recreateTheSignBrowserByNavigation();
         onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(MAMA)), withText(containsString(STARRED)))).check(matches(isChecked())).perform(click());
     }
 
@@ -157,4 +177,16 @@ public class SignBrowserTest {
         return mainActivityActivityTestRule.getActivity().getResources().getString(stringResourceId);
     }
 
+    private void recreateTheSignBrowserByNavigation() {
+        onView(withContentDescription(R.string.navigation_drawer_open)).perform(click());
+        onView(withText(R.string.train_signs)).perform(click());
+        onView(withContentDescription(R.string.navigation_drawer_open)).perform(click());
+        onView(withText(R.string.browse_signs)).perform(click());
+    }
+
+    private void checkOnlyStarredSignsAreShown() {
+        onView(allOf(withId(R.id.signRecyclerView), hasDescendant((withText(MAMA))))).check(matches(isDisplayed()));
+        onView(allOf(withId(R.id.signRecyclerView), hasDescendant((withText(PAPA))))).check(doesNotExist());
+        onView(allOf(withId(R.id.signRecyclerView), hasDescendant((withText(FOOTBALL))))).check(doesNotExist());
+    }
 }
