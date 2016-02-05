@@ -14,4 +14,5 @@
     <string name="signIconDescription">signIcon</string>
     <string name="signBrowserSingleRow">signBrowserSingleRow</string>
     <string name="action_search">Search</string>
+    <string name="search_hint">Search signs</string>
 </resources>

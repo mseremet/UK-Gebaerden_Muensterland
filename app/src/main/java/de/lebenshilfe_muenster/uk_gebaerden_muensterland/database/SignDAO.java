@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,17 +18,17 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.Sign;
 
 /**
  * Copyright (c) 2016 Matthias Tonhäuser
- * <p/>
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * <p/>
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p/>
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -119,10 +121,15 @@ public class SignDAO {
 
 
     public List<Sign> read() {
-        Log.d(CLASS_NAME, "Reading all signs.");
+        return read(StringUtils.EMPTY);
+    }
+
+    public List<Sign> read(String signNameLocaleDe) {
+        Log.d(CLASS_NAME, MessageFormat.format("Reading signs matching name_locale_de: {0}",signNameLocaleDe));
         final List<Sign> signs = new ArrayList<>();
         final Cursor cursor = database.query(DbContract.SignTable.TABLE_NAME,
-                DbContract.SignTable.ALL_COLUMNS, null, null, null, null, DbContract.SignTable.ORDER_BY_NAME_DE_ASC);
+                DbContract.SignTable.ALL_COLUMNS, DbContract.SignTable.NAME_LOCALE_DE_LIKE,
+                new String[]{"%" + signNameLocaleDe + "%"}, null, null, DbContract.SignTable.ORDER_BY_NAME_DE_ASC);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             final Sign sign = cursorToSign(cursor);
@@ -141,7 +148,7 @@ public class SignDAO {
             final ContentValues values = new ContentValues();
             values.put(DbContract.SignTable.COLUMN_NAME_LEARNING_PROGRESS, sign.getLearningProgress());
             values.put(DbContract.SignTable.COLUMN_NAME_STARRED, sign.isStarred());
-            final String selection = DbContract.SignTable._ID + " LIKE ?";
+            final String selection = DbContract.SignTable._ID + DbContract.LIKE;
             final String[] selectionArgs = {String.valueOf(sign.getId())};
             int rowsUpdated = this.database.update(
                     DbContract.SignTable.TABLE_NAME,
@@ -181,7 +188,7 @@ public class SignDAO {
         try {
             this.database.delete(DbContract.SignTable.TABLE_NAME,
                     DbContract.SignTable.COLUMN_NAME_SIGN_NAME + DbContract.EQUAL_SIGN + DbContract.QUESTION_MARK,
-                    new String[] {sign.getName()});
+                    new String[]{sign.getName()});
             this.database.setTransactionSuccessful();
         } finally {
             this.database.endTransaction();

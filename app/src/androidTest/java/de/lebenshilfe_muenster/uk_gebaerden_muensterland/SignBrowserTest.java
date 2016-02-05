@@ -9,6 +9,8 @@ import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
@@ -50,6 +52,7 @@ public class SignBrowserTest {
     private static final String FOOTBALL_MNEMONIC = "Faust tritt in Handfläche";
     private static final String STARRED = "Starred";
     private static final String PROGRESS_0 = "0";
+    public static final String ENTER = "\n";
 
     @Rule
     public ActivityTestRule<MainActivity> mainActivityActivityTestRule = new ActivityTestRule<>(MainActivity.class);
@@ -77,6 +80,16 @@ public class SignBrowserTest {
     @Test
     public void checkSearchIsPresent() {
         onView(withId(R.id.action_search)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void checkSearchingForSignsWorks() throws InterruptedException {
+        onView(withId(R.id.action_search)).check(matches(isDisplayed())).perform(click());
+        onView(withId(android.support.design.R.id.search_bar)).check(matches(isDisplayed()));
+        onView(withId(android.support.design.R.id.search_src_text)).check(matches(isDisplayed())).perform(typeText(MAMA + ENTER));
+        onView(allOf(withId(R.id.signSearchRecyclerView), hasDescendant((withText(MAMA))))).check(matches(isDisplayed()));
+        onView(allOf(withId(R.id.signSearchRecyclerView), hasDescendant((withText(PAPA))))).check(doesNotExist());
+        onView(allOf(withId(R.id.signSearchRecyclerView), hasDescendant((withText(FOOTBALL))))).check(doesNotExist());
     }
 
     @Test

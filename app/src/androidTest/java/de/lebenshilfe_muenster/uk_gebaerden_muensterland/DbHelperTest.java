@@ -5,6 +5,8 @@ import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
 
 import org.apache.commons.lang3.time.StopWatch;
+import org.hamcrest.Matchers;
+import org.hamcrest.collection.IsEmptyCollection;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -24,6 +26,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.junit.Assert.fail;
 
 /**
@@ -117,6 +120,20 @@ public class DbHelperTest {
         signs.add(MAMA);
         List<Sign> signsFromDb = signDAO.read();
         assertThat(signsFromDb, containsInAnyOrder(signs.toArray(new Sign[signs.size()])));
+    }
+
+    @Test
+    public void testReadWithNameLocaleDeReturnsSingleResult() {
+        List<Sign> signs = new ArrayList<>();
+        signs.add(MAMA);
+        List<Sign> signsFromDb = signDAO.read("mam");
+        assertThat(signsFromDb, containsInAnyOrder(signs.toArray(new Sign[signs.size()])));
+    }
+
+    @Test
+    public void testReadWithIllegalNameLocaleDeReturnsNoResult() {
+        List<Sign> signsFromDb = signDAO.read("foobar");
+        assertThat(signsFromDb, is(empty()));
     }
 
 
