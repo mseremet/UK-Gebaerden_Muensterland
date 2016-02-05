@@ -6,13 +6,17 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,23 +36,30 @@ public class SignBrowserSearchActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-            doMySearch(query);
+            searchForSignWithName(query);
+            final ActionBar supportActionBar = getSupportActionBar();
+            if (null == supportActionBar) {
+                throw new IllegalStateException("SupportActionBar is null. Should have been set in " +
+                        "MainActivity.onCreate().");
+            } else {
+                supportActionBar.setTitle(getResources().getString(R.string.search_results) + StringUtils.SPACE + query);
+                supportActionBar.setDisplayHomeAsUpEnabled(true);
+            }
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.options_sign_browser,menu);
+        inflater.inflate(R.menu.options_sign_browser, menu);
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-//        searchView.setIconifiedByDefault(false);
         return true;
     }
 
-    private void doMySearch(String query) {
+    private void searchForSignWithName(String query) {
         this.recyclerView = (RecyclerView) this.findViewById(R.id.signSearchRecyclerView);
         this.recyclerView.setHasFixedSize(true); // performance fix
         this.recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -69,7 +80,7 @@ public class SignBrowserSearchActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(List<Sign> result) {
-            recyclerView.swapAdapter(new SignBrowserSearchAdapter(result),true);
+            recyclerView.swapAdapter(new SignBrowserSearchAdapter(result), true);
         }
     }
 }
