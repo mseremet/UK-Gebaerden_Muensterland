@@ -103,7 +103,7 @@ public class SignBrowserTest {
         onView(allOf(withId(R.id.signSearchRecyclerView), hasDescendant((withText(FOOTBALL))))).check(doesNotExist());
         onView(allOf(withText(getStringResource(R.string.search_results) + StringUtils.SPACE + PAP),
                 withParent((withId(android.support.design.R.id.action_bar))))).check(matches(isDisplayed()));
-        // navigate back to the sign browser
+        // Navigate back to the sign browser -- Up button is only accessible via a localized content description ('Nach oben')
         onView(withContentDescription(getStringResource(R.string.navigate_up))).perform(click());
         onView(withText(R.string.sign_browser)).check(matches(isDisplayed()));
     }
