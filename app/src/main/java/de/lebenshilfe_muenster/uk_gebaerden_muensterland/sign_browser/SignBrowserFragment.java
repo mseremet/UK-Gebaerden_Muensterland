@@ -71,7 +71,7 @@ public class SignBrowserFragment extends Fragment {
         inflater.inflate(R.menu.options_sign_browser, menu);
         final MenuItem item = menu.findItem(R.id.action_toggle_starred);
         if (this.showStarredOnly) {
-            item.setIcon(R.drawable.ic_sign_browser_grade_enabled);
+            item.setIcon(R.drawable.ic_sign_browser_grade_checked);
         } else {
             item.setIcon(R.drawable.ic_sign_browser_grade);
         }
@@ -86,7 +86,7 @@ public class SignBrowserFragment extends Fragment {
         if (item.getItemId() == R.id.action_toggle_starred) {
             if (!this.showStarredOnly) {
                 this.showStarredOnly = true;
-                item.setIcon(R.drawable.ic_sign_browser_grade_enabled);
+                item.setIcon(R.drawable.ic_sign_browser_grade_checked);
             } else {
                 this.showStarredOnly = false;
                 item.setIcon(R.drawable.ic_sign_browser_grade);

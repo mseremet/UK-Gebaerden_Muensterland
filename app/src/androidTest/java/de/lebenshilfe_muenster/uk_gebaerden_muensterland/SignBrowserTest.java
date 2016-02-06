@@ -117,7 +117,7 @@ public class SignBrowserTest {
     public void checkTogglingStarredSignsWorks() {
         // check toggle on works
         onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(MAMA)),
-                withText(containsString(STARRED)))).check(matches(isNotChecked())).perform(click());
+                withContentDescription(containsString(STARRED)))).check(matches(isNotChecked())).perform(click());
         onView(withId(R.id.action_toggle_starred)).check(matches(isDisplayed())).perform(click());
         checkOnlyStarredSignsAreShown();
         // check toggle state is persisted
@@ -128,7 +128,7 @@ public class SignBrowserTest {
         checkSignRecyclerViewHasListElements();
         // reset
         onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(MAMA)),
-                withText(containsString(STARRED)))).check(matches(isChecked())).perform(click());
+                withContentDescription(containsString(STARRED)))).check(matches(isChecked())).perform(click());
     }
 
     @Test
@@ -152,17 +152,17 @@ public class SignBrowserTest {
 
     @Test
     public void checkSignHasStarredInformation() {
-        onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(MAMA)), withText(containsString(STARRED)))).check(matches(isNotChecked()));
-        onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(PAPA)), withText(containsString(STARRED)))).check(matches(isNotChecked()));
-        onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(FOOTBALL)), withText(containsString(STARRED)))).check(matches(isNotChecked()));
+        onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(MAMA)), withContentDescription(containsString(STARRED)))).check(matches(isNotChecked()));
+        onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(PAPA)), withContentDescription(containsString(STARRED)))).check(matches(isNotChecked()));
+        onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(FOOTBALL)), withContentDescription(containsString(STARRED)))).check(matches(isNotChecked()));
     }
 
     @Test
     public void checkSignStarredInformationCanBePersisted() {
-        onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(MAMA)), withText(containsString(STARRED)))).check(matches(isNotChecked())).perform(click());
-        onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(MAMA)), withText(containsString(STARRED)))).check(matches(isChecked()));
+        onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(MAMA)), withContentDescription(containsString(STARRED)))).check(matches(isNotChecked())).perform(click());
+        onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(MAMA)), withContentDescription(containsString(STARRED)))).check(matches(isChecked()));
         recreateTheSignBrowserByNavigation();
-        onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(MAMA)), withText(containsString(STARRED)))).check(matches(isChecked())).perform(click());
+        onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(MAMA)), withContentDescription(containsString(STARRED)))).check(matches(isChecked())).perform(click());
     }
 
     @Test

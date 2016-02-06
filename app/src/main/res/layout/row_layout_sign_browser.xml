@@ -76,9 +76,8 @@
         android:layout_alignParentRight="true"
         android:layout_marginLeft="6dip"
         android:layout_marginStart="6dip"
-        android:contentDescription="signStarred"
-        android:text="Starred"
-        android:textSize="12sp" />
+        android:contentDescription="@string/starredButton"
+        android:button="@drawable/ic_sign_browser_starred_button"/>
 
 </RelativeLayout>
 
