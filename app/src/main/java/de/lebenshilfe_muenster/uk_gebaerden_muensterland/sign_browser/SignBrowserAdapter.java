@@ -1,6 +1,7 @@
 package de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,7 +67,7 @@ public class SignBrowserAdapter extends RecyclerView.Adapter<SignBrowserAdapter.
         holder.checkBoxStarred.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-             handleClickOnCheckBoxStarred(dataset.get(position));
+                handleClickOnCheckBoxStarred(dataset.get(position));
             }
         });
     }
@@ -78,15 +79,7 @@ public class SignBrowserAdapter extends RecyclerView.Adapter<SignBrowserAdapter.
     }
 
     private void handleClickOnCheckBoxStarred(Sign sign) {
-        if(sign.isStarred()) {
-            sign.setStarred(false);
-        } else {
-            sign.setStarred(true);
-        }
-        SignDAO signDAO = SignDAO.getInstance(this.context);
-        signDAO.open();
-        signDAO.update(sign);
-        signDAO.close();
+        new UpdateSignTask().execute(sign);
     }
 
     @Override
@@ -106,6 +99,28 @@ public class SignBrowserAdapter extends RecyclerView.Adapter<SignBrowserAdapter.
             this.txtSignMnemonic = (TextView) v.findViewById(R.id.mnemonic);
             this.txtSignLearningProgress = (TextView) v.findViewById(R.id.learningProgressValue);
             this.checkBoxStarred = (CheckBox) v.findViewById(R.id.starred);
+        }
+    }
+
+    private class UpdateSignTask extends AsyncTask<Sign, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Sign... params) {
+            if (1 == params.length) {
+                final Sign sign = params[0];
+                if (sign.isStarred()) {
+                    sign.setStarred(false);
+                } else {
+                    sign.setStarred(true);
+                }
+                if (null != SignBrowserAdapter.this.context) {
+                    final SignDAO signDAO = SignDAO.getInstance(SignBrowserAdapter.this.context);
+                    signDAO.open();
+                    signDAO.update(sign);
+                    signDAO.close();
+                }
+            }
+            return null;
         }
     }
 

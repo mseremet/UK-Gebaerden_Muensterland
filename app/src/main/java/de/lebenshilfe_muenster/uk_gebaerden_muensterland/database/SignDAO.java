@@ -34,7 +34,7 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.Sign;
  */
 public class SignDAO {
 
-    private static final String CLASS_NAME = SignDAO.class.getName();
+    private static final String CLASS_NAME = SignDAO.class.getSimpleName();
     private static SignDAO instance;
     private final SQLiteOpenHelper openHelper;
     private SQLiteDatabase database;

@@ -11,6 +11,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -44,8 +45,10 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.SignDAO;
 public class SignBrowserFragment extends Fragment {
 
     public static final String SHOW_STARRED_ONLY = "SHOW_STARRED_ONLY";
+    public static final String CLASS_NAME = SignBrowserFragment.class.getSimpleName();
     private RecyclerView recyclerView;
     private boolean showStarredOnly = false;
+    private AsyncTask<Boolean, Void, List<Sign>> loadSignsTask;
 
     @Nullable
     @Override
@@ -62,8 +65,8 @@ public class SignBrowserFragment extends Fragment {
         this.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         this.recyclerView.setAdapter(new SignBrowserAdapter(new ArrayList<Sign>(), null));
         final SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-        this.showStarredOnly = sharedPref.getBoolean(SHOW_STARRED_ONLY,false);
-        new LoadSignsTask().execute(this.showStarredOnly);
+        this.showStarredOnly = sharedPref.getBoolean(SHOW_STARRED_ONLY, false);
+        this.loadSignsTask = new LoadSignsTask(getActivity()).execute(this.showStarredOnly);
     }
 
     @Override
@@ -95,9 +98,21 @@ public class SignBrowserFragment extends Fragment {
             final SharedPreferences.Editor editor = sharedPref.edit();
             editor.putBoolean(SHOW_STARRED_ONLY, this.showStarredOnly);
             editor.commit();
-            new LoadSignsTask().execute(this.showStarredOnly);
+            this.loadSignsTask = new LoadSignsTask(getActivity()).execute(this.showStarredOnly);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onPause() {
+        if (null != this.loadSignsTask) {
+            final AsyncTask.Status status = this.loadSignsTask.getStatus();
+            if (status.equals(AsyncTask.Status.PENDING)
+                    || status.equals(AsyncTask.Status.RUNNING)) {
+                this.loadSignsTask.cancel(true);
+            }
+        }
+        super.onPause();
     }
 
     /**
@@ -105,11 +120,21 @@ public class SignBrowserFragment extends Fragment {
      */
     private class LoadSignsTask extends AsyncTask<Boolean, Void, List<Sign>> {
 
+        private final Context context;
+
+        public LoadSignsTask(Context context) {
+             this.context = context;
+        }
+
         @Override
         protected List<Sign> doInBackground(Boolean... params) {
-            final SignDAO signDAO = SignDAO.getInstance(getActivity());
+            List<Sign> signs = new ArrayList<>();
+            if (isCancelled()) {
+                return signs;
+            }
+            final SignDAO signDAO = SignDAO.getInstance(this.context);
             signDAO.open();
-            final List<Sign> signs = signDAO.read();
+            signs = signDAO.read();
             signDAO.close();
             if (1 == params.length) {
                 if (params[0].booleanValue()) {
@@ -128,7 +153,7 @@ public class SignBrowserFragment extends Fragment {
         @Override
         protected void onPostExecute(List<Sign> result) {
             if (null != SignBrowserFragment.this) {
-                SignBrowserFragment.this.recyclerView.swapAdapter(new SignBrowserAdapter(result, getActivity()), false);
+                SignBrowserFragment.this.recyclerView.swapAdapter(new SignBrowserAdapter(result, this.context), false);
             }
         }
     }

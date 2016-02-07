@@ -99,12 +99,12 @@ public class DbHelperTest {
         stopWatch.start();
         signDAO.create(signs);
         stopWatch.stop();
-        Log.d(DbHelperTest.class.getName(), "Creating the signs took " + stopWatch.getTime() + " milliseconds");
+        Log.d(DbHelperTest.class.getSimpleName(), "Creating the signs took " + stopWatch.getTime() + " milliseconds");
         stopWatch.reset();
         stopWatch.start();
         final List<Sign> signsFromDb = signDAO.read();
         stopWatch.stop();
-        Log.d(DbHelperTest.class.getName(), "Reading the signs took " + stopWatch.getTime() + " milliseconds");
+        Log.d(DbHelperTest.class.getSimpleName(), "Reading the signs took " + stopWatch.getTime() + " milliseconds");
         signsFromDb.remove(FOOTBALL);
         signsFromDb.remove(MAMA);
         signsFromDb.remove(PAPA);

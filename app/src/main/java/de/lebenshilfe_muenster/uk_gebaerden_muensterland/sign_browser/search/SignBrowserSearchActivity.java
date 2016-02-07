@@ -27,6 +27,7 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.SignDAO;
 public class SignBrowserSearchActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
+    private AsyncTask<String, Void, List<Sign>> loadSignsByNameTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,21 +59,42 @@ public class SignBrowserSearchActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public void onPause() {
+        if (null != this.loadSignsByNameTask) {
+            final AsyncTask.Status status = this.loadSignsByNameTask.getStatus();
+            if (status.equals(AsyncTask.Status.PENDING)
+                    || status.equals(AsyncTask.Status.RUNNING)) {
+                this.loadSignsByNameTask.cancel(true);
+            }
+        }
+        super.onPause();
+    }
+
     private void searchForSignWithName(String query) {
         this.recyclerView = (RecyclerView) this.findViewById(R.id.signSearchRecyclerView);
         this.recyclerView.setHasFixedSize(true); // performance fix
         this.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         this.recyclerView.setAdapter(new SignBrowserSearchAdapter(new ArrayList<Sign>()));
-        new LoadSignsByNameTask().execute(query);
+        this.loadSignsByNameTask = new LoadSignsByNameTask(this).execute(query);
     }
 
     private class LoadSignsByNameTask extends AsyncTask<String, Void, List<Sign>> {
 
+        private final Context context;
+
+        public LoadSignsByNameTask(Context context) {
+            this.context = context;
+        }
+
         @Override
         protected List<Sign> doInBackground(String... params) {
             final List<Sign> signs = new ArrayList<>();
+            if (isCancelled()) {
+                return signs;
+            }
             if (1 == params.length) {
-                final SignDAO signDAO = SignDAO.getInstance(SignBrowserSearchActivity.this);
+                final SignDAO signDAO = SignDAO.getInstance(this.context);
                 signDAO.open();
                 signs.addAll(signDAO.read(params[0]));
                 signDAO.close();
