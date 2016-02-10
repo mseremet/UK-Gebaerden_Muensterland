@@ -102,6 +102,9 @@ public class NavigationDrawerTest {
         onView(isRoot()).perform(orientationLandscape());
         Log.d(NavigationDrawerTest.class.getSimpleName(), "afterOrientationLandscape");
         onView(allOf(withText(toolbarTitle), withParent((withId(R.id.toolbar))))).check(matches(isDisplayed()));
+        if (!toolbarTitle.equals("Sign browser")) {
+            onView(allOf(withId(R.id.dummyTxt), withText(toolbarTitle))).check(matches(isDisplayed()));
+        }
     }
 
 
