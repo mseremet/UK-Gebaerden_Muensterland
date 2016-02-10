@@ -9,7 +9,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
-import de.lebenshilfe_muenster.uk_gebaerden_muensterland.Sign;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.Sign;
 
 /**
  * Copyright (c) 2016 Matthias Tonhäuser
@@ -27,30 +27,28 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.Sign;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class SignBrowserSearchAdapter extends RecyclerView.Adapter<SignBrowserSearchAdapter.ViewHolder> {
+public class SignSearchAdapter extends RecyclerView.Adapter<SignSearchAdapter.ViewHolder> {
 
-    private final List<Sign> dataset;
-    private ViewGroup parent;
+    private final List<Sign> dataSet;
 
-    public SignBrowserSearchAdapter(List<Sign> dataset) {
-        this.dataset = dataset;
+    public SignSearchAdapter(List<Sign> dataSet) {
+        this.dataSet = dataSet;
     }
 
     @Override
-    public SignBrowserSearchAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
+    public SignSearchAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                             int viewType) {
-        this.parent = parent;
-        return new ViewHolder(LayoutInflater.from(this.parent.getContext()).inflate(R.layout.row_layout_sign_browser_search, parent, false));
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.row_layout_sign_browser_search, parent, false));
     }
 
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        holder.txtSignSearchName.setText(dataset.get(position).getNameLocaleDe());
+        holder.txtSignSearchName.setText(dataSet.get(position).getNameLocaleDe());
         holder.txtSignSearchName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                handleClickOnTxtSignName(dataset.get(position).getName());
+                handleClickOnTxtSignName(dataSet.get(position).getName());
             }
         });
     }
@@ -61,7 +59,7 @@ public class SignBrowserSearchAdapter extends RecyclerView.Adapter<SignBrowserSe
 
     @Override
     public int getItemCount() {
-        return dataset.size();
+        return dataSet.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

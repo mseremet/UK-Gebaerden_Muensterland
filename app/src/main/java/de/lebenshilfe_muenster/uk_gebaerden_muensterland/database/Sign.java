@@ -1,4 +1,4 @@
-package de.lebenshilfe_muenster.uk_gebaerden_muensterland;
+package de.lebenshilfe_muenster.uk_gebaerden_muensterland.database;
 
 import org.apache.commons.lang3.Validate;
 

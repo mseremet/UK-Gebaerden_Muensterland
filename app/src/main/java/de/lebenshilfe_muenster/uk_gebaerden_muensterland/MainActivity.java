@@ -10,34 +10,58 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
+
+import org.apache.commons.lang3.StringUtils;
 
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.about_signs.AboutSignsFragment;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.settings.SettingsFragment;
-import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.SignBrowserFragment;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.SignBrowserUIFragment;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_trainer.SignTrainerFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    public static final String SIGN_BROWSER_TAG = "sign_browser_tag";
+    public static final String SIGN_TRAINER_TAG = "sign_trainer_tag";
+    public static final String ABOUT_SIGNS_TAG = "about_signs_tag";
+    public static final String SETTINGS_TAG = "settings_tag";
+    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String KEY_TOOLBAR_TITLE = "main_activity_toolbar_title";
+    private String toolbarTitle = StringUtils.EMPTY;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        final ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        showFragmentAndSetToolbarTitle(new SignBrowserFragment(), R.string.sign_browser);
+        if (null == savedInstanceState) {
+            setFragment(new SignBrowserUIFragment(), SIGN_BROWSER_TAG);
+            setActionBarTitle(getString(R.string.sign_browser));
+        } else {
+            setActionBarTitle(savedInstanceState.getString(KEY_TOOLBAR_TITLE));
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        Log.d(TAG, "onSaveInstance");
+        super.onSaveInstanceState(outState);
+        outState.putString(KEY_TOOLBAR_TITLE, this.toolbarTitle);
     }
 
     @Override
@@ -52,35 +76,45 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+        Log.d(TAG, "onNavigationItemsSelected");
         int id = item.getItemId();
-        if (id == R.id.nav_sign_browser) {
-            showFragmentAndSetToolbarTitle(new SignBrowserFragment(), R.string.sign_browser);
-        } else if (id == R.id.nav_sign_trainer) {
-            showFragmentAndSetToolbarTitle(new SignTrainerFragment(), R.string.sign_trainer);
-        } else if (id == R.id.nav_sign_info) {
-            showFragmentAndSetToolbarTitle(new AboutSignsFragment(), R.string.about_signs);
-        } else if (id == R.id.nav_sign_settings) {
-            showFragmentAndSetToolbarTitle(new SettingsFragment(), R.string.settings);
+        if (R.id.nav_sign_browser == id) {
+            setFragment(new SignBrowserUIFragment(), SIGN_BROWSER_TAG);
+            setActionBarTitle(getString(R.string.sign_browser));
+        } else if (R.id.nav_sign_trainer == id) {
+            setFragment(new SignTrainerFragment(), SIGN_TRAINER_TAG);
+            setActionBarTitle(getString(R.string.sign_trainer));
+        } else if (R.id.nav_sign_info == id) {
+            setFragment(new AboutSignsFragment(), ABOUT_SIGNS_TAG);
+            setActionBarTitle(getString(R.string.about_signs));
+        } else if (R.id.nav_sign_settings == id) {
+            setFragment(new SettingsFragment(), SETTINGS_TAG);
+            setActionBarTitle(getString(R.string.settings));
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    private void showFragmentAndSetToolbarTitle(Fragment fragment, int actionBarTitleStringId) {
+    // TODO: https://github.com/Scaronthesky/UK-Gebaerden_Muensterland/issues/7
+    private void setFragment(Fragment fragment, String fragmentTag) {
+        Log.d(TAG, "setFragment: " + fragmentTag);
         final FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.content_frame, fragment);
-        // TODO: https://github.com/Scaronthesky/UK-Gebaerden_Muensterland/issues/7
-        // transaction.addToBackStack(null);
+        transaction.replace(R.id.content_frame, fragment, fragmentTag);
+        transaction.addToBackStack(null);
         transaction.commit();
+    }
 
+    private void setActionBarTitle(String actionBarTitle) {
+        Log.d(TAG, "setActionBarTitle: " + actionBarTitle);
         final ActionBar supportActionBar = getSupportActionBar();
         if (null == supportActionBar) {
             throw new IllegalStateException("SupportActionBar is null. Should be set in onCreate() method.");
         } else {
-            supportActionBar.setTitle(actionBarTitleStringId);
+            this.toolbarTitle = actionBarTitle;
+            supportActionBar.setTitle(this.toolbarTitle);
         }
     }
+
 
 }

@@ -4,6 +4,8 @@ package de.lebenshilfe_muenster.uk_gebaerden_muensterland;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.Sign;
+
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.equalTo;

@@ -13,7 +13,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
-import de.lebenshilfe_muenster.uk_gebaerden_muensterland.Sign;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.Sign;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.SignDAO;
 
 /**
@@ -37,7 +37,7 @@ public class SignBrowserAdapter extends RecyclerView.Adapter<SignBrowserAdapter.
     private final List<Sign> dataset;
     private final Context context;
 
-    public SignBrowserAdapter(List<Sign> dataset, Context context) {
+    public SignBrowserAdapter(Context context, List<Sign> dataset) {
         this.dataset = dataset;
         this.context = context;
     }

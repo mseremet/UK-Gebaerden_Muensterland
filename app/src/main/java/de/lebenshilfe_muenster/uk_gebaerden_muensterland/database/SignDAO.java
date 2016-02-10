@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import org.apache.commons.lang3.StringUtils;
@@ -14,21 +15,19 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.lebenshilfe_muenster.uk_gebaerden_muensterland.Sign;
-
 /**
  * Copyright (c) 2016 Matthias Tonhäuser
- * <p/>
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * <p/>
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p/>
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -119,23 +118,53 @@ public class SignDAO {
         return createdSign;
     }
 
-
+    /**
+     * Read all signs.
+     *
+     * @return a list of signs, may be empty but not null.
+     */
     public List<Sign> read() {
-        return read(StringUtils.EMPTY);
+        return readInternal(StringUtils.EMPTY, false);
     }
 
-    public List<Sign> read(String signNameLocaleDe) {
+    /**
+     * Read the signs where the name_locale_de matches the parameter.
+     *
+     * @param whereSignNameLocaleDeLike
+     * @return a list of signs, may be empty but not null.
+     */
+    public List<Sign> read(String whereSignNameLocaleDeLike) {
+        return readInternal(whereSignNameLocaleDeLike, false);
+    }
+
+    /**
+     * Read the signs which have been starred by the user.
+     *
+     * @return
+     */
+    public List<Sign> readStarredSignsOnly() {
+        return readInternal(StringUtils.EMPTY, true);
+    }
+
+
+    @NonNull
+    private List<Sign> readInternal(String whereSignNameLocaleDeLike, boolean readStarredSignsOnly) {
         final List<Sign> signs = new ArrayList<>();
         Cursor cursor;
-        if (StringUtils.isEmpty(signNameLocaleDe)) {
+        if (StringUtils.isNotEmpty(whereSignNameLocaleDeLike)) {
+            Log.d(CLASS_NAME, MessageFormat.format("Reading signs with name_locale_de like: {0}", whereSignNameLocaleDeLike));
+            cursor = database.query(DbContract.SignTable.TABLE_NAME,
+                    DbContract.SignTable.ALL_COLUMNS, DbContract.SignTable.NAME_LOCALE_DE_LIKE,
+                    new String[]{"%" + whereSignNameLocaleDeLike + "%"}, null, null, DbContract.SignTable.ORDER_BY_NAME_DE_ASC);
+        } else if (readStarredSignsOnly) {
+            Log.d(CLASS_NAME, "Reading starred signs only");
+            cursor = database.query(DbContract.SignTable.TABLE_NAME,
+                    DbContract.SignTable.ALL_COLUMNS, DbContract.SignTable.IS_STARRED,
+                    new String[]{DbContract.BOOLEAN_TRUE}, null, null, DbContract.SignTable.ORDER_BY_NAME_DE_ASC);
+        } else {
             Log.d(CLASS_NAME, "Reading all signs");
             cursor = database.query(DbContract.SignTable.TABLE_NAME,
                     DbContract.SignTable.ALL_COLUMNS, null, null, null, null, DbContract.SignTable.ORDER_BY_NAME_DE_ASC);
-        } else {
-            Log.d(CLASS_NAME, MessageFormat.format("Reading signs with name_locale_de like: {0}", signNameLocaleDe));
-            cursor = database.query(DbContract.SignTable.TABLE_NAME,
-                    DbContract.SignTable.ALL_COLUMNS, DbContract.SignTable.NAME_LOCALE_DE_LIKE,
-                    new String[]{"%" + signNameLocaleDe + "%"}, null, null, DbContract.SignTable.ORDER_BY_NAME_DE_ASC);
         }
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -224,7 +253,7 @@ public class SignDAO {
         signBuilder.setNameLocaleDe(cursor.getString(cursor.getColumnIndex(DbContract.SignTable.COLUMN_NAME_SIGN_NAME_DE)));
         signBuilder.setMnemonic(cursor.getString(cursor.getColumnIndex(DbContract.SignTable.COLUMN_NAME_MNEMONIC)));
         signBuilder.setLearningProgress(cursor.getInt(cursor.getColumnIndex(DbContract.SignTable.COLUMN_NAME_LEARNING_PROGRESS)));
-        final long starred = cursor.getLong(cursor.getColumnIndex(DbContract.SignTable.COLUMN_NAME_STARRED));
+        final int starred = cursor.getInt(cursor.getColumnIndex(DbContract.SignTable.COLUMN_NAME_STARRED));
         if (1 == starred) {
             signBuilder.setStarred(true);
         } else {
@@ -232,5 +261,6 @@ public class SignDAO {
         }
         return signBuilder.create();
     }
+
 
 }

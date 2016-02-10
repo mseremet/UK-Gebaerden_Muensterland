@@ -5,8 +5,6 @@ import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
 
 import org.apache.commons.lang3.time.StopWatch;
-import org.hamcrest.Matchers;
-import org.hamcrest.collection.IsEmptyCollection;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -17,6 +15,7 @@ import org.junit.runner.RunWith;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.Sign;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.SignDAO;
 
 import static org.hamcrest.CoreMatchers.allOf;
@@ -58,9 +57,9 @@ public class DbHelperTest {
             .setMnemonic("test_sign_mnemonic").setStarred(false).setLearningProgress(0).create();
     @Rule
     public final ActivityTestRule<MainActivity> mainActivityActivityTestRule = new ActivityTestRule<>(MainActivity.class);
-    private final SignDAO signDAO = SignDAO.getInstance(mainActivityActivityTestRule.launchActivity(null));
     @Rule
     public final ExpectedException thrown = ExpectedException.none();
+    private final SignDAO signDAO = SignDAO.getInstance(mainActivityActivityTestRule.launchActivity(null));
 
     @Before
     public void openDatabase() {
@@ -136,6 +135,23 @@ public class DbHelperTest {
         assertThat(signsFromDb, is(empty()));
     }
 
+    @Test
+    public void testReadWithStarredOnlyReturnsCorrectResult() {
+        Sign createdSign = null;
+        try {
+            createdSign = signDAO.create(TEST_SIGN);
+            createdSign.setStarred(true);
+            final Sign updatedSign = signDAO.update(createdSign);
+            List<Sign> signs = new ArrayList<>();
+            signs.add(updatedSign);
+            List<Sign> signsFromDb = signDAO.readStarredSignsOnly();
+            assertThat(signsFromDb, containsInAnyOrder(signs.toArray(new Sign[signs.size()])));
+        } finally {
+            if (null != createdSign) {
+                signDAO.delete(createdSign);
+            }
+        }
+    }
 
     @Test
     public void testDelete() {
@@ -143,7 +159,7 @@ public class DbHelperTest {
         final int numberOfSignsBefore = signDAO.read().size();
         signDAO.delete(sign);
         final int numberOfSignsAfter = signDAO.read().size();
-        if (numberOfSignsAfter != (numberOfSignsBefore -1)) {
+        if (numberOfSignsAfter != (numberOfSignsBefore - 1)) {
             fail("Deleted sign, but reading returns a list with the same size");
         }
     }

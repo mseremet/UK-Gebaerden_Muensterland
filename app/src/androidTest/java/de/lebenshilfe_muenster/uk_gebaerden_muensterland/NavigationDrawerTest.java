@@ -2,6 +2,7 @@ package de.lebenshilfe_muenster.uk_gebaerden_muensterland;
 
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
 
 import org.junit.After;
 import org.junit.Before;
@@ -15,10 +16,13 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
+import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.util.OrientationChangeAction.orientationLandscape;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.util.OrientationChangeAction.orientationPortrait;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.not;
 
@@ -46,6 +50,7 @@ public class NavigationDrawerTest {
 
     @Before
     public void openNavigationDrawer() {
+        Log.d(NavigationDrawerTest.class.getSimpleName(), "Open Navigation Drawer");
         onView(withContentDescription(R.string.navigation_drawer_open)).perform(click());
         onView(withId(R.id.nav_view)).check(matches(isDisplayed()));
     }
@@ -53,6 +58,8 @@ public class NavigationDrawerTest {
     @After
     public void checkNavigationDrawerIsClosed() {
         onView(withId(R.id.nav_view)).check(matches(not(isDisplayed())));
+        Log.d(NavigationDrawerTest.class.getSimpleName(), "Reset orientation");
+        onView(isRoot()).perform(orientationPortrait());
     }
 
     @Test(timeout = 3000)
@@ -64,7 +71,7 @@ public class NavigationDrawerTest {
         pressBack(); // close navigation drawer
     }
 
-    @Test(timeout = 3000)
+    @Test
     public void clickBrowseSignsButton() {
         clickNavigationButtonAndCheckToolbarTitle((R.string.browse_signs), R.string.sign_browser);
     }
@@ -87,7 +94,13 @@ public class NavigationDrawerTest {
     private void clickNavigationButtonAndCheckToolbarTitle(final int navigationButtonTextId, final int toolbarTitleId) {
         final String navigationButtonText = mainActivityActivityTestRule.getActivity().getResources().getString(navigationButtonTextId);
         final String toolbarTitle = mainActivityActivityTestRule.getActivity().getResources().getString(toolbarTitleId);
+        Log.d(NavigationDrawerTest.class.getSimpleName(), "beforeClick");
         onView(withText(navigationButtonText)).perform(click());
+        Log.d(NavigationDrawerTest.class.getSimpleName(), "afterClick");
+        onView(allOf(withText(toolbarTitle), withParent((withId(R.id.toolbar))))).check(matches(isDisplayed()));
+        Log.d(NavigationDrawerTest.class.getSimpleName(), "beforeOrientationLandscape");
+        onView(isRoot()).perform(orientationLandscape());
+        Log.d(NavigationDrawerTest.class.getSimpleName(), "afterOrientationLandscape");
         onView(allOf(withText(toolbarTitle), withParent((withId(R.id.toolbar))))).check(matches(isDisplayed()));
     }
 
