@@ -43,11 +43,10 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.Sign;
  */
 public class SignBrowserUIFragment extends Fragment implements SignBrowserTaskFragment.TaskCallbacks {
 
-    public static final String TAG = SignBrowserUIFragment.class.getSimpleName();
-    public static final String KEY_SHOW_STARRED_ONLY = "sign_browser_show_starred_only";
+    private static final String TAG = SignBrowserUIFragment.class.getSimpleName();
+    private static final String KEY_SHOW_STARRED_ONLY = "sign_browser_show_starred_only";
     private static final String TAG_TASK_FRAGMENT = "sign_browser_task_fragment";
 
-    private RecyclerView recyclerView;
     private boolean showStarredOnly = false;
     private SignBrowserTaskFragment signBrowserTaskFragment;
 
@@ -57,10 +56,10 @@ public class SignBrowserUIFragment extends Fragment implements SignBrowserTaskFr
         Log.d(TAG, "onCreateView");
         final View view = inflater.inflate(R.layout.fragment_sign_browser, container, false);
         setHasOptionsMenu(true);
-        this.recyclerView = (RecyclerView) view.findViewById(R.id.signRecyclerView);
-        this.recyclerView.setHasFixedSize(true); // performance fix
-        this.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        this.recyclerView.setAdapter(new SignBrowserAdapter(getActivity(), new ArrayList<Sign>()));
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.signRecyclerView);
+        recyclerView.setHasFixedSize(true); // performance fix
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(new SignBrowserAdapter(getActivity(), new ArrayList<Sign>()));
         return view;
     }
 

@@ -28,7 +28,6 @@ public class SignSearchActivity extends AppCompatActivity implements SignSearchT
 
     private static final java.lang.String KEY_QUERY = "sign_browser_search_query";
     private static final String TAG_TASK_FRAGMENT = "sign_browser_search_task_fragment";
-    private RecyclerView recyclerView;
     private SignSearchTaskFragment signSearchTaskFragment;
     private String query = StringUtils.EMPTY;
 
@@ -58,10 +57,10 @@ public class SignSearchActivity extends AppCompatActivity implements SignSearchT
     }
 
     private void setupRecyclerView() {
-        this.recyclerView = (RecyclerView) this.findViewById(R.id.signSearchRecyclerView);
-        this.recyclerView.setHasFixedSize(true); // performance fix
-        this.recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        this.recyclerView.setAdapter(new SignSearchAdapter(new ArrayList<Sign>()));
+        RecyclerView recyclerView = (RecyclerView) this.findViewById(R.id.signSearchRecyclerView);
+        recyclerView.setHasFixedSize(true); // performance fix
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(new SignSearchAdapter(new ArrayList<Sign>()));
     }
 
     private void setupSupportActionBar() {

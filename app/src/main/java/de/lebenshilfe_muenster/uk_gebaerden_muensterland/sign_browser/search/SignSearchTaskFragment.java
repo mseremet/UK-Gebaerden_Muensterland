@@ -34,7 +34,7 @@ public class SignSearchTaskFragment extends Fragment {
     private SearchSignsTask searchSignsTask;
     private boolean running;
 
-    static interface TaskCallbacks {
+    interface TaskCallbacks {
         void onPreExecute();
         void onProgressUpdate(int percent);
         void onCancelled();

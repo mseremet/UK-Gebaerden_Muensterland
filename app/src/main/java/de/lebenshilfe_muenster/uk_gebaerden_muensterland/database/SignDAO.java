@@ -130,7 +130,7 @@ public class SignDAO {
     /**
      * Read the signs where the name_locale_de matches the parameter.
      *
-     * @param whereSignNameLocaleDeLike
+     * @param whereSignNameLocaleDeLike the sign name with locale de to look for.
      * @return a list of signs, may be empty but not null.
      */
     public List<Sign> read(String whereSignNameLocaleDeLike) {
@@ -140,7 +140,7 @@ public class SignDAO {
     /**
      * Read the signs which have been starred by the user.
      *
-     * @return
+     * @return all the signs, which have been starred by the user.
      */
     public List<Sign> readStarredSignsOnly() {
         return readInternal(StringUtils.EMPTY, true);

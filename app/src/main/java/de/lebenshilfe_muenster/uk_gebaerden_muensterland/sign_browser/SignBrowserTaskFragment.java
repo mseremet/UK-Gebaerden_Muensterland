@@ -31,12 +31,12 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.SignDAO;
  */
 public class SignBrowserTaskFragment extends Fragment {
 
-    public static final String TAG = SignBrowserTaskFragment.class.getSimpleName();
+    private static final String TAG = SignBrowserTaskFragment.class.getSimpleName();
     private TaskCallbacks taskCallbacks;
     private LoadSignsTask loadSignsTask;
     private boolean running;
 
-    static interface TaskCallbacks {
+    interface TaskCallbacks {
         void onPreExecute();
         void onProgressUpdate(int percent);
         void onCancelled();
@@ -131,7 +131,7 @@ public class SignBrowserTaskFragment extends Fragment {
             signs = signDAO.read();
             signDAO.close();
             if (1 == params.length) {
-                if (params[0].booleanValue()) {
+                if (params[0]) {
                     final List<Sign> signsToRemove = new ArrayList<>();
                     for (Sign sign : signs) {
                         if (!sign.isStarred()) {

@@ -23,10 +23,10 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_trainer.SignTraine
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    public static final String SIGN_BROWSER_TAG = "sign_browser_tag";
-    public static final String SIGN_TRAINER_TAG = "sign_trainer_tag";
-    public static final String ABOUT_SIGNS_TAG = "about_signs_tag";
-    public static final String SETTINGS_TAG = "settings_tag";
+    private static final String SIGN_BROWSER_TAG = "sign_browser_tag";
+    private static final String SIGN_TRAINER_TAG = "sign_trainer_tag";
+    private static final String ABOUT_SIGNS_TAG = "about_signs_tag";
+    private static final String SETTINGS_TAG = "settings_tag";
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final String KEY_TOOLBAR_TITLE = "main_activity_toolbar_title";
     private String toolbarTitle = StringUtils.EMPTY;

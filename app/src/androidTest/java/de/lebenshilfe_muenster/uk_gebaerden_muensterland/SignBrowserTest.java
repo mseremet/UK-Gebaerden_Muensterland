@@ -50,9 +50,9 @@ import static org.hamcrest.CoreMatchers.not;
 @RunWith(AndroidJUnit4.class)
 public class SignBrowserTest {
 
-    public static final String ENTER = "\n";
-    public static final String MAM = "mam";
-    public static final String PAP = "paP";
+    private static final String ENTER = "\n";
+    private static final String MAM = "mam";
+    private static final String PAP = "paP";
     private static final String MAMA = "Mama";
     private static final String PAPA = "Papa";
     private static final String FOOTBALL = "Fußball";
@@ -63,7 +63,7 @@ public class SignBrowserTest {
     private static final String PROGRESS_0 = "0";
 
     @Rule
-    public ActivityTestRule<MainActivity> mainActivityActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+    public final ActivityTestRule<MainActivity> mainActivityActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Before
     public void changeOrientationToPortrait() {
