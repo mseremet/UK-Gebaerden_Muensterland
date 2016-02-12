@@ -34,11 +34,13 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.SignDAO;
  */
 public class SignBrowserAdapter extends RecyclerView.Adapter<SignBrowserAdapter.ViewHolder> {
 
-    private final List<Sign> dataset;
+    private final List<Sign> dataSet;
     private final Context context;
+    private final SignBrowserUIFragment signBrowserUIFragment;
 
-    public SignBrowserAdapter(Context context, List<Sign> dataset) {
-        this.dataset = dataset;
+    public SignBrowserAdapter(SignBrowserUIFragment signBrowserUIFragment, Context context, List<Sign> dataSet) {
+        this.signBrowserUIFragment = signBrowserUIFragment;
+        this.dataSet = dataSet;
         this.context = context;
     }
 
@@ -51,31 +53,29 @@ public class SignBrowserAdapter extends RecyclerView.Adapter<SignBrowserAdapter.
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        final String name = dataset.get(position).getName();
-        final String nameLocaleDe = dataset.get(position).getNameLocaleDe();
+        final String name = dataSet.get(position).getName();
+        final String nameLocaleDe = dataSet.get(position).getNameLocaleDe();
         holder.txtSignName.setText(nameLocaleDe);
         holder.txtSignName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                handleClickOnTxtSignName(name);
+                handleClickOnTxtSignName(dataSet.get(position));
             }
         });
-        holder.txtSignMnemonic.setText(dataset.get(position).getMnemonic());
+        holder.txtSignMnemonic.setText(dataSet.get(position).getMnemonic());
         final DecimalFormat decimalFormat = new DecimalFormat(" 0;-0");
-        holder.txtSignLearningProgress.setText(decimalFormat.format(dataset.get(position).getLearningProgress()));
-        holder.checkBoxStarred.setChecked(dataset.get(position).isStarred());
+        holder.txtSignLearningProgress.setText(decimalFormat.format(dataSet.get(position).getLearningProgress()));
+        holder.checkBoxStarred.setChecked(dataSet.get(position).isStarred());
         holder.checkBoxStarred.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                handleClickOnCheckBoxStarred(dataset.get(position));
+                handleClickOnCheckBoxStarred(dataSet.get(position));
             }
         });
     }
 
-    private void handleClickOnTxtSignName(String item) {
-        int position = this.dataset.indexOf(item);
-        // TODO: handle Click on item here
-        // notifyItemRemoved(position);
+    private void handleClickOnTxtSignName(Sign sign) {
+        this.signBrowserUIFragment.onTxtSignNameClicked(sign);
     }
 
     private void handleClickOnCheckBoxStarred(Sign sign) {
@@ -84,7 +84,7 @@ public class SignBrowserAdapter extends RecyclerView.Adapter<SignBrowserAdapter.
 
     @Override
     public int getItemCount() {
-        return dataset.size();
+        return dataSet.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

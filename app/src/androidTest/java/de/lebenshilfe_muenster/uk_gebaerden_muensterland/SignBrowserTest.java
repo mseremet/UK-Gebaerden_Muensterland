@@ -197,7 +197,7 @@ public class SignBrowserTest {
 
     @Test
     public void checkClickingOnSignNameNavigatesToDetailsView() {
-        onView(allOf(withId(R.id.signRecyclerView), hasDescendant((withText(MAMA))))).check(matches(isDisplayed())).perform(click());
+        onView(allOf(withText(MAMA), withParent(withId(R.id.signBrowserSingleRow)))).check(matches(isDisplayed())).perform(click());
         onView(allOf(withText(MAMA), withParent((withId(R.id.toolbar))))).check(matches(isDisplayed()));
     }
 

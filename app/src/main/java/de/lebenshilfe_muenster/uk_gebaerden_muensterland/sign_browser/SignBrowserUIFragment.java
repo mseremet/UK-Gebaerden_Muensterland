@@ -50,6 +50,17 @@ public class SignBrowserUIFragment extends Fragment implements SignBrowserTaskFr
     private boolean showStarredOnly = false;
     private SignBrowserTaskFragment signBrowserTaskFragment;
 
+    // Has to implemented by parent activity.
+    public interface OnSignClickedListener {
+        void onSignSelected(Sign sign);
+    }
+
+    private OnSignClickedListener onSignClickedListener = null;
+
+    public void setOnSignClickedListener(OnSignClickedListener onSignClickedListener) {
+        this.onSignClickedListener = onSignClickedListener;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -59,7 +70,7 @@ public class SignBrowserUIFragment extends Fragment implements SignBrowserTaskFr
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.signRecyclerView);
         recyclerView.setHasFixedSize(true); // performance fix
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(new SignBrowserAdapter(getActivity(), new ArrayList<Sign>()));
+        recyclerView.setAdapter(new SignBrowserAdapter(this, getActivity(), new ArrayList<Sign>()));
         return view;
     }
 
@@ -139,6 +150,13 @@ public class SignBrowserUIFragment extends Fragment implements SignBrowserTaskFr
         outState.putBoolean(KEY_SHOW_STARRED_ONLY, this.showStarredOnly);
     }
 
+    public void onTxtSignNameClicked(Sign sign) {
+        if (null == this.onSignClickedListener) {
+            throw new IllegalStateException("Parent activity has to implement the OnSignClickedListener");
+        }
+        this.onSignClickedListener.onSignSelected(sign);
+    }
+
     // Callback methods from SignBrowserTaskFragment
     @Override
     public void onPreExecute() {/*no-op*/}
@@ -158,7 +176,7 @@ public class SignBrowserUIFragment extends Fragment implements SignBrowserTaskFr
         if (null == mRecyclerView) {
             throw new IllegalStateException("RecyclerView is null");
         }
-        mRecyclerView.swapAdapter(new SignBrowserAdapter(getActivity(), result), true);
+        mRecyclerView.swapAdapter(new SignBrowserAdapter(this, getActivity(), result), true);
     }
 
 

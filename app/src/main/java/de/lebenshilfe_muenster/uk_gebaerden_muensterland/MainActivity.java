@@ -16,12 +16,13 @@ import android.view.MenuItem;
 import org.apache.commons.lang3.StringUtils;
 
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.about_signs.AboutSignsFragment;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.Sign;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.settings.SettingsFragment;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.SignBrowserUIFragment;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_trainer.SignTrainerFragment;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, SignBrowserUIFragment.OnSignClickedListener {
 
     private static final String SIGN_BROWSER_TAG = "sign_browser_tag";
     private static final String SIGN_TRAINER_TAG = "sign_trainer_tag";
@@ -50,8 +51,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         if (null == savedInstanceState) {
-            setFragment(new SignBrowserUIFragment(), SIGN_BROWSER_TAG);
-            setActionBarTitle(getString(R.string.sign_browser));
+            showSignBrowser();
         } else {
             setActionBarTitle(savedInstanceState.getString(KEY_TOOLBAR_TITLE));
         }
@@ -79,8 +79,7 @@ public class MainActivity extends AppCompatActivity
         Log.d(TAG, "onNavigationItemsSelected");
         int id = item.getItemId();
         if (R.id.nav_sign_browser == id) {
-            setFragment(new SignBrowserUIFragment(), SIGN_BROWSER_TAG);
-            setActionBarTitle(getString(R.string.sign_browser));
+            showSignBrowser();
         } else if (R.id.nav_sign_trainer == id) {
             setFragment(new SignTrainerFragment(), SIGN_TRAINER_TAG);
             setActionBarTitle(getString(R.string.sign_trainer));
@@ -94,6 +93,11 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onSignSelected(Sign sign) {
+        setActionBarTitle(sign.getNameLocaleDe());
     }
 
     // TODO: https://github.com/Scaronthesky/UK-Gebaerden_Muensterland/issues/7
@@ -116,5 +120,11 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    private void showSignBrowser() {
+        final SignBrowserUIFragment signBrowserUIFragment = new SignBrowserUIFragment();
+        signBrowserUIFragment.setOnSignClickedListener(this);
+        setFragment(signBrowserUIFragment, SIGN_BROWSER_TAG);
+        setActionBarTitle(getString(R.string.sign_browser));
+    }
 
 }
