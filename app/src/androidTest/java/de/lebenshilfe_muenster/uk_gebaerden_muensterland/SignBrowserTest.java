@@ -195,6 +195,12 @@ public class SignBrowserTest {
         onView(allOf(withId(R.id.signBrowserSingleRow), hasDescendant(withText(FOOTBALL)), hasDescendant(withText(containsString(PROGRESS_0))))).check(matches(isDisplayed()));
     }
 
+    @Test
+    public void checkClickingOnSignNameNavigatesToDetailsView() {
+        onView(allOf(withId(R.id.signRecyclerView), hasDescendant((withText(MAMA))))).check(matches(isDisplayed())).perform(click());
+        onView(allOf(withText(MAMA), withParent((withId(R.id.toolbar))))).check(matches(isDisplayed()));
+    }
+
     @NonNull
     private String getStringResource(int stringResourceId) {
         return mainActivityActivityTestRule.getActivity().getResources().getString(stringResourceId);

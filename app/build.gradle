@@ -21,6 +21,10 @@ android {
             debuggable true
         }
     }
+    lintOptions {
+        // Disabled because of false positive in custom view action
+        disable 'WrongConstant'
+    }
 }
 
 dependencies {

@@ -64,6 +64,7 @@ public class OrientationChangeAction implements ViewAction {
         return "change orientation to " + orientation;
     }
 
+
     @Override
     public void perform(UiController uiController, View view) {
         uiController.loopMainThreadUntilIdle();
