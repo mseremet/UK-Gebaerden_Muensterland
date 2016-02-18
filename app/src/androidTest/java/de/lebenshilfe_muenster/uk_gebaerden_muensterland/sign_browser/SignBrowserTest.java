@@ -1,6 +1,7 @@
-package de.lebenshilfe_muenster.uk_gebaerden_muensterland;
+package de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser;
 
 import android.support.annotation.NonNull;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -9,6 +10,9 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.MainActivity;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -72,7 +76,7 @@ public class SignBrowserTest {
 
     @Test
     public void checkSignBrowserIsDisplayedOnAppStartup() {
-        onView(withText(R.string.sign_browser)).check(matches(isDisplayed()));
+        onView(ViewMatchers.withText(R.string.sign_browser)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -198,7 +202,7 @@ public class SignBrowserTest {
     @Test
     public void checkClickingOnSignNameNavigatesToDetailsView() {
         onView(allOf(withText(MAMA), withParent(withId(R.id.signBrowserSingleRow)))).check(matches(isDisplayed())).perform(click());
-        onView(allOf(withText(MAMA), withParent((withId(R.id.toolbar))))).check(matches(isDisplayed()));
+        onView(allOf(withId(R.id.signVideoName), withText(MAMA))).check(matches(isDisplayed()));
     }
 
     @NonNull

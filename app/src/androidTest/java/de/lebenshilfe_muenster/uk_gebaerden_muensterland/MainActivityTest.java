@@ -43,14 +43,14 @@ import static org.hamcrest.CoreMatchers.not;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 @RunWith(AndroidJUnit4.class)
-public class NavigationDrawerTest {
+public class MainActivityTest {
 
     @Rule
     public final ActivityTestRule<MainActivity> mainActivityActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Before
     public void openNavigationDrawer() {
-        Log.d(NavigationDrawerTest.class.getSimpleName(), "Open Navigation Drawer");
+        Log.d(MainActivityTest.class.getSimpleName(), "Open Navigation Drawer");
         onView(withContentDescription(R.string.navigation_drawer_open)).perform(click());
         onView(withId(R.id.nav_view)).check(matches(isDisplayed()));
     }
@@ -58,7 +58,7 @@ public class NavigationDrawerTest {
     @After
     public void checkNavigationDrawerIsClosed() {
         onView(withId(R.id.nav_view)).check(matches(not(isDisplayed())));
-        Log.d(NavigationDrawerTest.class.getSimpleName(), "Reset orientation");
+        Log.d(MainActivityTest.class.getSimpleName(), "Reset orientation");
         onView(isRoot()).perform(orientationPortrait());
     }
 
@@ -94,13 +94,13 @@ public class NavigationDrawerTest {
     private void clickNavigationButtonAndCheckToolbarTitle(final int navigationButtonTextId, final int toolbarTitleId) {
         final String navigationButtonText = mainActivityActivityTestRule.getActivity().getResources().getString(navigationButtonTextId);
         final String toolbarTitle = mainActivityActivityTestRule.getActivity().getResources().getString(toolbarTitleId);
-        Log.d(NavigationDrawerTest.class.getSimpleName(), "beforeClick");
+        Log.d(MainActivityTest.class.getSimpleName(), "beforeClick");
         onView(withText(navigationButtonText)).perform(click());
-        Log.d(NavigationDrawerTest.class.getSimpleName(), "afterClick");
+        Log.d(MainActivityTest.class.getSimpleName(), "afterClick");
         onView(allOf(withText(toolbarTitle), withParent((withId(R.id.toolbar))))).check(matches(isDisplayed()));
-        Log.d(NavigationDrawerTest.class.getSimpleName(), "beforeOrientationLandscape");
+        Log.d(MainActivityTest.class.getSimpleName(), "beforeOrientationLandscape");
         onView(isRoot()).perform(orientationLandscape());
-        Log.d(NavigationDrawerTest.class.getSimpleName(), "afterOrientationLandscape");
+        Log.d(MainActivityTest.class.getSimpleName(), "afterOrientationLandscape");
         onView(allOf(withText(toolbarTitle), withParent((withId(R.id.toolbar))))).check(matches(isDisplayed()));
         if (!toolbarTitle.equals("Sign browser")) {
             onView(allOf(withId(R.id.dummyTxt), withText(toolbarTitle))).check(matches(isDisplayed()));

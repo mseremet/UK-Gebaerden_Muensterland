@@ -1,5 +1,8 @@
 package de.lebenshilfe_muenster.uk_gebaerden_muensterland.database;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.apache.commons.lang3.Validate;
 
 /**
@@ -18,7 +21,20 @@ import org.apache.commons.lang3.Validate;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class Sign {
+public class Sign implements Parcelable {
+
+    /**
+     * Parcelable Creator.
+     */
+    public static final Parcelable.Creator<Sign> CREATOR = new Parcelable.Creator<Sign>() {
+        public Sign createFromParcel(Parcel in) {
+            return new Sign(in);
+        }
+
+        public Sign[] newArray(int size) {
+            return new Sign[size];
+        }
+    };
 
     private static final int LEARNING_PROGRESS_LOWER_BOUNDARY = -5;
     private static final int LEARNING_PROGRESS_UPPER_BOUNDARY = 5;
@@ -49,6 +65,20 @@ public class Sign {
         this.learningProgress = learningProgress;
     }
 
+    /**
+     * Constructor for a sign which has been parcelled.
+     *
+     * @param in an Android parcel.
+     */
+    private Sign(Parcel in) {
+        this.id = in.readInt();
+        this.name = in.readString();
+        this.nameLocaleDe = in.readString();
+        this.mnemonic = in.readString();
+        this.starred = (boolean) in.readValue(null);
+        this.learningProgress = in.readInt();
+    }
+
     private void validateParameters(String name, String mnemonic, int learningProgress) {
         Validate.notNull(name, "Name must not be null");
         Validate.notBlank(name, "Name must not be empty.");
@@ -68,7 +98,6 @@ public class Sign {
     public String getNameLocaleDe() {
         return this.nameLocaleDe;
     }
-
 
     public boolean isStarred() {
         return starred;
@@ -123,6 +152,20 @@ public class Sign {
                 '}';
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeInt(this.id);
+        out.writeString(this.name);
+        out.writeString(this.nameLocaleDe);
+        out.writeString(this.mnemonic);
+        out.writeValue(this.starred);
+        out.writeInt(this.learningProgress);
+    }
 
     public static class Builder {
         private int id = 0;
@@ -167,4 +210,5 @@ public class Sign {
         }
 
     }
+
 }

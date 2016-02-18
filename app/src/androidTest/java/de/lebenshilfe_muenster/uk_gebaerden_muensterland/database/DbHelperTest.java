@@ -1,4 +1,4 @@
-package de.lebenshilfe_muenster.uk_gebaerden_muensterland;
+package de.lebenshilfe_muenster.uk_gebaerden_muensterland.database;
 
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -15,8 +15,7 @@ import org.junit.runner.RunWith;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.Sign;
-import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.SignDAO;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.MainActivity;
 
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.endsWith;

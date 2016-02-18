@@ -19,12 +19,14 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.about_signs.AboutSignsF
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.Sign;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.settings.SettingsFragment;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.SignBrowserUIFragment;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.video.SignVideoFragment;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_trainer.SignTrainerFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, SignBrowserUIFragment.OnSignClickedListener {
 
     private static final String SIGN_BROWSER_TAG = "sign_browser_tag";
+    private static final String SIGN_VIDEO_TAG = "sign_video_tag";
     private static final String SIGN_TRAINER_TAG = "sign_trainer_tag";
     private static final String ABOUT_SIGNS_TAG = "about_signs_tag";
     private static final String SETTINGS_TAG = "settings_tag";
@@ -90,14 +92,19 @@ public class MainActivity extends AppCompatActivity
             setFragment(new SettingsFragment(), SETTINGS_TAG);
             setActionBarTitle(getString(R.string.settings));
         }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
     @Override
     public void onSignSelected(Sign sign) {
-        setActionBarTitle(sign.getNameLocaleDe());
+        final SignVideoFragment signVideoFragment = new SignVideoFragment();
+        final Bundle args = new Bundle();
+        args.putParcelable(SignVideoFragment.SIGN_TO_SHOW, sign);
+        signVideoFragment.setArguments(args);
+        setFragment(signVideoFragment, SIGN_VIDEO_TAG);
+        setActionBarTitle(StringUtils.EMPTY);
     }
 
     // TODO: https://github.com/Scaronthesky/UK-Gebaerden_Muensterland/issues/7

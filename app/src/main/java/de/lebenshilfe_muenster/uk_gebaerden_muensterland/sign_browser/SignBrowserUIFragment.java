@@ -67,7 +67,7 @@ public class SignBrowserUIFragment extends Fragment implements SignBrowserTaskFr
         Log.d(TAG, "onCreateView");
         final View view = inflater.inflate(R.layout.fragment_sign_browser, container, false);
         setHasOptionsMenu(true);
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.signRecyclerView);
+        final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.signRecyclerView);
         recyclerView.setHasFixedSize(true); // performance fix
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(new SignBrowserAdapter(this, getActivity(), new ArrayList<Sign>()));

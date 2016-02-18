@@ -3,8 +3,8 @@ package de.lebenshilfe_muenster.uk_gebaerden_muensterland.suite;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-import de.lebenshilfe_muenster.uk_gebaerden_muensterland.NavigationDrawerTest;
-import de.lebenshilfe_muenster.uk_gebaerden_muensterland.SignBrowserTest;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.DbHelperTest;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.SignParcelableTest;
 
 /**
  * Copyright (c) 2016 Matthias Tonhäuser
@@ -23,6 +23,6 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.SignBrowserTest;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({NavigationDrawerTest.class, SignBrowserTest.class})
-public class AllUITests {
+@Suite.SuiteClasses({DbHelperTest.class, SignParcelableTest.class})
+public class AllInstrumentedUnitTests {
 }
