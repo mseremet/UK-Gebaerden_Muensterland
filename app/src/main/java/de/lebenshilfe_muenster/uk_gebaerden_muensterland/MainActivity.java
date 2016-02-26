@@ -19,7 +19,7 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.about_signs.AboutSignsF
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.Sign;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.settings.SettingsFragment;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.SignBrowserUIFragment;
-import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.video.SignVideoFragment;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.video.SignVideoUIFragment;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_trainer.SignTrainerFragment;
 
 public class MainActivity extends AppCompatActivity
@@ -99,11 +99,11 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onSignSelected(Sign sign) {
-        final SignVideoFragment signVideoFragment = new SignVideoFragment();
+        final SignVideoUIFragment signVideoUIFragment = new SignVideoUIFragment();
         final Bundle args = new Bundle();
-        args.putParcelable(SignVideoFragment.SIGN_TO_SHOW, sign);
-        signVideoFragment.setArguments(args);
-        setFragment(signVideoFragment, SIGN_VIDEO_TAG);
+        args.putParcelable(SignVideoUIFragment.SIGN_TO_SHOW, sign);
+        signVideoUIFragment.setArguments(args);
+        setFragment(signVideoUIFragment, SIGN_VIDEO_TAG);
         setActionBarTitle(StringUtils.EMPTY);
     }
 

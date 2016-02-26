@@ -36,7 +36,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
 
 /**
- * Copyright (c) 2016 Matthias Tonhäuser
+ * Copyright ( ) 2016 Matthias Tonhäuser
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -200,7 +200,7 @@ public class SignBrowserTest {
     }
 
     @Test
-    public void checkClickingOnSignNameNavigatesToDetailsView() {
+    public void checkClickingOnSignNameNavigatesToVideoView() {
         onView(allOf(withText(MAMA), withParent(withId(R.id.signBrowserSingleRow)))).check(matches(isDisplayed())).perform(click());
         onView(allOf(withId(R.id.signVideoName), withText(MAMA))).check(matches(isDisplayed()));
     }

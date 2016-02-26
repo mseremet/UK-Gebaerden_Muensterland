@@ -1,5 +1,7 @@
 package de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.video;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -17,11 +19,15 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.util.OrientationChangeAction.orientationLandscape;
 import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.util.OrientationChangeAction.orientationPortrait;
 import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.core.IsNot.not;
 
 /**
  * Copyright (c) 2016 Matthias Tonhäuser
@@ -42,30 +48,47 @@ import static org.hamcrest.CoreMatchers.allOf;
 @RunWith(AndroidJUnit4.class)
 public class SignVideoTest {
 
-    private static final String ENTER = "\n";
-    private static final String MAM = "mam";
-    private static final String PAP = "paP";
+    public static final String MAMA_NAME = "mama";
     private static final String MAMA = "Mama";
-    private static final String PAPA = "Papa";
-    private static final String FOOTBALL = "Fußball";
-    private static final String MAMA_MNEMONIC = "Wange streicheln";
-    private static final String PAPA_MNEMONIC = "Schnurrbart";
-    private static final String FOOTBALL_MNEMONIC = "Faust tritt in Handfläche";
-    private static final String STARRED = "Starred";
-    private static final String PROGRESS_0 = "0";
+
+    static {
+        Looper.prepare();
+    }
 
     @Rule
     public final ActivityTestRule<MainActivity> mainActivityActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Before
-    public void changeOrientationToPortrait() {
+    public void setup() {
         onView(isRoot()).perform(orientationPortrait());
+        onView(allOf(withText(MAMA), withParent(withId(R.id.signBrowserSingleRow)))).check(matches(isDisplayed())).perform(click());
     }
 
     @Test
-    public void checkClickingOnSignNameNavigatesToDetailsView() {
-        onView(allOf(withText(MAMA), withParent(withId(R.id.signBrowserSingleRow)))).check(matches(isDisplayed())).perform(click());
+    public void checkVideoIsLoadingAndPlaying() {
+        videoIsLoadingAndPlaying();
+    }
+
+    @Test
+    public void checkVideoResumesPlayingAfterOrientationChange() {
+        onView(isRoot()).perform(orientationLandscape());
+        videoIsLoadingAndPlaying();
+    }
+
+    private void videoIsLoadingAndPlaying() {
+        onView(withId(R.id.signVideoLoadingProgressBar)).check(matches(isDisplayed()));
         onView(allOf(withId(R.id.signVideoName), withText(MAMA))).check(matches(isDisplayed()));
+        onView(allOf(withId(R.id.signVideoView), withContentDescription((containsString(getStringResource(R.string.videoIsLoading))))))
+                .check(matches(isDisplayed()));
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                onView(withId(R.id.signVideoLoadingProgressBar)).check(matches((not(isDisplayed()))));
+                onView(allOf(withId(R.id.signVideoView),
+                        withContentDescription(allOf(containsString(getStringResource(R.string.videoIsPlaying)), containsString(MAMA_NAME)))))
+                        .check(matches(isDisplayed()));
+            }
+        }, 3000);
     }
 
     @NonNull
