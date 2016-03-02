@@ -75,6 +75,18 @@ public class SignVideoTest {
         videoIsLoadingAndPlaying();
     }
 
+    // See https://github.com/Scaronthesky/UK-Gebaerden_Muensterland/issues/14
+    @Test
+    public void checkOrientationChangeDoesNotCauseIllegalStateException() {
+        onView(isRoot()).perform(orientationLandscape());
+        onView(withContentDescription(R.string.navigation_drawer_open)).perform(click());
+        onView(withId(R.id.nav_view)).check(matches(isDisplayed()));
+        onView(withText(getStringResource(R.string.browse_signs))).perform(click());
+        onView(allOf(withText(MAMA), withParent(withId(R.id.signBrowserSingleRow)))).check(matches(isDisplayed())).perform(click());
+        checkVideoIsLoadingAndPlaying();
+    }
+
+
     private void videoIsLoadingAndPlaying() {
         onView(withId(R.id.signVideoLoadingProgressBar)).check(matches(isDisplayed()));
         onView(allOf(withId(R.id.signVideoName), withText(MAMA))).check(matches(isDisplayed()));

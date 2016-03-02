@@ -83,14 +83,11 @@ public class MainActivity extends AppCompatActivity
         if (R.id.nav_sign_browser == id) {
             showSignBrowser();
         } else if (R.id.nav_sign_trainer == id) {
-            setFragment(new SignTrainerFragment(), SIGN_TRAINER_TAG);
-            setActionBarTitle(getString(R.string.sign_trainer));
+            showSignTrainer();
         } else if (R.id.nav_sign_info == id) {
-            setFragment(new AboutSignsFragment(), ABOUT_SIGNS_TAG);
-            setActionBarTitle(getString(R.string.about_signs));
+            showAboutSigns();
         } else if (R.id.nav_sign_settings == id) {
-            setFragment(new SettingsFragment(), SETTINGS_TAG);
-            setActionBarTitle(getString(R.string.settings));
+            showSettings();
         }
         final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -99,12 +96,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onSignSelected(Sign sign) {
-        final SignVideoUIFragment signVideoUIFragment = new SignVideoUIFragment();
-        final Bundle args = new Bundle();
-        args.putParcelable(SignVideoUIFragment.SIGN_TO_SHOW, sign);
-        signVideoUIFragment.setArguments(args);
-        setFragment(signVideoUIFragment, SIGN_VIDEO_TAG);
-        setActionBarTitle(StringUtils.EMPTY);
+        Log.d(TAG, "onSignSelected: " + sign.getName());
+        showSignVideo(sign);
     }
 
     // TODO: https://github.com/Scaronthesky/UK-Gebaerden_Muensterland/issues/7
@@ -128,10 +121,33 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void showSignBrowser() {
+        Log.d(TAG, "showSignBrowser()");
         final SignBrowserUIFragment signBrowserUIFragment = new SignBrowserUIFragment();
-        signBrowserUIFragment.setOnSignClickedListener(this);
         setFragment(signBrowserUIFragment, SIGN_BROWSER_TAG);
         setActionBarTitle(getString(R.string.sign_browser));
     }
 
+    private void showSignVideo(Sign sign) {
+        final SignVideoUIFragment signVideoUIFragment = new SignVideoUIFragment();
+        final Bundle args = new Bundle();
+        args.putParcelable(SignVideoUIFragment.SIGN_TO_SHOW, sign);
+        signVideoUIFragment.setArguments(args);
+        setFragment(signVideoUIFragment, SIGN_VIDEO_TAG);
+        setActionBarTitle(StringUtils.EMPTY);
+    }
+
+    private void showSettings() {
+        setFragment(new SettingsFragment(), SETTINGS_TAG);
+        setActionBarTitle(getString(R.string.settings));
+    }
+
+    private void showAboutSigns() {
+        setFragment(new AboutSignsFragment(), ABOUT_SIGNS_TAG);
+        setActionBarTitle(getString(R.string.about_signs));
+    }
+
+    private void showSignTrainer() {
+        setFragment(new SignTrainerFragment(), SIGN_TRAINER_TAG);
+        setActionBarTitle(getString(R.string.sign_trainer));
+    }
 }

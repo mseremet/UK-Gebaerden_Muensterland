@@ -1,5 +1,6 @@
 package de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -27,17 +28,17 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.Sign;
 
 /**
  * Copyright (c) 2016 Matthias Tonhäuser
- * <p>
+ * <p/>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * <p>
+ * <p/>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ * <p/>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -49,16 +50,17 @@ public class SignBrowserUIFragment extends Fragment implements SignBrowserTaskFr
 
     private boolean showStarredOnly = false;
     private SignBrowserTaskFragment signBrowserTaskFragment;
-
-    // Has to implemented by parent activity.
-    public interface OnSignClickedListener {
-        void onSignSelected(Sign sign);
-    }
-
     private OnSignClickedListener onSignClickedListener = null;
 
-    public void setOnSignClickedListener(OnSignClickedListener onSignClickedListener) {
-        this.onSignClickedListener = onSignClickedListener;
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            this.onSignClickedListener = (OnSignClickedListener) activity;
+        } catch (ClassCastException ex) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnSignClickedListener");
+        }
     }
 
     @Nullable
@@ -142,7 +144,6 @@ public class SignBrowserUIFragment extends Fragment implements SignBrowserTaskFr
         return super.onOptionsItemSelected(item);
     }
 
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         Log.d(TAG, "onSaveInstance");
@@ -177,6 +178,11 @@ public class SignBrowserUIFragment extends Fragment implements SignBrowserTaskFr
             throw new IllegalStateException("RecyclerView is null");
         }
         mRecyclerView.swapAdapter(new SignBrowserAdapter(this, getActivity(), result), true);
+    }
+
+    // Has to implemented by parent activity.
+    public interface OnSignClickedListener {
+        void onSignSelected(Sign sign);
     }
 
 

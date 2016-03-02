@@ -95,7 +95,10 @@ public class SignVideoUIFragment extends Fragment {
         Log.d(TAG, "onSaveInstanceState");
         this.videoView.pause();
         super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putInt(VIDEO_PLAYBACK_POSITION, this.videoView.getCurrentPosition());
+        if (null != this.videoView) {
+            savedInstanceState.putInt(VIDEO_PLAYBACK_POSITION, this.videoView.getCurrentPosition());
+        }
+
     }
 
 }

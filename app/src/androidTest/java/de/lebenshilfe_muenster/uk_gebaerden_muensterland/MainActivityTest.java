@@ -62,7 +62,7 @@ public class MainActivityTest {
         onView(isRoot()).perform(orientationPortrait());
     }
 
-    @Test(timeout = 3000)
+    @Test
     public void testAllMenuItemsArePresent() {
         onView(withText(R.string.browse_signs)).check(matches(allOf(isDisplayed(), isEnabled())));
         onView(withText(R.string.train_signs)).check((matches(allOf(isDisplayed(), isEnabled()))));
@@ -76,17 +76,17 @@ public class MainActivityTest {
         clickNavigationButtonAndCheckToolbarTitle((R.string.browse_signs), R.string.sign_browser);
     }
 
-    @Test(timeout = 3000)
+    @Test
     public void clickTrainSignsButton() {
         clickNavigationButtonAndCheckToolbarTitle((R.string.train_signs), R.string.sign_trainer);
     }
 
-    @Test(timeout = 3000)
+    @Test
     public void clickAboutSignsButton() {
         clickNavigationButtonAndCheckToolbarTitle((R.string.about_signs), R.string.about_signs);
     }
 
-    @Test(timeout = 3000)
+    @Test
     public void clickSettingsButton() {
         clickNavigationButtonAndCheckToolbarTitle((R.string.settings), R.string.settings);
     }
