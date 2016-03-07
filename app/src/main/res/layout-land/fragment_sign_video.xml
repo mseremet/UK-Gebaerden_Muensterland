@@ -38,7 +38,7 @@
         android:text="Example sign mnemonic"
         android:textSize="12sp"
         tools:ignore="HardcodedText" />
-
+k
     <ProgressBar
         android:id="@+id/signVideoLoadingProgressBar"
         style="@android:style/Widget.ProgressBar.Large.Inverse"

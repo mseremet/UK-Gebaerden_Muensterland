@@ -23,7 +23,6 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/signVideoName"
-        android:layout_above="@+id/signVideoMnemonic"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -31,7 +30,7 @@
         android:id="@+id/signVideoMnemonic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@id/signVideoView"
         android:text="Example sign mnemonic"
         android:textSize="12sp"
         android:layout_gravity="center"
