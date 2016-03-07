@@ -45,6 +45,7 @@ public class SignVideoUIFragment extends Fragment {
     private ProgressBar progressBar;
     private int position;
     private TextView signVideoName;
+    private TextView signVideoMnemonic;
 
     @Nullable
     @Override
@@ -53,6 +54,7 @@ public class SignVideoUIFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_sign_video, container, false);
         this.signVideoName = (TextView) view.findViewById(R.id.signVideoName);
         this.videoView = (VideoView) view.findViewById(R.id.signVideoView);
+        this.signVideoMnemonic = (TextView) view.findViewById(R.id.signVideoMnemonic);
         this.progressBar = (ProgressBar) view.findViewById(R.id.signVideoLoadingProgressBar);
         this.videoView.setContentDescription(getActivity().getString(R.string.videoIsLoading));
         return view;
@@ -67,6 +69,7 @@ public class SignVideoUIFragment extends Fragment {
         }
         final Sign sign = getArguments().getParcelable(SIGN_TO_SHOW);
         this.signVideoName.setText(sign.getNameLocaleDe());
+        this.signVideoMnemonic.setText(sign.getMnemonic());
         this.mediaController = new MediaController(getActivity());
         this.mediaController.setAnchorView(this.videoView);
         this.mediaController.hide();

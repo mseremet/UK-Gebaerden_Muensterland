@@ -50,6 +50,7 @@ public class SignVideoTest {
 
     public static final String MAMA_NAME = "mama";
     private static final String MAMA = "Mama";
+    private static final String MAMA_MNEMONIC = "Wange streicheln";
 
     static {
         Looper.prepare();
@@ -75,6 +76,11 @@ public class SignVideoTest {
         videoIsLoadingAndPlaying();
     }
 
+    @Test
+    public void checkBackToBrowseButtonIsPresent() {
+        // TODO
+    }
+
     // See https://github.com/Scaronthesky/UK-Gebaerden_Muensterland/issues/14
     @Test
     public void checkOrientationChangeDoesNotCauseIllegalStateException() {
@@ -90,6 +96,7 @@ public class SignVideoTest {
     private void videoIsLoadingAndPlaying() {
         onView(withId(R.id.signVideoLoadingProgressBar)).check(matches(isDisplayed()));
         onView(allOf(withId(R.id.signVideoName), withText(MAMA))).check(matches(isDisplayed()));
+        onView(allOf(withId(R.id.signVideoMnemonic), withText(MAMA_MNEMONIC))).check(matches(isDisplayed()));
         onView(allOf(withId(R.id.signVideoView), withContentDescription((containsString(getStringResource(R.string.videoIsLoading))))))
                 .check(matches(isDisplayed()));
         Handler handler = new Handler();
