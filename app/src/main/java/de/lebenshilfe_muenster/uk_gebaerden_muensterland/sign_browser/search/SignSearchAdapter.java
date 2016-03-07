@@ -38,7 +38,7 @@ public class SignSearchAdapter extends RecyclerView.Adapter<SignSearchAdapter.Vi
     @Override
     public SignSearchAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                             int viewType) {
-        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.row_layout_sign_browser_search, parent, false));
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.search_row_layout, parent, false));
     }
 
 

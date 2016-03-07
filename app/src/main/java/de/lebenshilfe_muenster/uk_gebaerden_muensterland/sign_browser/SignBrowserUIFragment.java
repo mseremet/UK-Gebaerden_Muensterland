@@ -67,7 +67,7 @@ public class SignBrowserUIFragment extends Fragment implements SignBrowserTaskFr
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
-        final View view = inflater.inflate(R.layout.fragment_sign_browser, container, false);
+        final View view = inflater.inflate(R.layout.browser_fragment, container, false);
         setHasOptionsMenu(true);
         final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.signRecyclerView);
         recyclerView.setHasFixedSize(true); // performance fix

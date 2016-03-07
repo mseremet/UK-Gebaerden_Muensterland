@@ -47,7 +47,7 @@ public class SignBrowserAdapter extends RecyclerView.Adapter<SignBrowserAdapter.
     @Override
     public SignBrowserAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                             int viewType) {
-        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.row_layout_sign_browser, parent, false));
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.browser_row_layout, parent, false));
     }
 
 

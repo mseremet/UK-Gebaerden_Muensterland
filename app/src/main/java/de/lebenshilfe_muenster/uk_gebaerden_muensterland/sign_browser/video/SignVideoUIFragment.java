@@ -51,7 +51,7 @@ public class SignVideoUIFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
-        final View view = inflater.inflate(R.layout.fragment_sign_video, container, false);
+        final View view = inflater.inflate(R.layout.video_fragment, container, false);
         this.signVideoName = (TextView) view.findViewById(R.id.signVideoName);
         this.videoView = (VideoView) view.findViewById(R.id.signVideoView);
         this.signVideoMnemonic = (TextView) view.findViewById(R.id.signVideoMnemonic);

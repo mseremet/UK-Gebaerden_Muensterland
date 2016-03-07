@@ -34,7 +34,7 @@ public class SignSearchActivity extends AppCompatActivity implements SignSearchT
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_browser_search);
+        setContentView(R.layout.search_activity);
         if (null != savedInstanceState) {
             this.query = savedInstanceState.getString(KEY_QUERY);
         } else {
