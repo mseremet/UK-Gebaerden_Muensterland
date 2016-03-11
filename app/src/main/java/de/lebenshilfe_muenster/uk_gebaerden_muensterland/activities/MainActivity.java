@@ -1,7 +1,9 @@
-package de.lebenshilfe_muenster.uk_gebaerden_muensterland;
+package de.lebenshilfe_muenster.uk_gebaerden_muensterland.activities;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,9 +14,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 
 import org.apache.commons.lang3.StringUtils;
 
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.about_signs.AboutSignsFragment;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.Sign;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.settings.SettingsFragment;
@@ -26,32 +30,70 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, SignBrowserUIFragment.OnSignClickedListener {
 
     private static final String SIGN_BROWSER_TAG = "sign_browser_tag";
-    private static final String SIGN_VIDEO_TAG = "sign_video_tag";
     private static final String SIGN_TRAINER_TAG = "sign_trainer_tag";
     private static final String ABOUT_SIGNS_TAG = "about_signs_tag";
     private static final String SETTINGS_TAG = "settings_tag";
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final String KEY_TOOLBAR_TITLE = "main_activity_toolbar_title";
-    private String toolbarTitle = StringUtils.EMPTY;
+    private String actionBarTitle = StringUtils.EMPTY;
+    private ActionBarDrawerToggle toggle;
+    private ActionBar supportActionBar;
+
+//    public ActionBar getMainActivitySupportActionBar() {
+//        return this.supportActionBar;
+//    }
+//
+//    public ActionBarDrawerToggle getMainActivityToggle() {
+//        return this.toggle;
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
+        setupToolbar();
+        setupNavigationView();
+        restoreInstanceStateOrShowDefault(savedInstanceState);
+    }
 
+
+//    @Override
+//    public void onConfigurationChanged(Configuration newConfig) {
+//        super.onConfigurationChanged(newConfig);
+//        this.toggle.onConfigurationChanged(newConfig);
+//    }
+
+    private void setupToolbar() {
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+//        this.supportActionBar = getSupportActionBar();
         final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        final ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+        this.toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
+//        this.toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+//            // Called when the hamburger menu for the drawer is not visible and the up navigation
+//            // is visible instead. Used from the LowerLevel Fragments.
+//            @Override
+//            public void onClick(View v) {
+//                if (getFragmentManager().getBackStackEntryCount() > 0) {
+////                    MainActivity.this.supportActionBar.setDisplayHomeAsUpEnabled(false);
+//                    MainActivity.this.toggle.setDrawerIndicatorEnabled(true);
+//                    MainActivity.this.toggle.setHomeAsUpIndicator(null);
+//                    showSignBrowser();
+//                }
+//            }
+//        });
+//        this.toggle.setDrawerIndicatorEnabled(true);
+        drawer.setDrawerListener(this.toggle);
+    }
 
+    private void setupNavigationView() {
         final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
 
+    private void restoreInstanceStateOrShowDefault(Bundle savedInstanceState) {
         if (null == savedInstanceState) {
             showSignBrowser();
         } else {
@@ -60,10 +102,17 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        this.toggle.syncState();
+
+    }
+
+    @Override
     protected void onSaveInstanceState(Bundle outState) {
         Log.d(TAG, "onSaveInstance");
         super.onSaveInstanceState(outState);
-        outState.putString(KEY_TOOLBAR_TITLE, this.toolbarTitle);
+        outState.putString(KEY_TOOLBAR_TITLE, this.actionBarTitle);
     }
 
     @Override
@@ -95,6 +144,12 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        this.toggle.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onSignSelected(Sign sign) {
         Log.d(TAG, "onSignSelected: " + sign.getName());
         showSignVideo(sign);
@@ -109,14 +164,19 @@ public class MainActivity extends AppCompatActivity
         transaction.commit();
     }
 
+//    private void setLowerLevelFragment(Fragment fragment, String fragmentTag) {
+//        setFragment(fragment, fragmentTag);
+////        this.toggle.setDrawerIndicatorEnabled(false);
+//    }
+
     private void setActionBarTitle(String actionBarTitle) {
         Log.d(TAG, "setActionBarTitle: " + actionBarTitle);
         final ActionBar supportActionBar = getSupportActionBar();
         if (null == supportActionBar) {
             throw new IllegalStateException("SupportActionBar is null. Should be set in onCreate() method.");
         } else {
-            this.toolbarTitle = actionBarTitle;
-            supportActionBar.setTitle(this.toolbarTitle);
+            this.actionBarTitle = actionBarTitle;
+            supportActionBar.setTitle(this.actionBarTitle);
         }
     }
 
@@ -128,12 +188,18 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void showSignVideo(Sign sign) {
-        final SignVideoUIFragment signVideoUIFragment = new SignVideoUIFragment();
-        final Bundle args = new Bundle();
-        args.putParcelable(SignVideoUIFragment.SIGN_TO_SHOW, sign);
-        signVideoUIFragment.setArguments(args);
-        setFragment(signVideoUIFragment, SIGN_VIDEO_TAG);
-        setActionBarTitle(StringUtils.EMPTY);
+//        final SignVideoUIFragment signVideoUIFragment = new SignVideoUIFragment();
+//        final Bundle args = new Bundle();
+//        args.putParcelable(SignVideoUIFragment.SIGN_TO_SHOW, sign);
+////        signVideoUIFragment.setArguments(args);
+//        setLowerLevelFragment(signVideoUIFragment, SIGN_VIDEO_TAG);
+//        setActionBarTitle(StringUtils.EMPTY);
+        final Intent intent = new Intent(this, LevelOneActivity.class);
+        final Bundle bundle = new Bundle();
+        bundle.putString(LevelOneActivity.FRAGMENT_TO_SHOW, SignVideoUIFragment.class.getSimpleName());
+        bundle.putParcelable(SignVideoUIFragment.SIGN_TO_SHOW, sign);
+        intent.putExtra(LevelOneActivity.LEVEL_ONE_ACTIVITY_EXTRA, bundle);
+        startActivity(intent);
     }
 
     private void showSettings() {

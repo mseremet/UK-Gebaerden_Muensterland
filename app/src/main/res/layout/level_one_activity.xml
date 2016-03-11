@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".activities.MainActivity">
+    tools:context="de.lebenshilfe_muenster.uk_gebaerden_muensterland.activities.LevelOneActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -21,6 +21,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/main_activity_content" />
+    <include layout="@layout/level_one_activity_content" />
 
 </android.support.design.widget.CoordinatorLayout>

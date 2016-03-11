@@ -57,7 +57,7 @@ public class SignSearchActivity extends AppCompatActivity implements SignSearchT
     }
 
     private void setupRecyclerView() {
-        RecyclerView recyclerView = (RecyclerView) this.findViewById(R.id.signSearchRecyclerView);
+        final RecyclerView recyclerView = (RecyclerView) this.findViewById(R.id.signSearchRecyclerView);
         recyclerView.setHasFixedSize(true); // performance fix
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new SignSearchAdapter(new ArrayList<Sign>()));
@@ -67,7 +67,7 @@ public class SignSearchActivity extends AppCompatActivity implements SignSearchT
         final ActionBar supportActionBar = getSupportActionBar();
         if (null == supportActionBar) {
             throw new IllegalStateException("SupportActionBar is null. Should have been set in " +
-                    "MainActivity.onCreate().");
+                    "onCreate().");
         }
         supportActionBar.setTitle(getResources().getString(R.string.search_results) + StringUtils.SPACE + this.query);
         supportActionBar.setDisplayHomeAsUpEnabled(true);

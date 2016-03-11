@@ -11,7 +11,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import de.lebenshilfe_muenster.uk_gebaerden_muensterland.MainActivity;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.activities.MainActivity;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
 
 import static android.support.test.espresso.Espresso.onView;

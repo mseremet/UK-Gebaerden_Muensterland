@@ -1,31 +1,35 @@
 package de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.video;
 
-import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import de.lebenshilfe_muenster.uk_gebaerden_muensterland.MainActivity;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.activities.MainActivity;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
+import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.util.OrientationChangeAction.orientationLandscape;
 import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.util.OrientationChangeAction.orientationPortrait;
 import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.CoreMatchers.anyOf;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.core.IsNot.not;
 
@@ -62,7 +66,12 @@ public class SignVideoTest {
     @Before
     public void setup() {
         onView(isRoot()).perform(orientationPortrait());
-        onView(allOf(withText(MAMA), withParent(withId(R.id.signBrowserSingleRow)))).check(matches(isDisplayed())).perform(click());
+        navigateToSignVideoUIFragment();
+    }
+
+    @Test
+    public void checkToolbarTitleIsEmpty() {
+        onView(allOf(withText(StringUtils.EMPTY), withParent((withId(R.id.toolbar))))).check(doesNotExist());
     }
 
     @Test
@@ -77,38 +86,49 @@ public class SignVideoTest {
     }
 
     @Test
-    public void checkBackToBrowseButtonIsPresent() {
-        // TODO
+    public void checkUpButtonNavigatesToSignBrowser() {
+        checkUpButtonNavigatesToSignBrowserInternal();
+        // do it twice because this did not work properly
+        navigateToSignVideoUIFragment();
+        checkUpButtonNavigatesToSignBrowserInternal();
+        // check hamburger menu is present
+        onView(withContentDescription(R.string.navigation_drawer_open)).check(matches(isDisplayed()));
+        // do it again to check whether it works after an orientation change
+        navigateToSignVideoUIFragment();
+        onView(isRoot()).perform(orientationLandscape());
+        checkUpButtonNavigatesToSignBrowserInternal();
+    }
+
+    private void navigateToSignVideoUIFragment() {
+        onView(allOf(withText(MAMA), withParent(withId(R.id.signBrowserSingleRow))))
+                .check(matches(isDisplayed())).perform(click());
+    }
+
+    private void checkUpButtonNavigatesToSignBrowserInternal() {
+        onView(withContentDescription(getStringResource(R.string.navigate_up))).perform(click());
+        onView(ViewMatchers.withText(R.string.sign_browser)).check(matches(isDisplayed()));
     }
 
     // See https://github.com/Scaronthesky/UK-Gebaerden_Muensterland/issues/14
     @Test
     public void checkOrientationChangeDoesNotCauseIllegalStateException() {
         onView(isRoot()).perform(orientationLandscape());
+        checkUpButtonNavigatesToSignBrowserInternal();
         onView(withContentDescription(R.string.navigation_drawer_open)).perform(click());
         onView(withId(R.id.nav_view)).check(matches(isDisplayed()));
         onView(withText(getStringResource(R.string.browse_signs))).perform(click());
-        onView(allOf(withText(MAMA), withParent(withId(R.id.signBrowserSingleRow)))).check(matches(isDisplayed())).perform(click());
+        navigateToSignVideoUIFragment();
         checkVideoIsLoadingAndPlaying();
     }
 
 
     private void videoIsLoadingAndPlaying() {
-        onView(withId(R.id.signVideoLoadingProgressBar)).check(matches(isDisplayed()));
+//        onView(withId(R.id.signVideoLoadingProgressBar)).check(matches(anyOf(isDisplayed(), not(isDisplayed()))));
         onView(allOf(withId(R.id.signVideoName), withText(MAMA))).check(matches(isDisplayed()));
-        onView(allOf(withId(R.id.signVideoView), withContentDescription((containsString(getStringResource(R.string.videoIsLoading))))))
-                .check(matches(isDisplayed()));
-        // FIXME: Doesn't work, code in Runnable is not executed.
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            public void run() {
-                onView(withId(R.id.signVideoLoadingProgressBar)).check(matches((not(isDisplayed()))));
-                onView(allOf(withId(R.id.signVideoView),
-                        withContentDescription(allOf(containsString(getStringResource(R.string.videoIsPlaying)), containsString(MAMA_NAME)))))
-                        .check(matches(isDisplayed()));
-                onView(allOf(withId(R.id.signVideoMnemonic), withText(MAMA_MNEMONIC))).check(matches(isDisplayed()));
-            }
-        }, 3000);
+        onView(allOf(withId(R.id.signVideoView), withContentDescription(anyOf(containsString(getStringResource(R.string.videoIsLoading)),
+                containsString(getStringResource(R.string.videoIsPlaying)))))).check(matches(isDisplayed()));
+        // while the video is loading, the mnemonic is not shown completely to the user.
+        onView(allOf(withId(R.id.signVideoMnemonic), withText(MAMA_MNEMONIC))).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
     }
 
     @NonNull

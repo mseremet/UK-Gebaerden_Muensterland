@@ -15,7 +15,7 @@ import org.junit.runner.RunWith;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.lebenshilfe_muenster.uk_gebaerden_muensterland.MainActivity;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.activities.MainActivity;
 
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.endsWith;

@@ -1,21 +1,5 @@
 package de.lebenshilfe_muenster.uk_gebaerden_muensterland.sample;
 
-import android.support.test.espresso.action.ViewActions;
-import android.support.test.espresso.matcher.ViewMatchers;
-import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.AndroidJUnit4;
-import android.test.suitebuilder.annotation.LargeTest;
-
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import de.lebenshilfe_muenster.uk_gebaerden_muensterland.MainActivity;
-import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
-
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.allOf;
@@ -42,7 +26,7 @@ import static org.hamcrest.CoreMatchers.allOf;
 public class EspressoUITest {
 //    Sample Espresso UI Test
 //    @Rule
-//    public ActivityTestRule<MainActivity> mainActivityActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+//    public ActivityTestRule<MainActivity> levelOneActivityActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 //
 //    @Test(timeout = 1000)
 //    public void clickFloatingActionButton() {

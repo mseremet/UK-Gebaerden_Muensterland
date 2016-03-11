@@ -24,4 +24,6 @@
     <string name="videoIsPaused">Video is paused</string>
     <string name="videoCouldNotBeLoaded">Video could not be loaded.</string>
     <string name="videoIsLoading">Video is loading</string>
+    <string name="title_activity_level_one">LevelOneActivity</string>
+    <string name="action_settings">Settings</string>
 </resources>

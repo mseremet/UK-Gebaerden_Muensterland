@@ -56,7 +56,7 @@ public class Sign implements Parcelable {
      * @param learningProgress the learning progress for this sign. Must not be < -5 or > 5
      */
     private Sign(int id, String name, String nameLocaleDe, String mnemonic, boolean starred, int learningProgress) {
-        validateParameters(name, mnemonic, learningProgress);
+        validateParameters(name, nameLocaleDe, mnemonic, learningProgress);
         this.id = id;
         this.name = name;
         this.nameLocaleDe = nameLocaleDe;
@@ -79,9 +79,11 @@ public class Sign implements Parcelable {
         this.learningProgress = in.readInt();
     }
 
-    private void validateParameters(String name, String mnemonic, int learningProgress) {
+    private void validateParameters(String name, String nameLocaleDe, String mnemonic, int learningProgress) {
         Validate.notNull(name, "Name must not be null");
         Validate.notBlank(name, "Name must not be empty.");
+        Validate.notNull(nameLocaleDe, "NameLocaleDe must not be null");
+        Validate.notBlank(nameLocaleDe, "NameLocaleDe must not be empty.");
         Validate.notNull(mnemonic, "Mnemonic must not be null");
         Validate.notBlank(mnemonic, "Mnemonic must not be empty.");
         Validate.inclusiveBetween(LEARNING_PROGRESS_LOWER_BOUNDARY, LEARNING_PROGRESS_UPPER_BOUNDARY, learningProgress, "Learning progress cannot be < -5 or > 5");

@@ -40,12 +40,14 @@ public class SignVideoUIFragment extends Fragment {
     public static final String VIDEO_PLAYBACK_POSITION = "VIDEO_PLAYBACK_POSITION";
     public static final String ANDROID_RESOURCE = "android.resource://";
     public static final String SLASH = "/";
+    public static final String RAW = "raw";
     private MediaController mediaController;
     private VideoView videoView;
     private ProgressBar progressBar;
     private int position;
     private TextView signVideoName;
     private TextView signVideoMnemonic;
+    private boolean shouldVideoBeStarted = true;
 
     @Nullable
     @Override
@@ -66,6 +68,7 @@ public class SignVideoUIFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         if (null != savedInstanceState) {
             this.position = savedInstanceState.getInt(VIDEO_PLAYBACK_POSITION);
+            this.shouldVideoBeStarted = false;
         }
         final Sign sign = getArguments().getParcelable(SIGN_TO_SHOW);
         this.signVideoName.setText(sign.getNameLocaleDe());
@@ -74,7 +77,7 @@ public class SignVideoUIFragment extends Fragment {
         this.mediaController.setAnchorView(this.videoView);
         this.mediaController.hide();
         this.videoView.setMediaController(mediaController);
-        final int identifier = getActivity().getResources().getIdentifier(sign.getName(), "raw", getActivity().getPackageName());
+        final int identifier = getActivity().getResources().getIdentifier(sign.getName(), RAW, getActivity().getPackageName());
         if (0 == identifier) {
             this.signVideoName.setText(R.string.videoCouldNotBeLoaded);
             this.progressBar.setVisibility(View.GONE);
@@ -87,7 +90,9 @@ public class SignVideoUIFragment extends Fragment {
             public void onPrepared(MediaPlayer mp) {
                 SignVideoUIFragment.this.progressBar.setVisibility(View.GONE);
                 SignVideoUIFragment.this.videoView.seekTo(position);
-                SignVideoUIFragment.this.videoView.start();
+                if (SignVideoUIFragment.this.shouldVideoBeStarted) {
+                    SignVideoUIFragment.this.videoView.start();
+                }
                 SignVideoUIFragment.this.videoView.setContentDescription(getActivity().getString(R.string.videoIsPlaying) + ": " + sign.getName());
             }
         });
@@ -96,9 +101,9 @@ public class SignVideoUIFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         Log.d(TAG, "onSaveInstanceState");
-        this.videoView.pause();
         super.onSaveInstanceState(savedInstanceState);
         if (null != this.videoView) {
+            this.videoView.pause();
             savedInstanceState.putInt(VIDEO_PLAYBACK_POSITION, this.videoView.getCurrentPosition());
         }
 

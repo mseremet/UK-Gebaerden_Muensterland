@@ -79,6 +79,12 @@ public class SignTest {
         assertNameLocaleDe(football);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetNameLocaleDeCannotBeEmpty() {
+        new Sign.Builder().setId(0).setName(FOOTBALL).setNameLocaleDe(StringUtils.EMPTY)
+                .setMnemonic(KICK_A_BALL).setStarred(false).setLearningProgress(0).create();
+    }
+
     @Test
     public void testGetMnemonic() {
         final Sign football = new Sign.Builder().setId(0).setName(FOOTBALL).setNameLocaleDe(FUSSBALL)
