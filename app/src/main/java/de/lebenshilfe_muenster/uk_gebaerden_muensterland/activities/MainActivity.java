@@ -37,15 +37,6 @@ public class MainActivity extends AppCompatActivity
     private static final String KEY_TOOLBAR_TITLE = "main_activity_toolbar_title";
     private String actionBarTitle = StringUtils.EMPTY;
     private ActionBarDrawerToggle toggle;
-    private ActionBar supportActionBar;
-
-//    public ActionBar getMainActivitySupportActionBar() {
-//        return this.supportActionBar;
-//    }
-//
-//    public ActionBarDrawerToggle getMainActivityToggle() {
-//        return this.toggle;
-//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,34 +48,12 @@ public class MainActivity extends AppCompatActivity
         restoreInstanceStateOrShowDefault(savedInstanceState);
     }
 
-
-//    @Override
-//    public void onConfigurationChanged(Configuration newConfig) {
-//        super.onConfigurationChanged(newConfig);
-//        this.toggle.onConfigurationChanged(newConfig);
-//    }
-
     private void setupToolbar() {
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-//        this.supportActionBar = getSupportActionBar();
         final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         this.toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-//        this.toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
-//            // Called when the hamburger menu for the drawer is not visible and the up navigation
-//            // is visible instead. Used from the LowerLevel Fragments.
-//            @Override
-//            public void onClick(View v) {
-//                if (getFragmentManager().getBackStackEntryCount() > 0) {
-////                    MainActivity.this.supportActionBar.setDisplayHomeAsUpEnabled(false);
-//                    MainActivity.this.toggle.setDrawerIndicatorEnabled(true);
-//                    MainActivity.this.toggle.setHomeAsUpIndicator(null);
-//                    showSignBrowser();
-//                }
-//            }
-//        });
-//        this.toggle.setDrawerIndicatorEnabled(true);
         drawer.setDrawerListener(this.toggle);
     }
 
@@ -164,11 +133,6 @@ public class MainActivity extends AppCompatActivity
         transaction.commit();
     }
 
-//    private void setLowerLevelFragment(Fragment fragment, String fragmentTag) {
-//        setFragment(fragment, fragmentTag);
-////        this.toggle.setDrawerIndicatorEnabled(false);
-//    }
-
     private void setActionBarTitle(String actionBarTitle) {
         Log.d(TAG, "setActionBarTitle: " + actionBarTitle);
         final ActionBar supportActionBar = getSupportActionBar();
@@ -188,12 +152,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void showSignVideo(Sign sign) {
-//        final SignVideoUIFragment signVideoUIFragment = new SignVideoUIFragment();
-//        final Bundle args = new Bundle();
-//        args.putParcelable(SignVideoUIFragment.SIGN_TO_SHOW, sign);
-////        signVideoUIFragment.setArguments(args);
-//        setLowerLevelFragment(signVideoUIFragment, SIGN_VIDEO_TAG);
-//        setActionBarTitle(StringUtils.EMPTY);
         final Intent intent = new Intent(this, LevelOneActivity.class);
         final Bundle bundle = new Bundle();
         bundle.putString(LevelOneActivity.FRAGMENT_TO_SHOW, SignVideoUIFragment.class.getSimpleName());

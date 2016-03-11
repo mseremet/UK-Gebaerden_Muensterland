@@ -47,7 +47,6 @@ public class SignVideoUIFragment extends Fragment {
     private int position;
     private TextView signVideoName;
     private TextView signVideoMnemonic;
-    private boolean shouldVideoBeStarted = true;
 
     @Nullable
     @Override
@@ -68,7 +67,6 @@ public class SignVideoUIFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         if (null != savedInstanceState) {
             this.position = savedInstanceState.getInt(VIDEO_PLAYBACK_POSITION);
-            this.shouldVideoBeStarted = false;
         }
         final Sign sign = getArguments().getParcelable(SIGN_TO_SHOW);
         this.signVideoName.setText(sign.getNameLocaleDe());
@@ -90,9 +88,7 @@ public class SignVideoUIFragment extends Fragment {
             public void onPrepared(MediaPlayer mp) {
                 SignVideoUIFragment.this.progressBar.setVisibility(View.GONE);
                 SignVideoUIFragment.this.videoView.seekTo(position);
-                if (SignVideoUIFragment.this.shouldVideoBeStarted) {
-                    SignVideoUIFragment.this.videoView.start();
-                }
+                SignVideoUIFragment.this.videoView.start();
                 SignVideoUIFragment.this.videoView.setContentDescription(getActivity().getString(R.string.videoIsPlaying) + ": " + sign.getName());
             }
         });
