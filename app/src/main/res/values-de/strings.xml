@@ -1,5 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">UK-Gebaerden_Muensterland</string>
+    <string name="app_name">UK-Gebärden </string>
     <string name="navigate_up">Nach oben</string>
+    <string name="about_signs">Über UK-Gebärden</string>
+    <string name="action_search">Suchen</string>
+    <string name="action_settings">Einstellungen</string>
+    <string name="action_toggle_starred">Anzeige umschalten</string>
+    <string name="app_icon">App Symbol</string>
+    <string name="browse_signs">Gebärden anzeigen</string>
+    <string name="navigation_drawer_close">Navigation schließen</string>
+    <string name="navigation_drawer_open">Navigation öffnen</string>
+    <string name="progress">Fortschritt</string>
+    <string name="search_hint">Gebärden suchen</string>
+    <string name="search_results">Suche nach: </string>
+    <string name="settings">Einstellungen</string>
+    <string name="signIconDescription">Gebärden-Symbol</string>
+    <string name="sign_browser">Gebärden-Katalog</string>
+    <string name="sign_trainer">Gebärden-Trainer</string>
+    <string name="starredButton">Merken-Knopf</string>
+    <string name="train_signs">Gebärden üben</string>
+    <string name="videoCouldNotBeLoaded">Video konnte nicht geladen werden.</string>
+    <string name="videoIsLoading">Video wird geladen.</string>
+    <string name="videoIsPlaying">Video wird abgespielt.</string>
 </resources>

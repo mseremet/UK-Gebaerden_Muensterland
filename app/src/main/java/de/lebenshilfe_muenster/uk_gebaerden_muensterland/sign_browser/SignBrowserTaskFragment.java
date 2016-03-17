@@ -37,8 +37,11 @@ public class SignBrowserTaskFragment extends Fragment {
     private boolean running;
 
     interface TaskCallbacks {
+        @SuppressWarnings("EmptyMethod")
         void onPreExecute();
+        @SuppressWarnings({"EmptyMethod", "UnusedParameters"})
         void onProgressUpdate(int percent);
+        @SuppressWarnings("EmptyMethod")
         void onCancelled();
         void onPostExecute(List<Sign> result);
     }

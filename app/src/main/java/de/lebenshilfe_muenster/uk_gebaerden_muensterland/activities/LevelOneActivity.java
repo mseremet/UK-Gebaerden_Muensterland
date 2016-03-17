@@ -23,16 +23,18 @@ public class LevelOneActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(TAG,"onCreate()");
+        Log.d(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.level_one_activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(StringUtils.EMPTY);
+        if (null != getSupportActionBar()) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle(StringUtils.EMPTY);
+        }
         final Intent intent = getIntent();
         final Bundle bundle = intent.getBundleExtra(LEVEL_ONE_ACTIVITY_EXTRA);
-        if (null == bundle ) {
+        if (null == bundle) {
             throw new IllegalArgumentException("The bundle supplied to the activity is null");
         }
         final String fragmentToShow = bundle.getString(FRAGMENT_TO_SHOW, StringUtils.EMPTY);

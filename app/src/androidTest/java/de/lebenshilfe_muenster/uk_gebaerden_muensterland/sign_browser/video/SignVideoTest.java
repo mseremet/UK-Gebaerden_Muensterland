@@ -31,7 +31,6 @@ import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.util.Orientation
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.anyOf;
 import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.core.IsNot.not;
 
 /**
  * Copyright (c) 2016 Matthias Tonhäuser
@@ -52,7 +51,6 @@ import static org.hamcrest.core.IsNot.not;
 @RunWith(AndroidJUnit4.class)
 public class SignVideoTest {
 
-    public static final String MAMA_NAME = "mama";
     private static final String MAMA = "Mama";
     private static final String MAMA_MNEMONIC = "Wange streicheln";
 

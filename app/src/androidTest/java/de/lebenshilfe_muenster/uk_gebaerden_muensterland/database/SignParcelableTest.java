@@ -29,11 +29,11 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class SignParcelableTest {
 
-    public static final int ID = 0;
-    public static final String NAME = "football";
-    public static final String NAME_LOCALE_DE = "Fußball";
-    public static final String MNEMONIC = "Faust tritt in Handfläche";
-    public static final boolean STARRED = false;
+    private static final int ID = 0;
+    private static final String NAME = "football";
+    private static final String NAME_LOCALE_DE = "Fußball";
+    private static final String MNEMONIC = "Faust tritt in Handfläche";
+    private static final boolean STARRED = false;
     private static final int PROGRESS = 3;
     private static final Sign FOOTBALL = new Sign.Builder().setId(ID).setName(NAME).setNameLocaleDe(NAME_LOCALE_DE)
             .setMnemonic(MNEMONIC).setStarred(STARRED).setLearningProgress(PROGRESS).create();

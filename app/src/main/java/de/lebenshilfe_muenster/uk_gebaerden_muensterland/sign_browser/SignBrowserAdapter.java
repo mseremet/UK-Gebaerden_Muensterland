@@ -53,7 +53,6 @@ public class SignBrowserAdapter extends RecyclerView.Adapter<SignBrowserAdapter.
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        final String name = dataSet.get(position).getName();
         final String nameLocaleDe = dataSet.get(position).getNameLocaleDe();
         holder.txtSignName.setText(nameLocaleDe);
         holder.txtSignName.setOnClickListener(new View.OnClickListener() {

@@ -53,7 +53,7 @@
         android:layout_alignBaseline="@+id/mnemonic"
         android:layout_toLeftOf="@+id/learningProgressValue"
         android:layout_toStartOf="@+id/learningProgressValue"
-        android:text="Progress: "
+        android:text="@string/progress"
         android:textSize="12sp" />
 
     <TextView

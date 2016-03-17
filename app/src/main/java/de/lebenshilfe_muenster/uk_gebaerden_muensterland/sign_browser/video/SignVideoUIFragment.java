@@ -36,12 +36,11 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.Sign;
 public class SignVideoUIFragment extends Fragment {
 
     public static final String SIGN_TO_SHOW = "sign_to_show";
-    public static final String TAG = SignVideoUIFragment.class.getSimpleName();
-    public static final String VIDEO_PLAYBACK_POSITION = "VIDEO_PLAYBACK_POSITION";
-    public static final String ANDROID_RESOURCE = "android.resource://";
-    public static final String SLASH = "/";
-    public static final String RAW = "raw";
-    private MediaController mediaController;
+    private static final String TAG = SignVideoUIFragment.class.getSimpleName();
+    private static final String VIDEO_PLAYBACK_POSITION = "VIDEO_PLAYBACK_POSITION";
+    private static final String ANDROID_RESOURCE = "android.resource://";
+    private static final String SLASH = "/";
+    private static final String RAW = "raw";
     private VideoView videoView;
     private ProgressBar progressBar;
     private int position;
@@ -71,9 +70,9 @@ public class SignVideoUIFragment extends Fragment {
         final Sign sign = getArguments().getParcelable(SIGN_TO_SHOW);
         this.signVideoName.setText(sign.getNameLocaleDe());
         this.signVideoMnemonic.setText(sign.getMnemonic());
-        this.mediaController = new MediaController(getActivity());
-        this.mediaController.setAnchorView(this.videoView);
-        this.mediaController.hide();
+        final MediaController mediaController = new MediaController(getActivity());
+        mediaController.setAnchorView(this.videoView);
+        mediaController.hide();
         this.videoView.setMediaController(mediaController);
         final int identifier = getActivity().getResources().getIdentifier(sign.getName(), RAW, getActivity().getPackageName());
         if (0 == identifier) {
