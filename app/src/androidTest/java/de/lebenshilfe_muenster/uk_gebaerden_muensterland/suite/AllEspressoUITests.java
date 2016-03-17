@@ -5,6 +5,7 @@ import org.junit.runners.Suite;
 
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.MainActivityTest;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.SignBrowserTest;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.search.SignSearchTest;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.video.SignVideoTest;
 
 /**
@@ -24,6 +25,6 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.video.Sign
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({MainActivityTest.class, SignBrowserTest.class, SignVideoTest.class})
+@Suite.SuiteClasses({MainActivityTest.class, SignBrowserTest.class, SignSearchTest.class, SignVideoTest.class})
 public class AllEspressoUITests {
 }

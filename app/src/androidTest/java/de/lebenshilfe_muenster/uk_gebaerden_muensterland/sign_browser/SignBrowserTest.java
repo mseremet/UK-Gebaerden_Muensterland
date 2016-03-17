@@ -1,22 +1,19 @@
 package de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser;
 
-import android.support.annotation.NonNull;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import de.lebenshilfe_muenster.uk_gebaerden_muensterland.activities.MainActivity;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.activities.MainActivity;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
@@ -54,9 +51,6 @@ import static org.hamcrest.CoreMatchers.not;
 @RunWith(AndroidJUnit4.class)
 public class SignBrowserTest {
 
-    private static final String ENTER = "\n";
-    private static final String MAM = "mam";
-    private static final String PAP = "paP";
     private static final String MAMA = "Mama";
     private static final String PAPA = "Papa";
     private static final String FOOTBALL = "Fußball";
@@ -104,34 +98,6 @@ public class SignBrowserTest {
         onView(withId(R.id.action_toggle_starred)).check(matches(isDisplayed()));
     }
 
-    @Test
-    public void checkSearchingForSignsWorks() {
-        // Search from sign browser
-        onView(withId(R.id.action_search)).check(matches(isDisplayed())).perform(click());
-        onView(withId(android.support.design.R.id.search_src_text)).check(matches(isDisplayed())).perform(typeText(MAM + ENTER));
-        onView(allOf(withId(R.id.signSearchRecyclerView), hasDescendant((withText(MAMA))))).check(matches(isDisplayed()));
-        onView(allOf(withId(R.id.signSearchRecyclerView), hasDescendant((withText(PAPA))))).check(doesNotExist());
-        onView(allOf(withId(R.id.signSearchRecyclerView), hasDescendant((withText(FOOTBALL))))).check(doesNotExist());
-        onView(allOf(withText(getStringResource(R.string.search_results) + StringUtils.SPACE + MAM),
-                withParent((withId(android.support.design.R.id.action_bar))))).check(matches(isDisplayed()));
-        onView(isRoot()).perform(orientationLandscape()); // trigger configuration change
-        onView(allOf(withText(getStringResource(R.string.search_results) + StringUtils.SPACE + MAM),
-                withParent((withId(android.support.design.R.id.action_bar))))).check(matches(isDisplayed()));
-        // Search from the list of results again
-        onView(withId(R.id.action_search)).check(matches(isDisplayed())).perform(click());
-        onView(withId(android.support.design.R.id.search_src_text)).check(matches(isDisplayed())).perform(typeText(PAP + ENTER));
-        onView(allOf(withId(R.id.signSearchRecyclerView), hasDescendant((withText(MAMA))))).check(doesNotExist());
-        onView(allOf(withId(R.id.signSearchRecyclerView), hasDescendant((withText(PAPA))))).check(matches(isDisplayed()));
-        onView(allOf(withId(R.id.signSearchRecyclerView), hasDescendant((withText(FOOTBALL))))).check(doesNotExist());
-        onView(allOf(withText(getStringResource(R.string.search_results) + StringUtils.SPACE + PAP),
-                withParent((withId(android.support.design.R.id.action_bar))))).check(matches(isDisplayed()));
-        onView(isRoot()).perform(orientationLandscape()); // trigger configuration change
-        onView(allOf(withText(getStringResource(R.string.search_results) + StringUtils.SPACE + PAP),
-                withParent((withId(android.support.design.R.id.action_bar))))).check(matches(isDisplayed()));
-        // Navigate back to the sign browser -- Up button is only accessible via a localized content description ('Nach oben')
-        onView(withContentDescription(getStringResource(R.string.navigate_up))).perform(click());
-        onView(withText(R.string.sign_browser)).check(matches(isDisplayed()));
-    }
 
     @Test
     public void checkTogglingStarredSignsWorks() {
@@ -203,11 +169,6 @@ public class SignBrowserTest {
     public void checkClickingOnSignNameNavigatesToVideoView() {
         onView(allOf(withText(MAMA), withParent(withId(R.id.signBrowserSingleRow)))).check(matches(isDisplayed())).perform(click());
         onView(allOf(withId(R.id.signVideoName), withText(MAMA))).check(matches(isDisplayed()));
-    }
-
-    @NonNull
-    private String getStringResource(int stringResourceId) {
-        return mainActivityActivityTestRule.getActivity().getResources().getString(stringResourceId);
     }
 
     private void checkOnlyStarredSignsAreShown() {
