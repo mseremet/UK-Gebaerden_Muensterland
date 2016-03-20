@@ -90,12 +90,18 @@ public class SignSearchTest {
     }
 
     @Test
-    public void checkClickingOnSignNameNavigatesToDetailsView() {
+    public void checkNavigatingToVideosAndReturningWorks() {
         performSearch(MAM);
         onView(allOf(withText(MAMA), withParent(withId(R.id.signSearchSingleRow)))).check(matches(isDisplayed())).perform(click());
         onView(allOf(withId(R.id.signVideoName), withText(MAMA))).check(matches(isDisplayed()));
         navigateUp();
         checkActivityTitle(MAM);
+        performSearch(PAP);
+        onView(allOf(withText(PAPA), withParent(withId(R.id.signSearchSingleRow)))).check(matches(isDisplayed())).perform(click());
+        onView(allOf(withId(R.id.signVideoName), withText(PAPA))).check(matches(isDisplayed()));
+        onView(isRoot()).perform(orientationLandscape());
+        navigateUp();
+        checkActivityTitle(PAP);
     }
 
     private void performSearch(String query) {
