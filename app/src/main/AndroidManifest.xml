@@ -45,6 +45,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.lebenshilfe_muenster.uk_gebaerden_muensterland.activities.MainActivity" />
         </activity>
+        <activity
+            android:name=".sign_browser.search.video.SignSearchVideoActivity"
+            android:label="@string/title_activity_sign_search_video"
+            android:parentActivityName=".sign_browser.search.SignSearchActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.search.SignSearchActivity" />
+        </activity>
     </application>
 
 </manifest>

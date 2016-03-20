@@ -3,6 +3,7 @@ package de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.search;
 import android.support.annotation.NonNull;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Rule;
@@ -46,6 +47,7 @@ import static org.hamcrest.Matchers.allOf;
 @RunWith(AndroidJUnit4.class)
 public class SignSearchTest {
 
+    private static final String TAG = SignSearchTest.class.getSimpleName();
     private static final String ENTER = "\n";
     private static final String MAM = "mam";
     private static final String PAP = "paP";
@@ -57,32 +59,62 @@ public class SignSearchTest {
     public final ActivityTestRule<MainActivity> mainActivityActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
+    public void checkToolbarTitleIsEmpty() {
+        performSearch(MAM);
+        onView(allOf(withText(MAMA), withParent(withId(R.id.signSearchSingleRow)))).check(matches(isDisplayed())).perform(click());
+        onView(allOf(withText("SignSearchVideoActivity"), withParent((withId(R.id.toolbar))))).check(doesNotExist());
+    }
+
+    @Test
     public void checkSearchingForSignsWorks() {
-        // Search from sign browser
-        onView(withId(R.id.action_search)).check(matches(isDisplayed())).perform(click());
-        onView(withId(android.support.design.R.id.search_src_text)).check(matches(isDisplayed())).perform(typeText(MAM + ENTER));
+        Log.d(TAG, "Search from sign browser");
+        performSearch(MAM);
         onView(allOf(withId(R.id.signSearchRecyclerView), hasDescendant((withText(MAMA))))).check(matches(isDisplayed()));
         onView(allOf(withId(R.id.signSearchRecyclerView), hasDescendant((withText(PAPA))))).check(doesNotExist());
         onView(allOf(withId(R.id.signSearchRecyclerView), hasDescendant((withText(FOOTBALL))))).check(doesNotExist());
-        onView(allOf(withText(getStringResource(R.string.search_results) + StringUtils.SPACE + MAM),
-                withParent((withId(android.support.design.R.id.action_bar))))).check(matches(isDisplayed()));
-        onView(isRoot()).perform(orientationLandscape()); // trigger configuration change
-        onView(allOf(withText(getStringResource(R.string.search_results) + StringUtils.SPACE + MAM),
-                withParent((withId(android.support.design.R.id.action_bar))))).check(matches(isDisplayed()));
-        // Search from the list of results again
-        onView(withId(R.id.action_search)).check(matches(isDisplayed())).perform(click());
-        onView(withId(android.support.design.R.id.search_src_text)).check(matches(isDisplayed())).perform(typeText(PAP + ENTER));
+        checkActivityTitle(MAM);
+        Log.d(TAG, "trigger configuration change");
+        onView(isRoot()).perform(orientationLandscape());
+        checkActivityTitle(MAM);
+        Log.d(TAG, "Search from the list of results again");
+        performSearch(PAP);
         onView(allOf(withId(R.id.signSearchRecyclerView), hasDescendant((withText(MAMA))))).check(doesNotExist());
         onView(allOf(withId(R.id.signSearchRecyclerView), hasDescendant((withText(PAPA))))).check(matches(isDisplayed()));
         onView(allOf(withId(R.id.signSearchRecyclerView), hasDescendant((withText(FOOTBALL))))).check(doesNotExist());
-        onView(allOf(withText(getStringResource(R.string.search_results) + StringUtils.SPACE + PAP),
-                withParent((withId(android.support.design.R.id.action_bar))))).check(matches(isDisplayed()));
-        onView(isRoot()).perform(orientationLandscape()); // trigger configuration change
-        onView(allOf(withText(getStringResource(R.string.search_results) + StringUtils.SPACE + PAP),
-                withParent((withId(android.support.design.R.id.action_bar))))).check(matches(isDisplayed()));
-        // Navigate back to the sign browser -- Up button is only accessible via a localized content description ('Nach oben')
-        onView(withContentDescription(getStringResource(R.string.navigate_up))).perform(click());
+        checkActivityTitle(PAP);
+        Log.d(TAG, "trigger configuration change");
+        onView(isRoot()).perform(orientationLandscape());
+        checkActivityTitle(PAP);
+        navigateUp();
         onView(withText(R.string.sign_browser)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void checkClickingOnSignNameNavigatesToDetailsView() {
+        performSearch(MAM);
+        onView(allOf(withText(MAMA), withParent(withId(R.id.signSearchSingleRow)))).check(matches(isDisplayed())).perform(click());
+        onView(allOf(withId(R.id.signVideoName), withText(MAMA))).check(matches(isDisplayed()));
+        navigateUp();
+        checkActivityTitle(MAM);
+    }
+
+    private void performSearch(String query) {
+        Log.d(TAG, "Perform search");
+        onView(withId(R.id.action_search)).check(matches(isDisplayed())).perform(click());
+        onView(withId(android.support.design.R.id.search_src_text)).check(matches(isDisplayed())).perform(typeText(query + ENTER));
+    }
+
+    private void checkActivityTitle(String query) {
+        onView(allOf(withText(getStringResource(R.string.search_results) + StringUtils.SPACE + query),
+                withParent((withId(android.support.design.R.id.action_bar))))).check(matches(isDisplayed()));
+    }
+
+    /**
+     * Navigate back to the sign browser -- Up button is only accessible via a localized content description ('Nach oben')
+     */
+    private void navigateUp() {
+        Log.d(TAG, "navigateUp()" );
+        onView(withContentDescription(getStringResource(R.string.navigate_up))).perform(click());
     }
 
     @NonNull

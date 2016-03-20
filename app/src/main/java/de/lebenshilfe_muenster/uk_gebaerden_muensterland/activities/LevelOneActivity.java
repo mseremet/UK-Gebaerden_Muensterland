@@ -16,8 +16,8 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.video.Sign
 
 public class LevelOneActivity extends AppCompatActivity {
 
-    static final String FRAGMENT_TO_SHOW = "fragment_to_show";
-    static final String LEVEL_ONE_ACTIVITY_EXTRA = "level_one_activity_extra";
+    public static final String FRAGMENT_TO_SHOW = "fragment_to_show";
+    public static final String EXTRA = "extra";
     private static final String TAG = LevelOneActivity.class.getSimpleName();
     private static final String SIGN_VIDEO_TAG = "sign_video_tag";
 
@@ -33,7 +33,7 @@ public class LevelOneActivity extends AppCompatActivity {
             getSupportActionBar().setTitle(StringUtils.EMPTY);
         }
         final Intent intent = getIntent();
-        final Bundle bundle = intent.getBundleExtra(LEVEL_ONE_ACTIVITY_EXTRA);
+        final Bundle bundle = intent.getBundleExtra(EXTRA);
         if (null == bundle) {
             throw new IllegalArgumentException("The bundle supplied to the activity is null");
         }

@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity
         final Bundle bundle = new Bundle();
         bundle.putString(LevelOneActivity.FRAGMENT_TO_SHOW, SignVideoUIFragment.class.getSimpleName());
         bundle.putParcelable(SignVideoUIFragment.SIGN_TO_SHOW, sign);
-        intent.putExtra(LevelOneActivity.LEVEL_ONE_ACTIVITY_EXTRA, bundle);
+        intent.putExtra(LevelOneActivity.EXTRA, bundle);
         startActivity(intent);
     }
 

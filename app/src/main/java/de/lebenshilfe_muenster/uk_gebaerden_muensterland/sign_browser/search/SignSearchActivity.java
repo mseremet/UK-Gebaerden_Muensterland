@@ -1,6 +1,5 @@
 package de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.search;
 
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.SearchManager;
 import android.content.Context;
@@ -12,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -23,47 +23,58 @@ import java.util.List;
 
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.Sign;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.search.video.SignSearchVideoActivity;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.video.SignVideoUIFragment;
 
 public class SignSearchActivity extends AppCompatActivity implements SignSearchTaskFragment.TaskCallbacks {
 
-    private static final java.lang.String KEY_QUERY = "sign_browser_search_query";
+    public static final String QUERY = "sign_browser_search_query";
     private static final String TAG_TASK_FRAGMENT = "sign_browser_search_task_fragment";
+    private static final String TAG = SignSearchActivity.class.getSimpleName();
     private SignSearchTaskFragment signSearchTaskFragment;
     private String query = StringUtils.EMPTY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate() " + this.hashCode());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_activity);
         if (null != savedInstanceState) {
-            this.query = savedInstanceState.getString(KEY_QUERY);
+            this.query = savedInstanceState.getString(QUERY);
         } else {
             final Intent intent = getIntent();
-            if (!(Intent.ACTION_SEARCH.equals(intent.getAction()))) {
-                return;
-            }
+//            if (!(Intent.ACTION_SEARCH.equals(intent.getAction()))) {
+//                throw new IllegalArgumentException("The intent.getAction() method of the intent " +
+//                        "passed to this activity does not equal ACTION_SEARCH");
+//            }
             this.query = intent.getStringExtra(SearchManager.QUERY);
         }
         setupRecyclerView();
         setupSupportActionBar();
-        final FragmentManager fm = getFragmentManager();
-        this.signSearchTaskFragment = (SignSearchTaskFragment) fm.findFragmentByTag(TAG_TASK_FRAGMENT);
-        if (null == signSearchTaskFragment) {
-            signSearchTaskFragment = new SignSearchTaskFragment();
-            final FragmentTransaction fragmentTransaction = fm.beginTransaction();
-            fragmentTransaction.add(signSearchTaskFragment, TAG_TASK_FRAGMENT);
-            fragmentTransaction.commit();
+        this.signSearchTaskFragment = (SignSearchTaskFragment) getFragmentManager().findFragmentByTag(TAG_TASK_FRAGMENT);
+        if (null == this.signSearchTaskFragment) {
+            initSignSearchTaskFragment();
         }
     }
 
+    private void initSignSearchTaskFragment() {
+        Log.d(TAG, "initSignSearchTaskFragment() " + this.hashCode());
+        this.signSearchTaskFragment = new SignSearchTaskFragment();
+        final FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.add(signSearchTaskFragment, TAG_TASK_FRAGMENT);
+        fragmentTransaction.commit();
+    }
+
     private void setupRecyclerView() {
+        Log.d(TAG, "setupRecyclerView() " + this.hashCode());
         final RecyclerView recyclerView = (RecyclerView) this.findViewById(R.id.signSearchRecyclerView);
         recyclerView.setHasFixedSize(true); // performance fix
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new SignSearchAdapter(new ArrayList<Sign>()));
+        recyclerView.setAdapter(new SignSearchAdapter(new ArrayList<Sign>(), this));
     }
 
     private void setupSupportActionBar() {
+        Log.d(TAG, "setupSupportActionBar() " + this.hashCode());
         final ActionBar supportActionBar = getSupportActionBar();
         if (null == supportActionBar) {
             throw new IllegalStateException("SupportActionBar is null. Should have been set in " +
@@ -75,14 +86,16 @@ public class SignSearchActivity extends AppCompatActivity implements SignSearchT
 
     @Override
     public void onStart() {
+        Log.d(TAG, "onStart() " + this.hashCode());
         super.onStart();
-        if (!signSearchTaskFragment.isRunning()) {
-            this.signSearchTaskFragment.start(this, query);
-        }
+            if (!this.signSearchTaskFragment.isRunning()) {
+                this.signSearchTaskFragment.start(this, query);
+            }
     }
 
     @Override
     protected void onPause() {
+        Log.d(TAG, "onPause()" + this.hashCode());
         super.onPause();
         if (signSearchTaskFragment.isRunning()) {
             this.signSearchTaskFragment.cancel();
@@ -91,6 +104,7 @@ public class SignSearchActivity extends AppCompatActivity implements SignSearchT
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        Log.d(TAG, "onCreateOptionsMenu()" + this.hashCode());
         final MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.options_sign_browser_search, menu);
         final SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
@@ -102,28 +116,48 @@ public class SignSearchActivity extends AppCompatActivity implements SignSearchT
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
+        Log.d(TAG, "onSaveInstanceState() " + this.hashCode());
         super.onSaveInstanceState(outState);
-        outState.putString(KEY_QUERY, this.query);
+        outState.putString(QUERY, this.query);
+    }
+
+    public void onTxtSignNameClicked(Sign sign) {
+        Log.d(TAG, "onTxtSignNameClicked() " + this.hashCode());
+        final Intent intent = new Intent(this, SignSearchVideoActivity.class);
+        final Bundle bundle = new Bundle();
+        bundle.putString(SignSearchActivity.QUERY, this.query);
+        bundle.putParcelable(SignVideoUIFragment.SIGN_TO_SHOW, sign);
+        intent.putExtra(SignSearchVideoActivity.EXTRA, bundle);
+        startActivity(intent);
     }
 
     @Override
-    public void onPreExecute() {/*no-op*/}
+    public void onPreExecute() {
+        Log.d(TAG, "onPreExecute " + this.hashCode());
+        /*no-op*/
+    }
 
     @Override
-    public void onProgressUpdate(int percent) {/*no-op*/}
+    public void onProgressUpdate(int percent) {
+        Log.d(TAG, "onProgressUpdate " + this.hashCode());
+        /*no-op*/
+    }
 
     @Override
-    public void onCancelled() {/*no-op*/}
+    public void onCancelled() {
+        Log.d(TAG, "onCancelled " + this.hashCode());
+        /*no-op*/
+    }
 
     @Override
     public void onPostExecute(List<Sign> result) {
+        Log.d(TAG, "onPostExecute " + this.hashCode());
         // FIXME: After savedInstance has been called, this.recyclerview is null here, despite being
         // FIXME: set in the onCreated() method. Therefore a findViewById is necessary.
         final RecyclerView mRecyclerView = (RecyclerView) this.findViewById(R.id.signSearchRecyclerView);
         if (null == mRecyclerView) {
             throw new IllegalStateException("mRecyclerView is null");
         }
-        mRecyclerView.swapAdapter(new SignSearchAdapter(result), false);
+        mRecyclerView.swapAdapter(new SignSearchAdapter(result, this), false);
     }
-
 }

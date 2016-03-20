@@ -51,7 +51,7 @@ public class SignVideoUIFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
-        final View view = inflater.inflate(R.layout.video_fragment, container, false);
+        final View view = inflater.inflate(R.layout.video_fragment_view, container, false);
         this.signVideoName = (TextView) view.findViewById(R.id.signVideoName);
         this.videoView = (VideoView) view.findViewById(R.id.signVideoView);
         this.signVideoMnemonic = (TextView) view.findViewById(R.id.signVideoMnemonic);
@@ -68,6 +68,9 @@ public class SignVideoUIFragment extends Fragment {
             this.position = savedInstanceState.getInt(VIDEO_PLAYBACK_POSITION);
         }
         final Sign sign = getArguments().getParcelable(SIGN_TO_SHOW);
+        if (null == sign) {
+            throw new IllegalArgumentException("No sign to show provided via fragment arguments.");
+        }
         this.signVideoName.setText(sign.getNameLocaleDe());
         this.signVideoMnemonic.setText(sign.getMnemonic());
         final MediaController mediaController = new MediaController(getActivity());

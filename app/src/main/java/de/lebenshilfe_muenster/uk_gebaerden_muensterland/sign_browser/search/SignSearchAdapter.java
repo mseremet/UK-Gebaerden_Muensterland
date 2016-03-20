@@ -30,9 +30,11 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.Sign;
 public class SignSearchAdapter extends RecyclerView.Adapter<SignSearchAdapter.ViewHolder> {
 
     private final List<Sign> dataSet;
+    private final SignSearchActivity signSearchActivity;
 
-    public SignSearchAdapter(List<Sign> dataSet) {
+    public SignSearchAdapter(List<Sign> dataSet, SignSearchActivity signSearchActivity) {
         this.dataSet = dataSet;
+        this.signSearchActivity = signSearchActivity;
     }
 
     @Override
@@ -48,13 +50,13 @@ public class SignSearchAdapter extends RecyclerView.Adapter<SignSearchAdapter.Vi
         holder.txtSignSearchName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                handleClickOnTxtSignName(dataSet.get(position).getName());
+                handleClickOnTxtSignName(dataSet.get(position));
             }
         });
     }
 
-    private void handleClickOnTxtSignName(String item) {
-        // TODO: handle Click on item here
+    private void handleClickOnTxtSignName(Sign sign) {
+        this.signSearchActivity.onTxtSignNameClicked(sign);
     }
 
     @Override
