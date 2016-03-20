@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
 
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.video.SignVideoUIFragment;
@@ -28,15 +29,12 @@ public class LevelOneActivity extends AppCompatActivity {
         setContentView(R.layout.level_one_activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        if (null != getSupportActionBar()) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(StringUtils.EMPTY);
-        }
+        Validate.notNull(getSupportActionBar(), "SupportActionBar is null.");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(StringUtils.EMPTY);
         final Intent intent = getIntent();
         final Bundle bundle = intent.getBundleExtra(EXTRA);
-        if (null == bundle) {
-            throw new IllegalArgumentException("The bundle supplied to the activity is null");
-        }
+        Validate.notNull(bundle, "The bundle supplied to the activity is null.");
         final String fragmentToShow = bundle.getString(FRAGMENT_TO_SHOW, StringUtils.EMPTY);
         if (SignVideoUIFragment.class.getSimpleName().equals(fragmentToShow)) {
             final Parcelable sign = bundle.getParcelable(SignVideoUIFragment.SIGN_TO_SHOW);

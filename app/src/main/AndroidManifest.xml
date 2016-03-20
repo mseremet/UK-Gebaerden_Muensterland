@@ -47,7 +47,6 @@
         </activity>
         <activity
             android:name=".sign_browser.search.video.SignSearchVideoActivity"
-            android:label="@string/title_activity_sign_search_video"
             android:parentActivityName=".sign_browser.search.SignSearchActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data

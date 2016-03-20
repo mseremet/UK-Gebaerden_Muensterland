@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
 
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.search.SignSearchActivity;
@@ -30,23 +31,16 @@ public class SignSearchVideoActivity extends AppCompatActivity {
         setContentView(R.layout.search_video_activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        if (null != getSupportActionBar()) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(StringUtils.EMPTY);
-        }
+        Validate.notNull(getSupportActionBar(), "SupportActionBar is null.");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(StringUtils.EMPTY);
         final Intent intent = getIntent();
         final Bundle bundle = intent.getBundleExtra(EXTRA);
-        if (null == bundle) {
-            throw new IllegalArgumentException("The bundle supplied to the activity is null.");
-        }
+        Validate.notNull(bundle, "The bundle supplied to the activity is null.");
         this.originalQuery = bundle.getString(SignSearchActivity.QUERY);
-        if (null == this.originalQuery) {
-            throw new IllegalArgumentException("Query string supplied to this activity is null.");
-        }
+        Validate.notNull(this.originalQuery, "Query string supplied to this activity is null.");
         final Parcelable parcelledSign = bundle.getParcelable(SignVideoUIFragment.SIGN_TO_SHOW);
-        if (null == parcelledSign) {
-            throw new IllegalArgumentException("Parcelled sign supplied to this activity is null.");
-        }
+        Validate.notNull(parcelledSign, "Parcelled sign supplied to this activity is null.");
         final SignVideoUIFragment signVideoUIFragment = new SignVideoUIFragment();
         final Bundle args = new Bundle();
         args.putParcelable(SignVideoUIFragment.SIGN_TO_SHOW, parcelledSign);
@@ -63,7 +57,7 @@ public class SignSearchVideoActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 final Intent upIntent = NavUtils.getParentActivityIntent(this);
-                upIntent.putExtra(SearchManager.QUERY,this.originalQuery );
+                upIntent.putExtra(SearchManager.QUERY, this.originalQuery);
                 NavUtils.navigateUpTo(this, upIntent);
                 return true;
         }

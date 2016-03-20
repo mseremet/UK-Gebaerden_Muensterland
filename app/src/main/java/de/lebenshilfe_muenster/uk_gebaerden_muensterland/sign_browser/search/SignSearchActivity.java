@@ -17,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,11 +44,8 @@ public class SignSearchActivity extends AppCompatActivity implements SignSearchT
             this.query = savedInstanceState.getString(QUERY);
         } else {
             final Intent intent = getIntent();
-//            if (!(Intent.ACTION_SEARCH.equals(intent.getAction()))) {
-//                throw new IllegalArgumentException("The intent.getAction() method of the intent " +
-//                        "passed to this activity does not equal ACTION_SEARCH");
-//            }
             this.query = intent.getStringExtra(SearchManager.QUERY);
+            Validate.notNull(this.query, "The query supplied to this activity is null!");
         }
         setupRecyclerView();
         setupSupportActionBar();
@@ -76,10 +74,7 @@ public class SignSearchActivity extends AppCompatActivity implements SignSearchT
     private void setupSupportActionBar() {
         Log.d(TAG, "setupSupportActionBar() " + this.hashCode());
         final ActionBar supportActionBar = getSupportActionBar();
-        if (null == supportActionBar) {
-            throw new IllegalStateException("SupportActionBar is null. Should have been set in " +
-                    "onCreate().");
-        }
+        Validate.notNull(supportActionBar,"SupportActionBar is null. Should have been set in onCreate()." );
         supportActionBar.setTitle(getResources().getString(R.string.search_results) + StringUtils.SPACE + this.query);
         supportActionBar.setDisplayHomeAsUpEnabled(true);
     }
@@ -155,9 +150,7 @@ public class SignSearchActivity extends AppCompatActivity implements SignSearchT
         // FIXME: After savedInstance has been called, this.recyclerview is null here, despite being
         // FIXME: set in the onCreated() method. Therefore a findViewById is necessary.
         final RecyclerView mRecyclerView = (RecyclerView) this.findViewById(R.id.signSearchRecyclerView);
-        if (null == mRecyclerView) {
-            throw new IllegalStateException("mRecyclerView is null");
-        }
+        Validate.notNull(mRecyclerView, "RecyclerView is null.");
         mRecyclerView.swapAdapter(new SignSearchAdapter(result, this), false);
     }
 }

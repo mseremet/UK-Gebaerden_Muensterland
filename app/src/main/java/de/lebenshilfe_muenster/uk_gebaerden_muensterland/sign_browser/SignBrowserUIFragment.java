@@ -20,6 +20,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.apache.commons.lang3.Validate;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -152,9 +154,7 @@ public class SignBrowserUIFragment extends Fragment implements SignBrowserTaskFr
     }
 
     public void onTxtSignNameClicked(Sign sign) {
-        if (null == this.onSignClickedListener) {
-            throw new IllegalStateException("Parent activity has to implement the OnSignClickedListener");
-        }
+        Validate.notNull(this.onSignClickedListener, "Parent activity has to implement the OnSignClickedListener");
         this.onSignClickedListener.onSignSelected(sign);
     }
 
@@ -173,11 +173,9 @@ public class SignBrowserUIFragment extends Fragment implements SignBrowserTaskFr
         Log.d(TAG, "onPostExecute");
         // FIXME: After savedInstance has been called, this.recyclerView is null here, despite being
         // FIXME: set in the onActivityCreated() method. Therefore a findViewById is necessary.
-        final RecyclerView mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.signRecyclerView);
-        if (null == mRecyclerView) {
-            throw new IllegalStateException("RecyclerView is null");
-        }
-        mRecyclerView.swapAdapter(new SignBrowserAdapter(this, getActivity(), result), true);
+        final RecyclerView recyclerView = (RecyclerView) getActivity().findViewById(R.id.signRecyclerView);
+        Validate.notNull(recyclerView, "RecyclerView is null");
+        recyclerView.swapAdapter(new SignBrowserAdapter(this, getActivity(), result), true);
     }
 
     // Has to implemented by parent activity.

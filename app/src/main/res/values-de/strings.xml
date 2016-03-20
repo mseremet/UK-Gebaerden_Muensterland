@@ -5,7 +5,7 @@
     <string name="about_signs">Über UK-Gebärden</string>
     <string name="action_search">Suchen</string>
     <string name="action_settings">Einstellungen</string>
-    <string name="action_toggle_starred">Anzeige umschalten</string>
+    <string name="action_toggle_starred">Nur gemerkte anzeigen</string>
     <string name="app_icon">App Symbol</string>
     <string name="browse_signs">Gebärden anzeigen</string>
     <string name="navigation_drawer_close">Navigation schließen</string>

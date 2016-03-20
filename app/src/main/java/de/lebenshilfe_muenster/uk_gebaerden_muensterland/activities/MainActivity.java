@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -15,6 +14,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
 
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.about_signs.AboutSignsFragment;
@@ -133,13 +133,9 @@ public class MainActivity extends AppCompatActivity
 
     private void setActionBarTitle(String actionBarTitle) {
         Log.d(TAG, "setActionBarTitle: " + actionBarTitle);
-        final ActionBar supportActionBar = getSupportActionBar();
-        if (null == supportActionBar) {
-            throw new IllegalStateException("SupportActionBar is null. Should be set in onCreate() method.");
-        } else {
-            this.actionBarTitle = actionBarTitle;
-            supportActionBar.setTitle(this.actionBarTitle);
-        }
+        Validate.notNull(getSupportActionBar(), "SupportActionBar is null. Should be set in onCreate() method.");
+        this.actionBarTitle = actionBarTitle;
+        getSupportActionBar().setTitle(this.actionBarTitle);
     }
 
     private void showSignBrowser() {

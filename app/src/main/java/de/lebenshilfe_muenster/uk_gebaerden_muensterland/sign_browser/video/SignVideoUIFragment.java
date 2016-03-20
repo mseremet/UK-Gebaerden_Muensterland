@@ -14,6 +14,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.VideoView;
 
+import org.apache.commons.lang3.Validate;
+
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.Sign;
 
@@ -68,9 +70,7 @@ public class SignVideoUIFragment extends Fragment {
             this.position = savedInstanceState.getInt(VIDEO_PLAYBACK_POSITION);
         }
         final Sign sign = getArguments().getParcelable(SIGN_TO_SHOW);
-        if (null == sign) {
-            throw new IllegalArgumentException("No sign to show provided via fragment arguments.");
-        }
+        Validate.notNull(sign, "No sign to show provided via fragment arguments.");
         this.signVideoName.setText(sign.getNameLocaleDe());
         this.signVideoMnemonic.setText(sign.getMnemonic());
         final MediaController mediaController = new MediaController(getActivity());

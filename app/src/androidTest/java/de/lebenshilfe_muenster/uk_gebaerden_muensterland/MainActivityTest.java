@@ -1,5 +1,6 @@
 package de.lebenshilfe_muenster.uk_gebaerden_muensterland;
 
+import android.support.annotation.NonNull;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
@@ -104,10 +105,14 @@ public class MainActivityTest {
         onView(isRoot()).perform(orientationLandscape());
         Log.d(MainActivityTest.class.getSimpleName(), "afterOrientationLandscape");
         onView(allOf(withText(toolbarTitle), withParent((withId(R.id.toolbar))))).check(matches(isDisplayed()));
-        if (!toolbarTitle.equals("Sign browser")) {
+        if (!toolbarTitle.equals(getStringResource(R.string.sign_browser))) {
             onView(allOf(withId(R.id.dummyTxt), withText(toolbarTitle))).check(matches(isDisplayed()));
         }
     }
 
+    @NonNull
+    private String getStringResource(int stringResourceId) {
+        return mainActivityActivityTestRule.getActivity().getResources().getString(stringResourceId);
+    }
 
 }

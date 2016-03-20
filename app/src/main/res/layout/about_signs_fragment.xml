@@ -7,7 +7,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="About signs"
+        android:text="@string/about_signs"
         android:id="@+id/dummyTxt"
         android:layout_gravity="center_horizontal" />
 </LinearLayout>

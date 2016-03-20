@@ -1,5 +1,6 @@
 package de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser;
 
+import android.support.annotation.NonNull;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -34,17 +35,17 @@ import static org.hamcrest.CoreMatchers.not;
 
 /**
  * Copyright ( ) 2016 Matthias Tonhäuser
- * <p>
+ * <p/>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * <p>
+ * <p/>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ * <p/>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -57,7 +58,6 @@ public class SignBrowserTest {
     private static final String MAMA_MNEMONIC = "Wange streicheln";
     private static final String PAPA_MNEMONIC = "Schnurrbart";
     private static final String FOOTBALL_MNEMONIC = "Faust tritt in Handfläche";
-    private static final String STARRED = "Starred";
     private static final String PROGRESS_0 = "0";
 
     @Rule
@@ -104,7 +104,7 @@ public class SignBrowserTest {
         try {
             // check toggle on works
             onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(MAMA)),
-                    withContentDescription(containsString(STARRED)))).check(matches(isNotChecked())).perform(click());
+                    withContentDescription(containsString(getStringResource(R.string.starredButton))))).check(matches(isNotChecked())).perform(click());
             onView(withId(R.id.action_toggle_starred)).check(matches(isDisplayed())).perform(click());
             checkOnlyStarredSignsAreShown();
             // check toggle state is persisted
@@ -116,7 +116,7 @@ public class SignBrowserTest {
         } finally {
             // reset
             onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(MAMA)),
-                    withContentDescription(containsString(STARRED)))).check(matches(isChecked())).perform(click());
+                    withContentDescription(containsString(getStringResource(R.string.starredButton))))).check(matches(isChecked())).perform(click());
         }
     }
 
@@ -141,20 +141,20 @@ public class SignBrowserTest {
 
     @Test
     public void checkSignHasStarredInformation() {
-        onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(MAMA)), withContentDescription(containsString(STARRED)))).check(matches(isNotChecked()));
-        onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(PAPA)), withContentDescription(containsString(STARRED)))).check(matches(isNotChecked()));
-        onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(FOOTBALL)), withContentDescription(containsString(STARRED)))).check(matches(isNotChecked()));
+        onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(MAMA)), withContentDescription(containsString(getStringResource(R.string.starredButton))))).check(matches(isNotChecked()));
+        onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(PAPA)), withContentDescription(containsString(getStringResource(R.string.starredButton))))).check(matches(isNotChecked()));
+        onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(FOOTBALL)), withContentDescription(containsString(getStringResource(R.string.starredButton))))).check(matches(isNotChecked()));
     }
 
     @Test
     public void checkSignStarredInformationCanBePersisted() {
         try {
-            onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(MAMA)), withContentDescription(containsString(STARRED)))).check(matches(isNotChecked())).perform(click());
-            onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(MAMA)), withContentDescription(containsString(STARRED)))).check(matches(isChecked()));
+            onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(MAMA)), withContentDescription(containsString(getStringResource(R.string.starredButton))))).check(matches(isNotChecked())).perform(click());
+            onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(MAMA)), withContentDescription(containsString(getStringResource(R.string.starredButton))))).check(matches(isChecked()));
             onView(isRoot()).perform(orientationLandscape()); // trigger configuration change
         } finally {
             // reset
-            onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(MAMA)), withContentDescription(containsString(STARRED)))).check(matches(isChecked())).perform(click());
+            onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(MAMA)), withContentDescription(containsString(getStringResource(R.string.starredButton))))).check(matches(isChecked())).perform(click());
         }
     }
 
@@ -175,5 +175,10 @@ public class SignBrowserTest {
         onView(allOf(withId(R.id.signRecyclerView), hasDescendant((withText(MAMA))))).check(matches(isDisplayed()));
         onView(allOf(withId(R.id.signRecyclerView), hasDescendant((withText(PAPA))))).check(doesNotExist());
         onView(allOf(withId(R.id.signRecyclerView), hasDescendant((withText(FOOTBALL))))).check(doesNotExist());
+    }
+
+    @NonNull
+    private String getStringResource(int stringResourceId) {
+        return mainActivityActivityTestRule.getActivity().getResources().getString(stringResourceId);
     }
 }
