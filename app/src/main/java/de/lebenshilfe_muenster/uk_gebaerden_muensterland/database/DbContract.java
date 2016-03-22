@@ -41,6 +41,7 @@ class DbContract {
         public static final String NAME_LOCALE_DE_LIKE = "LOWER(" + COLUMN_NAME_SIGN_NAME_DE + ") LIKE LOWER(?)";
         public static final String IS_STARRED = COLUMN_NAME_STARRED + EQUAL_SIGN + QUESTION_MARK;
         public static final String ORDER_BY_NAME_DE_ASC = COLUMN_NAME_SIGN_NAME_DE + ASCENDING;
+        public static final String ORDER_BY_LEARNING_PROGRESS_ASC = COLUMN_NAME_LEARNING_PROGRESS + ASCENDING;
     }
 
 }

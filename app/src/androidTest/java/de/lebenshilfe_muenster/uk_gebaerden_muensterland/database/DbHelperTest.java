@@ -1,5 +1,6 @@
 package de.lebenshilfe_muenster.uk_gebaerden_muensterland.database;
 
+import android.support.annotation.NonNull;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
@@ -21,10 +22,13 @@ import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
+import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.fail;
 
 /**
@@ -150,6 +154,89 @@ public class DbHelperTest {
                 signDAO.delete(createdSign);
             }
         }
+    }
+
+    @Test
+    public void testReadRandomSignReturnsNonNullValue() {
+        final Sign randomSign = signDAO.readRandomSign(null);
+        assertThat(randomSign, is(notNullValue()));
+    }
+
+    @Test
+    public void testReadRandomSignReturnsNotTheCurrentSign() {
+        final Sign randomSign = signDAO.readRandomSign(FOOTBALL);
+        assertThat(randomSign, not(is(equalTo(FOOTBALL))));
+    }
+
+    @Test
+    public void testReadRandomSignReturnsSignsOrderedByLearningProgress() {
+        // setup
+        final List<Sign> signs = new ArrayList<>();
+        int k = 0;
+        for (int i = 0; i < 3; i++) {
+            for (int j = -5; j < 6; j++) {
+                final String name = "Test_Sign_" + k;
+                signs.add(new Sign.Builder().setId(0).setName(name).setNameLocaleDe(name + "_de")
+                        .setMnemonic(name + "_mnemonic").setStarred(false).setLearningProgress(j).create());
+                k++;
+            }
+        }
+        try {
+            signDAO.create(signs);
+            final List<Sign> signsFromDbBeforeTest = getTestSigns();
+            assertThat(signsFromDbBeforeTest, containsInAnyOrder(signs.toArray(new Sign[signs.size()])));
+            // do the test
+            final Sign firstSign = signDAO.readRandomSign(null);
+            assertThat(firstSign.getLearningProgress(), is(equalTo(-5)));
+            final Sign secondSign = signDAO.readRandomSign(firstSign);
+            assertSignIsNotEqualToPreviousSignButHasSameLearningProgress(firstSign, secondSign);
+            Sign thirdSign = signDAO.readRandomSign(secondSign);
+            assertSignIsNotEqualToPreviousSignButHasSameLearningProgress(secondSign, thirdSign);
+            thirdSign.increaseLearningProgress();
+            thirdSign = signDAO.update(thirdSign);
+            Sign fourthSign = signDAO.readRandomSign(thirdSign);
+            assertSignIsNotEqualToPreviousSignAndHasLowerLearningProgress(thirdSign, fourthSign);
+            fourthSign.increaseLearningProgress();
+            fourthSign = signDAO.update(fourthSign);
+            Sign fifthSign = signDAO.readRandomSign(fourthSign);
+            assertSignIsNotEqualToPreviousSignAndHasLowerLearningProgress(fourthSign, fifthSign);
+            fifthSign.increaseLearningProgress();
+            fifthSign = signDAO.update(fifthSign);
+            Sign sixthSign = signDAO.readRandomSign(fifthSign);
+            assertSignIsNotEqualToPreviousSignButHasSameLearningProgress(fifthSign, sixthSign);
+            Sign seventhSign = signDAO.readRandomSign(sixthSign);
+            assertSignIsNotEqualToPreviousSignButHasSameLearningProgress(sixthSign, seventhSign);
+            final List<Sign> signsFromDbAfterTest = getTestSigns();
+            for (Sign sign : signsFromDbAfterTest) {
+                assertThat(sign.getLearningProgress(), not(is(equalTo(-5))));
+            }
+        } finally {
+            signDAO.delete(signs);
+        }
+
+    }
+
+    @NonNull
+    private List<Sign> getTestSigns() {
+        final List<Sign> signsFromDb = signDAO.read();
+        final List<Sign> nonTestSigns = new ArrayList<>();
+        for (Sign sign : signsFromDb) {
+            if (!sign.getName().startsWith("Test_Sign_")) {
+                nonTestSigns.add(sign);
+            }
+        }
+        signsFromDb.removeAll(nonTestSigns);
+        return signsFromDb;
+    }
+
+    private void assertSignIsNotEqualToPreviousSignButHasSameLearningProgress(Sign previousSign, Sign currentSign) {
+        assertThat(currentSign, (not(is(equalTo(previousSign)))));
+        assertThat(currentSign.getLearningProgress(), is(equalTo(previousSign.getLearningProgress())));
+    }
+
+    private void assertSignIsNotEqualToPreviousSignAndHasLowerLearningProgress(Sign previousSign, Sign currentSign) {
+        assertThat(currentSign, (not(is(equalTo(previousSign)))));
+        assertThat(currentSign.getLearningProgress(), is(lessThan(previousSign.getLearningProgress())));
     }
 
     @Test

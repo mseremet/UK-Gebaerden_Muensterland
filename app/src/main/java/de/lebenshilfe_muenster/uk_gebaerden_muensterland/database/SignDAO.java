@@ -14,26 +14,27 @@ import org.apache.commons.lang3.StringUtils;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Copyright (c) 2016 Matthias Tonhäuser
- * <p>
+ * <p/>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * <p>
+ * <p/>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ * <p/>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 public class SignDAO {
 
-    private static final String CLASS_NAME = SignDAO.class.getSimpleName();
+    private static final String TAG = SignDAO.class.getSimpleName();
     private static SignDAO instance;
     private final SQLiteOpenHelper openHelper;
     private SQLiteDatabase database;
@@ -56,12 +57,12 @@ public class SignDAO {
     }
 
     public void open() throws SQLException {
-        Log.d(CLASS_NAME, "Opening database.");
+        Log.d(TAG, "Opening database.");
         this.database = openHelper.getWritableDatabase();
     }
 
     public void close() {
-        Log.d(CLASS_NAME, "Closing database.");
+        Log.d(TAG, "Closing database.");
         if (null != this.database) {
             this.openHelper.close();
         }
@@ -89,7 +90,7 @@ public class SignDAO {
      * @return the persisted sign, <code>null</code> if persisting failed.
      */
     public Sign create(Sign sign) {
-        Log.d(CLASS_NAME, "Creating sign: " + sign);
+        Log.d(TAG, "Creating sign: " + sign);
         this.database.beginTransaction();
         Sign createdSign = null;
         try {
@@ -111,7 +112,7 @@ public class SignDAO {
             }
             createdSign = readSingleSign(insertId);
             this.database.setTransactionSuccessful();
-            Log.d(CLASS_NAME, "Created sign: " + createdSign);
+            Log.d(TAG, "Created sign: " + createdSign);
         } finally {
             this.database.endTransaction();
         }
@@ -124,7 +125,7 @@ public class SignDAO {
      * @return a list of signs, may be empty but not null.
      */
     public List<Sign> read() {
-        return readInternal(StringUtils.EMPTY, false);
+        return readInternal(StringUtils.EMPTY, false, false);
     }
 
     /**
@@ -134,7 +135,7 @@ public class SignDAO {
      * @return a list of signs, may be empty but not null.
      */
     public List<Sign> read(String whereSignNameLocaleDeLike) {
-        return readInternal(whereSignNameLocaleDeLike, false);
+        return readInternal(whereSignNameLocaleDeLike, false, false);
     }
 
     /**
@@ -143,26 +144,62 @@ public class SignDAO {
      * @return all the signs, which have been starred by the user.
      */
     public List<Sign> readStarredSignsOnly() {
-        return readInternal(StringUtils.EMPTY, true);
+        return readInternal(StringUtils.EMPTY, true, false);
     }
 
+    /**
+     * Returns a random sign from the database. Signs with low or negative learning progress are more
+     * likely to be returned. The random sign will never be the same as the currentSign provided as a
+     * parameter.
+     *
+     * @param currentSign the current sign shown to the user.
+     * @return a random sign, null if no or only one sign exists in the database.
+     */
+    public Sign readRandomSign(Sign currentSign) {
+        final List<Sign> signsOrderedByLearningProgress = readInternal(StringUtils.EMPTY, false, true);
+        if (signsOrderedByLearningProgress.size() < 2) {
+            return null;
+        }
+        signsOrderedByLearningProgress.remove(currentSign);
+        final Sign signWithLeastLearningProgress = signsOrderedByLearningProgress.get(0);
+        signsOrderedByLearningProgress.remove(signWithLeastLearningProgress);
+        final List <Sign> signsWithLeastLearningProgress = new ArrayList<>();
+        for (int i = 0; i < signsOrderedByLearningProgress.size() ; i++) {
+            if (signWithLeastLearningProgress.getLearningProgress()
+                    == signsOrderedByLearningProgress.get(i).getLearningProgress()) {
+                signsWithLeastLearningProgress.add(signsOrderedByLearningProgress.get(i));
+            } else {
+                break;
+            }
+        }
+        if (signsWithLeastLearningProgress.isEmpty()) {
+            return signWithLeastLearningProgress;
+        }
+        final int randomInt = new Random().nextInt(signsWithLeastLearningProgress.size());
+        return signsWithLeastLearningProgress.get(randomInt);
+    }
 
     @NonNull
-    private List<Sign> readInternal(String whereSignNameLocaleDeLike, boolean readStarredSignsOnly) {
+    private List<Sign> readInternal(String whereSignNameLocaleDeLike, boolean readStarredSignsOnly, boolean readOrderedByLearningProgress) {
         final List<Sign> signs = new ArrayList<>();
         Cursor cursor;
         if (StringUtils.isNotEmpty(whereSignNameLocaleDeLike)) {
-            Log.d(CLASS_NAME, MessageFormat.format("Reading signs with name_locale_de like: {0}", whereSignNameLocaleDeLike));
+            Log.d(TAG, MessageFormat.format("Reading signs with name_locale_de like: {0}", whereSignNameLocaleDeLike));
             cursor = database.query(DbContract.SignTable.TABLE_NAME,
                     DbContract.SignTable.ALL_COLUMNS, DbContract.SignTable.NAME_LOCALE_DE_LIKE,
                     new String[]{"%" + whereSignNameLocaleDeLike + "%"}, null, null, DbContract.SignTable.ORDER_BY_NAME_DE_ASC);
         } else if (readStarredSignsOnly) {
-            Log.d(CLASS_NAME, "Reading starred signs only");
+            Log.d(TAG, "Reading starred signs only");
             cursor = database.query(DbContract.SignTable.TABLE_NAME,
                     DbContract.SignTable.ALL_COLUMNS, DbContract.SignTable.IS_STARRED,
                     new String[]{DbContract.BOOLEAN_TRUE}, null, null, DbContract.SignTable.ORDER_BY_NAME_DE_ASC);
+        } else if (readOrderedByLearningProgress) {
+            Log.d(TAG, "Reading signs ordered by learning progress ascending");
+            cursor = database.query(DbContract.SignTable.TABLE_NAME,
+                    DbContract.SignTable.ALL_COLUMNS, null,
+                    null, null, null, DbContract.SignTable.ORDER_BY_LEARNING_PROGRESS_ASC);
         } else {
-            Log.d(CLASS_NAME, "Reading all signs");
+            Log.d(TAG, "Reading all signs");
             cursor = database.query(DbContract.SignTable.TABLE_NAME,
                     DbContract.SignTable.ALL_COLUMNS, null, null, null, null, DbContract.SignTable.ORDER_BY_NAME_DE_ASC);
         }
@@ -177,7 +214,7 @@ public class SignDAO {
     }
 
     public Sign update(Sign sign) {
-        Log.d(CLASS_NAME, "Updating sign: " + sign);
+        Log.d(TAG, "Updating sign: " + sign);
         this.database.beginTransaction();
         Sign updatedSign = null;
         try {
@@ -219,7 +256,7 @@ public class SignDAO {
      * For <strong>testing</strong> purposes only!
      */
     public void delete(Sign sign) {
-        Log.d(CLASS_NAME, MessageFormat.format("Deleting sign {0}", sign));
+        Log.d(TAG, MessageFormat.format("Deleting sign {0}", sign));
         this.database.beginTransaction();
         try {
             this.database.delete(DbContract.SignTable.TABLE_NAME,
@@ -261,6 +298,5 @@ public class SignDAO {
         }
         return signBuilder.create();
     }
-
 
 }
