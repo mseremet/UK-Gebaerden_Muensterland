@@ -148,9 +148,8 @@ public class SignDAO {
     }
 
     /**
-     * Returns a random sign from the database. Signs with low or negative learning progress are more
-     * likely to be returned. The random sign will never be the same as the currentSign provided as a
-     * parameter.
+     * From the signs with the least learning progress a random sign will be returned.
+     * The random sign will never be the same as the currentSign provided as a parameter.
      *
      * @param currentSign the current sign shown to the user.
      * @return a random sign, null if no or only one sign exists in the database.
@@ -163,8 +162,8 @@ public class SignDAO {
         signsOrderedByLearningProgress.remove(currentSign);
         final Sign signWithLeastLearningProgress = signsOrderedByLearningProgress.get(0);
         signsOrderedByLearningProgress.remove(signWithLeastLearningProgress);
-        final List <Sign> signsWithLeastLearningProgress = new ArrayList<>();
-        for (int i = 0; i < signsOrderedByLearningProgress.size() ; i++) {
+        final List<Sign> signsWithLeastLearningProgress = new ArrayList<>();
+        for (int i = 0; i < signsOrderedByLearningProgress.size(); i++) {
             if (signWithLeastLearningProgress.getLearningProgress()
                     == signsOrderedByLearningProgress.get(i).getLearningProgress()) {
                 signsWithLeastLearningProgress.add(signsOrderedByLearningProgress.get(i));
