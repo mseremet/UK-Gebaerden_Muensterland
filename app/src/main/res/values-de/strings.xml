@@ -22,4 +22,5 @@
     <string name="videoCouldNotBeLoaded">Video konnte nicht geladen werden.</string>
     <string name="videoIsLoading">Video wird geladen.</string>
     <string name="videoIsPlaying">Video wird abgespielt.</string>
+    <string name="signQuestion">Welche Gebärde ist das?</string>
 </resources>
