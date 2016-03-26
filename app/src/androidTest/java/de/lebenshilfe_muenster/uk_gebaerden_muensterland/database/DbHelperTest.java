@@ -206,6 +206,7 @@ public class DbHelperTest {
             assertSignIsNotEqualToPreviousSignButHasSameLearningProgress(fifthSign, sixthSign);
             Sign seventhSign = signDAO.readRandomSign(sixthSign);
             assertSignIsNotEqualToPreviousSignButHasSameLearningProgress(sixthSign, seventhSign);
+            assertThat(seventhSign.getLearningProgress(), is(equalTo(-4)));
             final List<Sign> signsFromDbAfterTest = getTestSigns();
             for (Sign sign : signsFromDbAfterTest) {
                 assertThat(sign.getLearningProgress(), not(is(equalTo(-5))));
