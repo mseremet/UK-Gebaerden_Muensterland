@@ -5,6 +5,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
 
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -17,12 +18,17 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.util.OrientationChangeAction.orientationLandscape;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.util.OrientationChangeAction.orientationPortrait;
 import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.Matchers.anyOf;
 
 /**
  * Created by mtonhaeuser on 26.03.2016.
@@ -37,7 +43,7 @@ public class SignTrainerTest {
 
     @Before
     public void navigateToSignTrainer() {
-        Log.d(TAG, "Open Navigation Drawer");
+        onView(isRoot()).perform(orientationPortrait());
         onView(withContentDescription(R.string.navigation_drawer_open)).perform(click());
         onView(withId(R.id.nav_view)).check(matches(isDisplayed()));
         final String navigationButtonText = mainActivityActivityTestRule.getActivity().getResources().getString(R.string.train_signs);
@@ -63,8 +69,20 @@ public class SignTrainerTest {
 
     @Test
     public void checkQuestionTextIsPresent() {
-        onView(withText(getStringResource(R.string.signQuestion))).check(matches(isDisplayed()));
+        onView(withId((R.id.signTrainerQuestionText))).check(matches(isDisplayed()));
     }
+
+    @Test
+    public void checkVideoViewTextIsPresent() {
+        onView((withContentDescription(anyOf(containsString(getStringResource(R.string.videoIsLoading)),
+                Matchers.containsString(getStringResource(R.string.videoIsPlaying)))))).check(matches(isDisplayed()));
+        onView(withText(getStringResource(R.string.solveQuestion))).check(matches(isDisplayed()));
+        onView(isRoot()).perform(orientationLandscape()); // trigger configuration change
+        onView((withContentDescription(anyOf(containsString(getStringResource(R.string.videoIsLoading)),
+                Matchers.containsString(getStringResource(R.string.videoIsPlaying)))))).check(matches(isDisplayed()));
+        onView(withText(getStringResource(R.string.solveQuestion))).check(matches(isDisplayed()));
+    }
+
 
     @NonNull
     private String getStringResource(int stringResourceId) {

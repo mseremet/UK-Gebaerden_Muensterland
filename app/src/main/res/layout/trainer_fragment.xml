@@ -1,17 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
-    android:layout_height="?android:attr/listPreferredItemHeight"
-    android:orientation="horizontal"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
     android:padding="6dip">
 
     <TextView
-        android:id="@+id/signQuestion"
+        android:id="@+id/signTrainerQuestionText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:text="@string/signQuestion"
         android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <VideoView
+        android:id="@+id/signTrainerVideoView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/signTrainerQuestionText"
+        android:layout_centerHorizontal="true"/>
+
+    <Button
+        android:id="@+id/signTrainerSolveQuestionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/signTrainerVideoView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="6dip"
+        android:layout_marginBottom="6dip"
+        android:text="@string/solveQuestion" />
+
+    <ProgressBar
+        android:id="@+id/signTrainerVideoLoadingProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:indeterminate="true"
+        style="@android:style/Widget.ProgressBar.Large.Inverse"/>
+
+
 </RelativeLayout>

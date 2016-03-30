@@ -22,7 +22,7 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.Sign;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.settings.SettingsFragment;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.SignBrowserUIFragment;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.video.SignVideoUIFragment;
-import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_trainer.SignTrainerFragment;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_trainer.SignTrainerUIFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, SignBrowserUIFragment.OnSignClickedListener {
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(TAG, "onCreate");
+        Log.d(TAG, "onCreate " + hashCode());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
         setupToolbar();
@@ -77,13 +77,14 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        Log.d(TAG, "onSaveInstance");
+        Log.d(TAG, "onSaveInstance " + hashCode());
         super.onSaveInstanceState(outState);
         outState.putString(KEY_TOOLBAR_TITLE, this.actionBarTitle);
     }
 
     @Override
     public void onBackPressed() {
+        Log.d(TAG, "onBackPressed " + hashCode());
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -94,7 +95,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        Log.d(TAG, "onNavigationItemsSelected");
+        Log.d(TAG, "onNavigationItemsSelected " + hashCode());
         int id = item.getItemId();
         if (R.id.nav_sign_browser == id) {
             showSignBrowser();
@@ -118,13 +119,13 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onSignSelected(Sign sign) {
-        Log.d(TAG, "onSignSelected: " + sign.getName());
+        Log.d(TAG, "onSignSelected: " + sign.getName() + StringUtils.SPACE + hashCode());
         showSignVideo(sign);
     }
 
     // TODO: https://github.com/Scaronthesky/UK-Gebaerden_Muensterland/issues/7
     private void setFragment(Fragment fragment, String fragmentTag) {
-        Log.d(TAG, "setFragment: " + fragmentTag);
+        Log.d(TAG, "setFragment: " + fragmentTag + StringUtils.SPACE + hashCode());
         final FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.content_frame, fragment, fragmentTag);
         transaction.addToBackStack(null);
@@ -132,20 +133,21 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setActionBarTitle(String actionBarTitle) {
-        Log.d(TAG, "setActionBarTitle: " + actionBarTitle);
+        Log.d(TAG, "setActionBarTitle: " + actionBarTitle + StringUtils.SPACE + hashCode());
         Validate.notNull(getSupportActionBar(), "SupportActionBar is null. Should be set in onCreate() method.");
         this.actionBarTitle = actionBarTitle;
         getSupportActionBar().setTitle(this.actionBarTitle);
     }
 
     private void showSignBrowser() {
-        Log.d(TAG, "showSignBrowser()");
+        Log.d(TAG, "showSignBrowser() " + hashCode());
         final SignBrowserUIFragment signBrowserUIFragment = new SignBrowserUIFragment();
         setFragment(signBrowserUIFragment, SIGN_BROWSER_TAG);
         setActionBarTitle(getString(R.string.sign_browser));
     }
 
     private void showSignVideo(Sign sign) {
+        Log.d(TAG, "showSignVideo() " + hashCode());
         final Intent intent = new Intent(this, LevelOneActivity.class);
         final Bundle bundle = new Bundle();
         bundle.putString(LevelOneActivity.FRAGMENT_TO_SHOW, SignVideoUIFragment.class.getSimpleName());
@@ -155,17 +157,20 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void showSettings() {
+        Log.d(TAG, "showSettings " + hashCode());
         setFragment(new SettingsFragment(), SETTINGS_TAG);
         setActionBarTitle(getString(R.string.settings));
     }
 
     private void showAboutSigns() {
+        Log.d(TAG, "showAboutSigns " + hashCode());
         setFragment(new AboutSignsFragment(), ABOUT_SIGNS_TAG);
         setActionBarTitle(getString(R.string.about_signs));
     }
 
     private void showSignTrainer() {
-        setFragment(new SignTrainerFragment(), SIGN_TRAINER_TAG);
+        Log.d(TAG, "showSignTrainer " + hashCode());
+        setFragment(new SignTrainerUIFragment(), SIGN_TRAINER_TAG);
         setActionBarTitle(getString(R.string.sign_trainer));
     }
 }

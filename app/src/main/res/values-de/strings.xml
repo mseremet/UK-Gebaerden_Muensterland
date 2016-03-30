@@ -23,4 +23,6 @@
     <string name="videoIsLoading">Video wird geladen.</string>
     <string name="videoIsPlaying">Video wird abgespielt.</string>
     <string name="signQuestion">Welche Gebärde ist das?</string>
+    <string name="solveQuestion">Auflösen</string>
+    <string name="noSignWasFound">Keine Gebärde in der Datenbank gefunden. </string>
 </resources>

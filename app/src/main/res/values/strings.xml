@@ -22,4 +22,6 @@
     <string name="progress">Progress</string>
     <string name="app_icon">App icon</string>
     <string name="signQuestion">Which sign is this?</string>
+    <string name="solveQuestion">Solve</string>
+    <string name="noSignWasFound">No sign was found in the databae.</string>
 </resources>

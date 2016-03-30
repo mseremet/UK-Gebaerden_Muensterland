@@ -55,12 +55,13 @@ public class SignBrowserUIFragment extends Fragment implements SignBrowserTaskFr
     private OnSignClickedListener onSignClickedListener = null;
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        Log.d(TAG, "onAttach " + hashCode());
+        super.onAttach(context);
         try {
-            this.onSignClickedListener = (OnSignClickedListener) activity;
+            this.onSignClickedListener = (OnSignClickedListener) context;
         } catch (ClassCastException ex) {
-            throw new ClassCastException(activity.toString()
+            throw new ClassCastException(context.toString()
                     + " must implement OnSignClickedListener");
         }
     }
@@ -68,7 +69,7 @@ public class SignBrowserUIFragment extends Fragment implements SignBrowserTaskFr
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d(TAG, "onCreateView");
+        Log.d(TAG, "onCreateView " + hashCode());
         final View view = inflater.inflate(R.layout.browser_fragment, container, false);
         setHasOptionsMenu(true);
         final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.signRecyclerView);
@@ -80,15 +81,17 @@ public class SignBrowserUIFragment extends Fragment implements SignBrowserTaskFr
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        Log.d(TAG, "onActivityCreated");
+        Log.d(TAG, "onActivityCreated " + hashCode());
         super.onActivityCreated(savedInstanceState);
         if (savedInstanceState != null) {
             this.showStarredOnly = savedInstanceState.getBoolean(KEY_SHOW_STARRED_ONLY);
         }
         final FragmentManager fm = getActivity().getFragmentManager();
+//        final FragmentManager fm = getChildFragmentManager();
         this.signBrowserTaskFragment = (SignBrowserTaskFragment) fm.findFragmentByTag(TAG_TASK_FRAGMENT);
         if (null == this.signBrowserTaskFragment) {
             this.signBrowserTaskFragment = new SignBrowserTaskFragment();
+            this.signBrowserTaskFragment.setTaskCallbacks(this);
             this.signBrowserTaskFragment.setTargetFragment(this, 0);
             final FragmentTransaction transaction = fm.beginTransaction();
             transaction.add(signBrowserTaskFragment, TAG_TASK_FRAGMENT);
@@ -99,7 +102,7 @@ public class SignBrowserUIFragment extends Fragment implements SignBrowserTaskFr
 
     @Override
     public void onStart() {
-        Log.d(TAG, "onStart");
+        Log.d(TAG, "onStart " + hashCode());
         super.onStart();
         if (!this.signBrowserTaskFragment.isRunning()) {
             this.signBrowserTaskFragment.start(getActivity(), this.showStarredOnly);
@@ -108,7 +111,7 @@ public class SignBrowserUIFragment extends Fragment implements SignBrowserTaskFr
 
     @Override
     public void onPause() {
-        Log.d(TAG, "onPause");
+        Log.d(TAG, "onPause " + hashCode());
         super.onPause();
         if (this.signBrowserTaskFragment.isRunning()) {
             this.signBrowserTaskFragment.cancel();
@@ -116,8 +119,26 @@ public class SignBrowserUIFragment extends Fragment implements SignBrowserTaskFr
     }
 
     @Override
+    public void onStop() {
+        Log.d(TAG, "onStop " + hashCode());
+        super.onStop();
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.d(TAG, "onDestroy " + hashCode());
+        super.onDestroy();
+    }
+
+    @Override
+    public void onDetach() {
+        Log.d(TAG, "onDetach " + hashCode());
+        super.onDetach();
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        Log.d(TAG, "onCreateOptionsMenu");
+        Log.d(TAG, "onCreateOptionsMenu " + hashCode());
         inflater.inflate(R.menu.options_sign_browser, menu);
         final MenuItem item = menu.findItem(R.id.action_toggle_starred);
         if (this.showStarredOnly) {
@@ -133,6 +154,7 @@ public class SignBrowserUIFragment extends Fragment implements SignBrowserTaskFr
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Log.d(TAG, "onOptionsItemSelected " + hashCode());
         if (item.getItemId() == R.id.action_toggle_starred) {
             if (!this.showStarredOnly) {
                 this.showStarredOnly = true;
@@ -148,12 +170,13 @@ public class SignBrowserUIFragment extends Fragment implements SignBrowserTaskFr
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        Log.d(TAG, "onSaveInstance");
+        Log.d(TAG, "onSaveInstance " + hashCode());
         super.onSaveInstanceState(outState);
         outState.putBoolean(KEY_SHOW_STARRED_ONLY, this.showStarredOnly);
     }
 
     public void onTxtSignNameClicked(Sign sign) {
+        Log.d(TAG, "onTxtSignNameClicked " + hashCode());
         Validate.notNull(this.onSignClickedListener, "Parent activity has to implement the OnSignClickedListener");
         this.onSignClickedListener.onSignSelected(sign);
     }
@@ -170,7 +193,7 @@ public class SignBrowserUIFragment extends Fragment implements SignBrowserTaskFr
 
     @Override
     public void onPostExecute(List<Sign> result) {
-        Log.d(TAG, "onPostExecute");
+        Log.d(TAG, "onPostExecute " + hashCode());
         // FIXME: After savedInstance has been called, this.recyclerView is null here, despite being
         // FIXME: set in the onActivityCreated() method. Therefore a findViewById is necessary.
         final RecyclerView recyclerView = (RecyclerView) getActivity().findViewById(R.id.signRecyclerView);

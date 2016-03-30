@@ -121,7 +121,6 @@ public class SignVideoTest {
 
 
     private void videoIsLoadingAndPlaying() {
-//        onView(withId(R.id.signVideoLoadingProgressBar)).check(matches(anyOf(isDisplayed(), not(isDisplayed()))));
         onView(allOf(withId(R.id.signVideoName), withText(MAMA))).check(matches(isDisplayed()));
         onView(allOf(withId(R.id.signVideoView), withContentDescription(anyOf(containsString(getStringResource(R.string.videoIsLoading)),
                 containsString(getStringResource(R.string.videoIsPlaying)))))).check(matches(isDisplayed()));

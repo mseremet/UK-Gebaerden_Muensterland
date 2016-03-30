@@ -7,6 +7,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
+import org.apache.commons.lang3.Validate;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,17 +17,17 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.SignDAO;
 
 /**
  * Copyright (c) 2016 Matthias Tonhäuser
- * <p>
+ * <p/>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * <p>
+ * <p/>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ * <p/>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -39,17 +41,25 @@ public class SignBrowserTaskFragment extends Fragment {
     interface TaskCallbacks {
         @SuppressWarnings("EmptyMethod")
         void onPreExecute();
+
         @SuppressWarnings({"EmptyMethod", "UnusedParameters"})
         void onProgressUpdate(int percent);
+
         @SuppressWarnings("EmptyMethod")
         void onCancelled();
+
         void onPostExecute(List<Sign> result);
     }
 
+    public void setTaskCallbacks(TaskCallbacks taskCallbacks) {
+        this.taskCallbacks = taskCallbacks;
+    }
+
     @Override
-    public void onAttach(Activity activity) {
-        Log.d(TAG, "onAttach");
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Log.d(TAG, "onAttach - Context " + hashCode());
+        super.onAttach(context);
         if (!(getTargetFragment() instanceof TaskCallbacks)) {
             throw new IllegalStateException("Target fragment must implement the TaskCallbacks interface.");
         }
@@ -58,25 +68,39 @@ public class SignBrowserTaskFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.d(TAG, "onCreate");
+        Log.d(TAG, "onCreate " + hashCode());
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
     }
 
+
+    @Override
+    public void onStop() {
+        Log.d(TAG, "onStop " + hashCode());
+        super.onStop();
+    }
+
     @Override
     public void onDestroy() {
-        Log.d(TAG, "onDestroy");
+        Log.d(TAG, "onDestroy " + hashCode());
         super.onDestroy();
         cancel();
     }
 
+    @Override
+    public void onDetach() {
+        Log.d(TAG, "onDetach " + hashCode());
+        super.onDetach();
+    }
+
     /**
      * Start the background task.
-     * @param context i. e. an Activity
+     *
+     * @param context         i. e. an Activity
      * @param loadStarredOnly whether all or just the ones which are starred should be loaded.
      */
     public void start(Context context, boolean loadStarredOnly) {
-        Log.d(TAG, "start");
+        Log.d(TAG, "start " + hashCode());
         if (!running) {
             loadSignsTask = new LoadSignsTask(context);
             loadSignsTask.execute(loadStarredOnly);
@@ -88,7 +112,7 @@ public class SignBrowserTaskFragment extends Fragment {
      * Cancel the background task.
      */
     public void cancel() {
-        Log.d(TAG, "cancel");
+        Log.d(TAG, "cancel " + hashCode());
         if (running) {
             loadSignsTask.cancel(false);
             loadSignsTask = null;
@@ -116,34 +140,27 @@ public class SignBrowserTaskFragment extends Fragment {
 
         @Override
         protected void onPreExecute() {
-            Log.d(LoadSignsTask.class.getSimpleName(), "onPreExecute");
+            Log.d(LoadSignsTask.class.getSimpleName(), "onPreExecute " + hashCode());
             taskCallbacks.onPreExecute();
             running = true;
         }
 
         @Override
         protected List<Sign> doInBackground(Boolean... params) {
-            Log.d(LoadSignsTask.class.getSimpleName(), "doInBackground");
+            Log.d(LoadSignsTask.class.getSimpleName(), "doInBackground " + hashCode());
+            Validate.inclusiveBetween(0, 1, params.length, "Only null or one Boolean as a parameter allowed.");
             List<Sign> signs = new ArrayList<>();
             if (isCancelled()) {
                 return signs;
             }
             final SignDAO signDAO = SignDAO.getInstance(this.context);
             signDAO.open();
-            // TODO: Replace with a read method which filters on database level
-            signs = signDAO.read();
-            signDAO.close();
-            if (1 == params.length) {
-                if (params[0]) {
-                    final List<Sign> signsToRemove = new ArrayList<>();
-                    for (Sign sign : signs) {
-                        if (!sign.isStarred()) {
-                            signsToRemove.add(sign);
-                        }
-                    }
-                    signs.removeAll(signsToRemove);
-                }
+            if (1 == params.length && params[0]) { // read starred signs only
+                signs = signDAO.readStarredSignsOnly();
+            } else {
+                signs = signDAO.read();
             }
+            signDAO.close();
             return signs;
         }
 
@@ -154,14 +171,14 @@ public class SignBrowserTaskFragment extends Fragment {
 
         @Override
         protected void onCancelled() {
-            Log.d(LoadSignsTask.class.getSimpleName(), "onCancelled");
+            Log.d(LoadSignsTask.class.getSimpleName(), "onCancelled " + hashCode());
             taskCallbacks.onCancelled();
             running = false;
         }
 
         @Override
         protected void onPostExecute(List<Sign> result) {
-            Log.d(LoadSignsTask.class.getSimpleName(), "onPostExecute");
+            Log.d(LoadSignsTask.class.getSimpleName(), "onPostExecute " + hashCode());
             taskCallbacks.onPostExecute(result);
             running = false;
         }
