@@ -1,9 +1,9 @@
 package de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.search;
 
-import android.app.FragmentTransaction;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
@@ -24,16 +24,17 @@ import java.util.List;
 
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.Sign;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.SignDAO;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.search.video.SignSearchVideoActivity;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.video.SignVideoUIFragment;
 
-public class SignSearchActivity extends AppCompatActivity implements SignSearchTaskFragment.TaskCallbacks {
+public class SignSearchActivity extends AppCompatActivity  {
 
     public static final String QUERY = "sign_browser_search_query";
-    private static final String TAG_TASK_FRAGMENT = "sign_browser_search_task_fragment";
     private static final String TAG = SignSearchActivity.class.getSimpleName();
-    private SignSearchTaskFragment signSearchTaskFragment;
+    private static final boolean INTERRUPT_IF_RUNNING = true;
     private String query = StringUtils.EMPTY;
+    private SearchSignsTask signSearchTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,22 +50,10 @@ public class SignSearchActivity extends AppCompatActivity implements SignSearchT
         }
         setupRecyclerView();
         setupSupportActionBar();
-        this.signSearchTaskFragment = (SignSearchTaskFragment) getFragmentManager().findFragmentByTag(TAG_TASK_FRAGMENT);
-        if (null == this.signSearchTaskFragment) {
-            initSignSearchTaskFragment();
-        }
-    }
-
-    private void initSignSearchTaskFragment() {
-        Log.d(TAG, "initSignSearchTaskFragment() " + this.hashCode());
-        this.signSearchTaskFragment = new SignSearchTaskFragment();
-        final FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.add(signSearchTaskFragment, TAG_TASK_FRAGMENT);
-        fragmentTransaction.commit();
+        this.signSearchTask = new SearchSignsTask(this);
     }
 
     private void setupRecyclerView() {
-        Log.d(TAG, "setupRecyclerView() " + this.hashCode());
         final RecyclerView recyclerView = (RecyclerView) this.findViewById(R.id.signSearchRecyclerView);
         recyclerView.setHasFixedSize(true); // performance fix
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -72,9 +61,8 @@ public class SignSearchActivity extends AppCompatActivity implements SignSearchT
     }
 
     private void setupSupportActionBar() {
-        Log.d(TAG, "setupSupportActionBar() " + this.hashCode());
         final ActionBar supportActionBar = getSupportActionBar();
-        Validate.notNull(supportActionBar,"SupportActionBar is null. Should have been set in onCreate()." );
+        Validate.notNull(supportActionBar, "SupportActionBar is null. Should have been set in onCreate().");
         supportActionBar.setTitle(getResources().getString(R.string.search_results) + StringUtils.SPACE + this.query);
         supportActionBar.setDisplayHomeAsUpEnabled(true);
     }
@@ -83,18 +71,20 @@ public class SignSearchActivity extends AppCompatActivity implements SignSearchT
     public void onStart() {
         Log.d(TAG, "onStart() " + this.hashCode());
         super.onStart();
-            if (!this.signSearchTaskFragment.isRunning()) {
-                this.signSearchTaskFragment.start(this, query);
-            }
+        this.signSearchTask.execute(this.query);
     }
 
     @Override
     protected void onPause() {
         Log.d(TAG, "onPause()" + this.hashCode());
         super.onPause();
-        if (signSearchTaskFragment.isRunning()) {
-            this.signSearchTaskFragment.cancel();
+        if (null != this.signSearchTask) {
+            final AsyncTask.Status status = this.signSearchTask.getStatus();
+            if (status.equals(AsyncTask.Status.PENDING)|| status.equals(AsyncTask.Status.RUNNING)) {
+                this.signSearchTask.cancel(INTERRUPT_IF_RUNNING);
+            }
         }
+        super.onPause();
     }
 
     @Override
@@ -126,31 +116,41 @@ public class SignSearchActivity extends AppCompatActivity implements SignSearchT
         startActivity(intent);
     }
 
-    @Override
-    public void onPreExecute() {
-        Log.d(TAG, "onPreExecute " + this.hashCode());
-        /*no-op*/
+    /**
+     * The first string parameter is the query to search in the name_locale_de for.
+     */
+    private class SearchSignsTask extends AsyncTask<String, Void, List<Sign>> {
+
+        private final Context context;
+
+        public SearchSignsTask(Context context) {
+            this.context = context;
+        }
+
+
+        @Override
+        protected List<Sign> doInBackground(String... params) {
+            Log.d(SignSearchActivity.class.getSimpleName(), "doInBackground " + this.hashCode());
+            Validate.exclusiveBetween(0, 2, params.length, "Exactly one string as a parameter allowed.");
+            final List<Sign> signs = new ArrayList<>();
+            if (isCancelled()) {
+                return signs;
+            }
+            final SignDAO signDAO = SignDAO.getInstance(this.context);
+            signDAO.open();
+            signs.addAll(signDAO.read(params[0]));
+            signDAO.close();
+            return signs;
+        }
+
+        @Override
+        protected void onPostExecute(List<Sign> result) {
+            Log.d(TAG, "onPostExecute " + this.hashCode());
+            final RecyclerView mRecyclerView = (RecyclerView) SignSearchActivity.this.findViewById(R.id.signSearchRecyclerView);
+            Validate.notNull(mRecyclerView, "RecyclerView is null.");
+            mRecyclerView.swapAdapter(new SignSearchAdapter(result, SignSearchActivity.this), false);
+        }
+
     }
 
-    @Override
-    public void onProgressUpdate(int percent) {
-        Log.d(TAG, "onProgressUpdate " + this.hashCode());
-        /*no-op*/
-    }
-
-    @Override
-    public void onCancelled() {
-        Log.d(TAG, "onCancelled " + this.hashCode());
-        /*no-op*/
-    }
-
-    @Override
-    public void onPostExecute(List<Sign> result) {
-        Log.d(TAG, "onPostExecute " + this.hashCode());
-        // FIXME: After savedInstance has been called, this.recyclerview is null here, despite being
-        // FIXME: set in the onCreated() method. Therefore a findViewById is necessary.
-        final RecyclerView mRecyclerView = (RecyclerView) this.findViewById(R.id.signSearchRecyclerView);
-        Validate.notNull(mRecyclerView, "RecyclerView is null.");
-        mRecyclerView.swapAdapter(new SignSearchAdapter(result, this), false);
-    }
 }
