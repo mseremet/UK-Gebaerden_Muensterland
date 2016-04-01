@@ -1,11 +1,9 @@
 package de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser;
 
-import android.app.Activity;
 import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.app.SearchManager;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.MenuItemCompat;
@@ -27,6 +25,7 @@ import java.util.List;
 
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.Sign;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.SignDAO;
 
 /**
  * Copyright (c) 2016 Matthias Tonhäuser
@@ -44,14 +43,13 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.Sign;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class SignBrowserUIFragment extends Fragment implements SignBrowserTaskFragment.TaskCallbacks {
+public class SignBrowserUIFragment extends Fragment {
 
+    public static final boolean INTERRUPT_IF_RUNNING = true;
     private static final String TAG = SignBrowserUIFragment.class.getSimpleName();
     private static final String KEY_SHOW_STARRED_ONLY = "sign_browser_show_starred_only";
-    private static final String TAG_TASK_FRAGMENT = "sign_browser_task_fragment";
-
+    private LoadSignsTask loadSignsTask;
     private boolean showStarredOnly = false;
-    private SignBrowserTaskFragment signBrowserTaskFragment;
     private OnSignClickedListener onSignClickedListener = null;
 
     @Override
@@ -86,36 +84,26 @@ public class SignBrowserUIFragment extends Fragment implements SignBrowserTaskFr
         if (savedInstanceState != null) {
             this.showStarredOnly = savedInstanceState.getBoolean(KEY_SHOW_STARRED_ONLY);
         }
-        final FragmentManager fm = getActivity().getFragmentManager();
-//        final FragmentManager fm = getChildFragmentManager();
-        this.signBrowserTaskFragment = (SignBrowserTaskFragment) fm.findFragmentByTag(TAG_TASK_FRAGMENT);
-        if (null == this.signBrowserTaskFragment) {
-            this.signBrowserTaskFragment = new SignBrowserTaskFragment();
-            this.signBrowserTaskFragment.setTaskCallbacks(this);
-            this.signBrowserTaskFragment.setTargetFragment(this, 0);
-            final FragmentTransaction transaction = fm.beginTransaction();
-            transaction.add(signBrowserTaskFragment, TAG_TASK_FRAGMENT);
-            transaction.addToBackStack(null);
-            transaction.commit();
-        }
+        this.loadSignsTask = new LoadSignsTask(getActivity());
     }
 
     @Override
     public void onStart() {
         Log.d(TAG, "onStart " + hashCode());
         super.onStart();
-        if (!this.signBrowserTaskFragment.isRunning()) {
-            this.signBrowserTaskFragment.start(getActivity(), this.showStarredOnly);
-        }
+        this.loadSignsTask.execute(this.showStarredOnly);
     }
 
     @Override
     public void onPause() {
         Log.d(TAG, "onPause " + hashCode());
-        super.onPause();
-        if (this.signBrowserTaskFragment.isRunning()) {
-            this.signBrowserTaskFragment.cancel();
+        if (null != this.loadSignsTask) {
+            final AsyncTask.Status status = this.loadSignsTask.getStatus();
+            if (status.equals(AsyncTask.Status.PENDING)|| status.equals(AsyncTask.Status.RUNNING)) {
+                this.loadSignsTask.cancel(INTERRUPT_IF_RUNNING);
+            }
         }
+        super.onPause();
     }
 
     @Override
@@ -163,7 +151,8 @@ public class SignBrowserUIFragment extends Fragment implements SignBrowserTaskFr
                 this.showStarredOnly = false;
                 item.setIcon(R.drawable.ic_sign_browser_grade);
             }
-            signBrowserTaskFragment.start(getActivity(), this.showStarredOnly);
+            this.loadSignsTask = new LoadSignsTask(getActivity());
+            this.loadSignsTask.execute(this.showStarredOnly);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -181,31 +170,51 @@ public class SignBrowserUIFragment extends Fragment implements SignBrowserTaskFr
         this.onSignClickedListener.onSignSelected(sign);
     }
 
-    // Callback methods from SignBrowserTaskFragment
-    @Override
-    public void onPreExecute() {/*no-op*/}
-
-    @Override
-    public void onProgressUpdate(int percent) {/*no-op*/}
-
-    @Override
-    public void onCancelled() {/*no-op*/}
-
-    @Override
-    public void onPostExecute(List<Sign> result) {
-        Log.d(TAG, "onPostExecute " + hashCode());
-        // FIXME: After savedInstance has been called, this.recyclerView is null here, despite being
-        // FIXME: set in the onActivityCreated() method. Therefore a findViewById is necessary.
-        final RecyclerView recyclerView = (RecyclerView) getActivity().findViewById(R.id.signRecyclerView);
-        Validate.notNull(recyclerView, "RecyclerView is null");
-        recyclerView.swapAdapter(new SignBrowserAdapter(this, getActivity(), result), true);
-    }
-
-    // Has to implemented by parent activity.
+    /**
+     * Has to be implemented by parent activity.
+     */
     public interface OnSignClickedListener {
         void onSignSelected(Sign sign);
     }
 
+    /**
+     * If the first parameter Boolean is true, only starred signs will be loaded.
+     */
+    private class LoadSignsTask extends AsyncTask<Boolean, Void, List<Sign>> {
+
+        private final Context context;
+
+        public LoadSignsTask(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        protected List<Sign> doInBackground(Boolean... params) {
+            Log.d(LoadSignsTask.class.getSimpleName(), "doInBackground " + hashCode());
+            Validate.inclusiveBetween(0, 1, params.length, "Only null or one Boolean as a parameter allowed.");
+            List<Sign> signs = new ArrayList<>();
+            if (isCancelled()) {
+                return signs;
+            }
+            final SignDAO signDAO = SignDAO.getInstance(this.context);
+            signDAO.open();
+            if (1 == params.length && params[0]) { // read starred signs only
+                signs = signDAO.readStarredSignsOnly();
+            } else {
+                signs = signDAO.read();
+            }
+            signDAO.close();
+            return signs;
+        }
+        @Override
+        protected void onPostExecute(List<Sign> result) {
+            Log.d(LoadSignsTask.class.getSimpleName(), "onPostExecute " + hashCode());
+            final RecyclerView recyclerView = (RecyclerView) getActivity().findViewById(R.id.signRecyclerView);
+            Validate.notNull(recyclerView, "RecyclerView is null");
+            recyclerView.swapAdapter(new SignBrowserAdapter(SignBrowserUIFragment.this, getActivity(), result), true);
+        }
+
+    }
 
 }
 
