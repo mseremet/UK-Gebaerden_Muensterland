@@ -1,10 +1,10 @@
 package de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_trainer;
 
 import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.content.Context;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -17,8 +17,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.VideoView;
 
+import org.apache.commons.lang3.Validate;
+
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.Sign;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.SignDAO;
 
 /**
  * Copyright (c) 2016 Matthias Tonhäuser
@@ -36,20 +39,20 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.Sign;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class SignTrainerUIFragment extends Fragment implements SignTrainerTaskFragment.TaskCallbacks {
+public class SignTrainerUIFragment extends Fragment {
 
     private static final String TAG = SignTrainerUIFragment.class.getSimpleName();
     private static final String ANDROID_RESOURCE = "android.resource://";
     private static final String SLASH = "/";
     private static final String RAW = "raw";
-    private static final String TAG_TASK_FRAGMENT = "SIGN_TRAINER_TASK_FRAGMENT";
     private static final String KEY_CURRENT_SIGN = "KEY_CURRENT_SIGN";
+    private static final boolean INTERRUPT_IF_RUNNING = true;
     private VideoView videoView;
     private ProgressBar progressBar;
     private TextView signQuestionText;
     private Button solveQuestionButton;
     private Sign currentSign = null;
-    private SignTrainerTaskFragment signTrainerTaskFragment;
+    private LoadRandomSignTask loadRandomSignTask;
 
     @Nullable
     @Override
@@ -76,36 +79,28 @@ public class SignTrainerUIFragment extends Fragment implements SignTrainerTaskFr
                 return; // Don't depend on any code below to have been executed.
             }
         }
-        final FragmentManager fm = getActivity().getFragmentManager();
-        // FIXME
-//        final FragmentManager fm = getChildFragmentManager();
-        this.signTrainerTaskFragment = (SignTrainerTaskFragment) fm.findFragmentByTag(TAG_TASK_FRAGMENT);
-        if (null == this.signTrainerTaskFragment) {
-            this.signTrainerTaskFragment = new SignTrainerTaskFragment();
-            this.signTrainerTaskFragment.setTargetFragment(this, 0);
-            final FragmentTransaction transaction = fm.beginTransaction();
-            transaction.add(signTrainerTaskFragment, TAG_TASK_FRAGMENT);
-            transaction.addToBackStack(null);
-            transaction.commit();
-        }
+        this.loadRandomSignTask = new LoadRandomSignTask(getActivity());
     }
 
     @Override
     public void onStart() {
         Log.d(TAG, "onStart " + hashCode());
         super.onStart();
-        if (!this.signTrainerTaskFragment.isRunning()) {
-            this.signTrainerTaskFragment.start(getActivity(), this.currentSign);
+        if (null != this.loadRandomSignTask) {
+            this.loadRandomSignTask.execute(this.currentSign);
         }
     }
 
     @Override
     public void onPause() {
         Log.d(TAG, "onPause " + hashCode());
-        super.onPause();
-        if (this.signTrainerTaskFragment.isRunning()) {
-            this.signTrainerTaskFragment.cancel();
+        if (null != this.loadRandomSignTask) {
+            final AsyncTask.Status status = this.loadRandomSignTask.getStatus();
+            if (status.equals(AsyncTask.Status.PENDING)|| status.equals(AsyncTask.Status.RUNNING)) {
+                this.loadRandomSignTask.cancel(INTERRUPT_IF_RUNNING);
+            }
         }
+        super.onPause();
     }
 
     @Override
@@ -114,26 +109,6 @@ public class SignTrainerUIFragment extends Fragment implements SignTrainerTaskFr
         super.onSaveInstanceState(outState);
         if (null != this.currentSign) {
             outState.putParcelable(KEY_CURRENT_SIGN, this.currentSign);
-        }
-    }
-
-    @Override
-    public void onPreExecute() {/*no-op*/}
-
-    @Override
-    public void onProgressUpdate(int percent) {/*no-op*/}
-
-    @Override
-    public void onCancelled() {/*no-op*/}
-
-    @Override
-    public void onPostExecute(final Sign result) {
-        Log.d(TAG, "onPostExecute() " + hashCode());
-        if (null == result) {
-            this.signQuestionText.setText(R.string.noSignWasFound);
-        } else {
-            this.currentSign = result;
-            setupVideoView(this.currentSign);
         }
     }
 
@@ -162,6 +137,51 @@ public class SignTrainerUIFragment extends Fragment implements SignTrainerTaskFr
                 }
             });
         }
+    }
+
+    /**
+     * Reads a random sign from the database. Will return null if the task is cancelled. The current
+     * sign can be provided as a parameter or be null, if there is no current sign.
+     */
+    private class LoadRandomSignTask extends AsyncTask<Sign, Void, Sign> {
+
+        private final Context context;
+
+        public LoadRandomSignTask(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        protected Sign doInBackground(Sign... params) {
+            Log.d(LoadRandomSignTask.class.getSimpleName(), "doInBackground " + hashCode());
+            Validate.inclusiveBetween(0, 1, params.length, "Only null or one sign as a parameter allowed.");
+            if (isCancelled()) {
+                return null;
+            }
+            final SignDAO signDAO = SignDAO.getInstance(this.context);
+            signDAO.open();
+            Sign sign;
+            if (1 == params.length && null != params[0]) { // current sign provided via parameters
+                sign = signDAO.readRandomSign(params[0]);
+            } else {
+                sign = signDAO.readRandomSign(null);
+            }
+            signDAO.close();
+            return sign;
+        }
+
+
+        @Override
+        protected void onPostExecute(Sign result) {
+            Log.d(LoadRandomSignTask.class.getSimpleName(), "onPostExecute " + hashCode());
+            if (null == result) {
+                SignTrainerUIFragment.this.signQuestionText.setText(R.string.noSignWasFound);
+            } else {
+                SignTrainerUIFragment.this.currentSign = result;
+                setupVideoView(SignTrainerUIFragment.this.currentSign);
+            }
+        }
+
     }
 }
 

@@ -79,7 +79,7 @@ public class MainActivityTest {
         clickNavigationButtonAndCheckToolbarTitle((R.string.browse_signs), R.string.sign_browser);
     }
 
-    // @Test FIXME
+    @Test
     public void clickTrainSignsButton() {
         clickNavigationButtonAndCheckToolbarTitle((R.string.train_signs), R.string.sign_trainer);
     }
@@ -105,7 +105,7 @@ public class MainActivityTest {
         onView(isRoot()).perform(orientationLandscape());
         Log.d(MainActivityTest.class.getSimpleName(), "afterOrientationLandscape");
         onView(allOf(withText(toolbarTitle), withParent((withId(R.id.toolbar))))).check(matches(isDisplayed()));
-        if (!toolbarTitle.equals(getStringResource(R.string.sign_browser))) {
+        if (toolbarTitle.equals(getStringResource(R.string.about_signs)) || toolbarTitle.equals(getStringResource(R.string.settings))) {
             onView(allOf(withId(R.id.dummyTxt), withText(toolbarTitle))).check(matches(isDisplayed()));
         }
     }
