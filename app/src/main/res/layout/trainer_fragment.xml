@@ -21,24 +21,11 @@
         android:layout_below="@+id/signTrainerQuestionText"
         android:layout_centerHorizontal="true"/>
 
-    <Button
-        android:id="@+id/signTrainerSolveQuestionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/signTrainerVideoView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="6dip"
+    <include
+        layout="@layout/trainer_fragment_answer_part"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginBottom="6dip"
-        android:text="@string/solveQuestion" />
-
-    <ProgressBar
-        android:id="@+id/signTrainerVideoLoadingProgressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:indeterminate="true"
-        style="@android:style/Widget.ProgressBar.Large.Inverse"/>
-
+        android:layout_below="@id/signTrainerVideoView"/>
 
 </RelativeLayout>

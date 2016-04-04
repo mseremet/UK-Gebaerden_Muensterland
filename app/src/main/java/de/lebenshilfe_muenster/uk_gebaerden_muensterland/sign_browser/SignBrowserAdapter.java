@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import org.apache.commons.lang3.Validate;
+
 import java.text.DecimalFormat;
 import java.util.List;
 
@@ -105,19 +107,18 @@ public class SignBrowserAdapter extends RecyclerView.Adapter<SignBrowserAdapter.
 
         @Override
         protected Void doInBackground(Sign... params) {
-            if (1 == params.length) {
-                final Sign sign = params[0];
-                if (sign.isStarred()) {
-                    sign.setStarred(false);
-                } else {
-                    sign.setStarred(true);
-                }
-                if (null != SignBrowserAdapter.this.context) {
-                    final SignDAO signDAO = SignDAO.getInstance(SignBrowserAdapter.this.context);
-                    signDAO.open();
-                    signDAO.update(sign);
-                    signDAO.close();
-                }
+            Validate.exclusiveBetween(0, 2, params.length, "Exactly one sign as a parameter allowed.");
+            final Sign sign = params[0];
+            if (sign.isStarred()) {
+                sign.setStarred(false);
+            } else {
+                sign.setStarred(true);
+            }
+            if (null != SignBrowserAdapter.this.context) {
+                final SignDAO signDAO = SignDAO.getInstance(SignBrowserAdapter.this.context);
+                signDAO.open();
+                signDAO.update(sign);
+                signDAO.close();
             }
             return null;
         }

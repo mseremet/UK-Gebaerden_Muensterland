@@ -19,9 +19,14 @@
     <string name="videoCouldNotBeLoaded">Video could not be loaded.</string>
     <string name="videoIsLoading">Video is loading</string>
     <string name="action_settings">Settings</string>
-    <string name="progress">Progress</string>
+    <string name="learningProgress">Progress</string>
     <string name="app_icon">App icon</string>
     <string name="signQuestion">Which sign is this?</string>
     <string name="solveQuestion">Solve</string>
     <string name="noSignWasFound">No sign was found in the databae.</string>
+    <string name="questionWasEasy">Easy</string>
+    <string name="questionWasFair">Fair</string>
+    <string name="questionWasHard">Hard</string>
+    <string name="answer">Answer</string>
+    <string name="trainerMnemonic">mnemomic</string>
 </resources>

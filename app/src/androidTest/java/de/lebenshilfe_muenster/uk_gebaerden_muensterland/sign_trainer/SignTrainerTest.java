@@ -3,7 +3,6 @@ package de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_trainer;
 import android.support.annotation.NonNull;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.util.Log;
 
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -18,6 +17,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -27,6 +27,7 @@ import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.util.Orientation
 import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.util.OrientationChangeAction.orientationPortrait;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.anyOf;
 
@@ -73,14 +74,52 @@ public class SignTrainerTest {
     }
 
     @Test
-    public void checkVideoViewTextIsPresent() {
+    public void checkAnswerButtonsAreNotPresent() {
+        onView(withText("Einfach")).check(matches(not(isDisplayed())));
+        onView(withText("Normal")).check(matches(not(isDisplayed())));
+        onView(withText("Schwer")).check(matches(not(isDisplayed())));
+    }
+
+    @Test
+    public void checkSignTrainerIsWorkingCorrectly() {
         onView((withContentDescription(anyOf(containsString(getStringResource(R.string.videoIsLoading)),
                 Matchers.containsString(getStringResource(R.string.videoIsPlaying)))))).check(matches(isDisplayed()));
         onView(withText(getStringResource(R.string.solveQuestion))).check(matches(isDisplayed()));
-        onView(isRoot()).perform(orientationLandscape()); // trigger configuration change
+        // trigger configuration change and check state afterwards
+        onView(isRoot()).perform(orientationLandscape());
         onView((withContentDescription(anyOf(containsString(getStringResource(R.string.videoIsLoading)),
                 Matchers.containsString(getStringResource(R.string.videoIsPlaying)))))).check(matches(isDisplayed()));
-        onView(withText(getStringResource(R.string.solveQuestion))).check(matches(isDisplayed()));
+        // click solve button
+        onView(withText(getStringResource(R.string.solveQuestion))).check(matches(isDisplayed())).perform(click());
+        checkStateAfterSolveButtonClicked();
+        // trigger configuration change and check state afterwards
+        onView(isRoot()).perform(orientationPortrait());
+        checkStateAfterSolveButtonClicked();
+        // click on answer button
+        onView(withText(getStringResource(R.string.questionWasFair))).perform(click());
+        onView((withContentDescription(anyOf(containsString(getStringResource(R.string.videoIsLoading)),
+                Matchers.containsString(getStringResource(R.string.videoIsPlaying)))))).check(matches(isDisplayed()));
+        checkStateAfterAnswerButtonClicked();
+    }
+
+    private void checkStateAfterSolveButtonClicked() {
+        onView(withText(getStringResource(R.string.questionWasEasy))).check(matches(isDisplayed()));
+        onView(withText(getStringResource(R.string.questionWasFair))).check(matches(isDisplayed()));
+        onView(withText(getStringResource(R.string.questionWasHard))).check(matches(isDisplayed()));
+        onView(withText(getStringResource(R.string.solveQuestion))).check(matches((not(isEnabled()))));
+        onView(withContentDescription(getStringResource(R.string.answer))).check(matches(isDisplayed()));
+        onView(withContentDescription(getStringResource(R.string.trainerMnemonic))).check(matches(isDisplayed()));
+        onView(withContentDescription(getStringResource(R.string.learningProgress))).check(matches(isDisplayed()));
+    }
+
+    private void checkStateAfterAnswerButtonClicked() {
+        onView(withText(getStringResource(R.string.solveQuestion))).check(matches(isEnabled()));
+        onView(withText(getStringResource(R.string.questionWasEasy))).check(matches(not(isDisplayed())));
+        onView(withText(getStringResource(R.string.questionWasFair))).check(matches(not(isDisplayed())));
+        onView(withText(getStringResource(R.string.questionWasHard))).check(matches(not(isDisplayed())));
+        onView(withContentDescription(getStringResource(R.string.answer))).check(matches(not(isDisplayed())));
+        onView(withContentDescription(getStringResource(R.string.trainerMnemonic))).check(matches(not(isDisplayed())));
+        onView(withContentDescription(getStringResource(R.string.learningProgress))).check(matches(not(isDisplayed())));
     }
 
 
