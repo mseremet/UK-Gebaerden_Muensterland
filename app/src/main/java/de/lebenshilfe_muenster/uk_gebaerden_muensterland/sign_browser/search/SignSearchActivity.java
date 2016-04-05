@@ -51,6 +51,7 @@ public class SignSearchActivity extends AppCompatActivity  {
         setupRecyclerView();
         setupSupportActionBar();
         this.signSearchTask = new SearchSignsTask(this);
+        this.signSearchTask.execute(this.query);
     }
 
     private void setupRecyclerView() {
@@ -71,7 +72,6 @@ public class SignSearchActivity extends AppCompatActivity  {
     public void onStart() {
         Log.d(TAG, "onStart() " + this.hashCode());
         super.onStart();
-        this.signSearchTask.execute(this.query);
     }
 
     @Override

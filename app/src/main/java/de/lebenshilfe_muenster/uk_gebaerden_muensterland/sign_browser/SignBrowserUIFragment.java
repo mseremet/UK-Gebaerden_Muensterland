@@ -85,13 +85,13 @@ public class SignBrowserUIFragment extends Fragment {
             this.showStarredOnly = savedInstanceState.getBoolean(KEY_SHOW_STARRED_ONLY);
         }
         this.loadSignsTask = new LoadSignsTask(getActivity());
+        this.loadSignsTask.execute(this.showStarredOnly);
     }
 
     @Override
     public void onStart() {
         Log.d(TAG, "onStart " + hashCode());
         super.onStart();
-        this.loadSignsTask.execute(this.showStarredOnly);
     }
 
     @Override
