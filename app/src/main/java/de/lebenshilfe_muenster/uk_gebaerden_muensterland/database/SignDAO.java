@@ -171,9 +171,7 @@ public class SignDAO {
                 break;
             }
         }
-        if (signsWithLeastLearningProgress.isEmpty()) {
-            return signWithLeastLearningProgress;
-        }
+        signsWithLeastLearningProgress.add(signWithLeastLearningProgress);
         final int randomInt = new Random().nextInt(signsWithLeastLearningProgress.size());
         return signsWithLeastLearningProgress.get(randomInt);
     }
