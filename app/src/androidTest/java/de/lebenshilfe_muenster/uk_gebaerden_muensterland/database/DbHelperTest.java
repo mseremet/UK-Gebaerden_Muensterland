@@ -167,8 +167,11 @@ public class DbHelperTest {
 
     @Test
     public void testReadRandomSignReturnsNotTheCurrentSign() {
-        final Sign randomSign = signDAO.readRandomSign(FOOTBALL);
-        assertThat(randomSign, not(is(equalTo(FOOTBALL))));
+        for (int i = 0; i < 100; i++) {
+            final Sign randomSign = signDAO.readRandomSign(FOOTBALL);
+            assertThat(randomSign, not(is(equalTo(FOOTBALL))));
+        }
+
     }
 
     @Test
