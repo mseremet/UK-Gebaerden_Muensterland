@@ -4,7 +4,13 @@ import android.support.annotation.NonNull;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
+import org.apache.commons.lang3.Validate;
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -17,6 +23,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.contrib.RecyclerViewActions.scrollToHolder;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
@@ -54,14 +61,37 @@ public class SignBrowserTest {
 
     private static final String MAMA = "Mama";
     private static final String PAPA = "Papa";
-    private static final String FOOTBALL = "Fußball";
-    private static final String MAMA_MNEMONIC = "Wange streicheln";
-    private static final String PAPA_MNEMONIC = "Schnurrbart";
+    private static final String FOOTBALL = "Fußball spielen";
+    private static final String MAMA_MNEMONIC = "Wange kreisend streicheln";
+    private static final String PAPA_MNEMONIC = "Schnauzbart andeuten";
     private static final String FOOTBALL_MNEMONIC = "Faust tritt in Handfläche";
     private static final String PROGRESS_0 = "0";
 
     @Rule
     public final ActivityTestRule<MainActivity> mainActivityActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+
+    public static Matcher<RecyclerView.ViewHolder> getHolderForSignWithName(final String signNameLocaleDe) {
+        Validate.notEmpty(signNameLocaleDe);
+        return new BaseMatcher<RecyclerView.ViewHolder>() {
+
+            @Override
+            public boolean matches(Object item) {
+                Validate.isInstanceOf(SignBrowserAdapter.ViewHolder.class, item);
+                final SignBrowserAdapter.ViewHolder holder = (SignBrowserAdapter.ViewHolder) item;
+                boolean matches = false;
+                if (!(null == holder.txtSignName)) {
+                    matches = ((signNameLocaleDe.equals(holder.txtSignName.getText().toString()))
+                            && (View.VISIBLE == holder.txtSignName.getVisibility()));
+                }
+                return matches;
+            }
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("with sign name: " + signNameLocaleDe.toString());
+            }
+        };
+    }
 
     @Before
     public void changeOrientationToPortrait() {
@@ -98,13 +128,12 @@ public class SignBrowserTest {
         onView(withId(R.id.action_toggle_starred)).check(matches(isDisplayed()));
     }
 
-
     @Test
     public void checkTogglingStarredSignsWorks() {
         try {
             // check toggle on works
-            onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(MAMA)),
-                    withContentDescription(containsString(getStringResource(R.string.starredButton))))).check(matches(isNotChecked())).perform(click());
+            onView(withId(R.id.signRecyclerView)).perform(scrollToHolder(getHolderForSignWithName(MAMA)));
+            onView(getSignWithName(MAMA)).check(matches(isNotChecked())).perform(click());
             onView(withId(R.id.action_toggle_starred)).check(matches(isDisplayed())).perform(click());
             checkOnlyStarredSignsAreShown();
             // check toggle state is persisted
@@ -115,8 +144,8 @@ public class SignBrowserTest {
             checkSignRecyclerViewHasListElements();
         } finally {
             // reset
-            onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(MAMA)),
-                    withContentDescription(containsString(getStringResource(R.string.starredButton))))).check(matches(isChecked())).perform(click());
+            onView(withId(R.id.signRecyclerView)).perform(scrollToHolder(getHolderForSignWithName(MAMA)));
+            onView(getSignWithName(MAMA)).check(matches(isChecked())).perform(click());
         }
     }
 
@@ -127,47 +156,62 @@ public class SignBrowserTest {
 
     @Test
     public void checkSignRecyclerViewHasListElements() {
+        onView(withId(R.id.signRecyclerView)).perform(scrollToHolder(getHolderForSignWithName(MAMA)));
         onView(allOf(withId(R.id.signRecyclerView), hasDescendant((withText(MAMA))))).check(matches(isDisplayed()));
+        onView(withId(R.id.signRecyclerView)).perform(scrollToHolder(getHolderForSignWithName(PAPA)));
         onView(allOf(withId(R.id.signRecyclerView), hasDescendant((withText(PAPA))))).check(matches(isDisplayed()));
+        onView(withId(R.id.signRecyclerView)).perform(scrollToHolder(getHolderForSignWithName(FOOTBALL)));
         onView(allOf(withId(R.id.signRecyclerView), hasDescendant((withText(FOOTBALL))))).check(matches(isDisplayed()));
     }
 
     @Test
     public void checkSignHasMnemonic() {
+        onView(withId(R.id.signRecyclerView)).perform(scrollToHolder(getHolderForSignWithName(MAMA)));
         onView(allOf(withId(R.id.signBrowserSingleRow), hasDescendant(withText(containsString(MAMA_MNEMONIC))))).check(matches(isDisplayed()));
+        onView(withId(R.id.signRecyclerView)).perform(scrollToHolder(getHolderForSignWithName(PAPA)));
         onView(allOf(withId(R.id.signBrowserSingleRow), hasDescendant(withText(containsString(PAPA_MNEMONIC))))).check(matches(isDisplayed()));
+        onView(withId(R.id.signRecyclerView)).perform(scrollToHolder(getHolderForSignWithName(FOOTBALL)));
         onView(allOf(withId(R.id.signBrowserSingleRow), hasDescendant(withText(containsString(FOOTBALL_MNEMONIC))))).check(matches(isDisplayed()));
     }
 
     @Test
     public void checkSignHasStarredInformation() {
-        onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(MAMA)), withContentDescription(containsString(getStringResource(R.string.starredButton))))).check(matches(isNotChecked()));
-        onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(PAPA)), withContentDescription(containsString(getStringResource(R.string.starredButton))))).check(matches(isNotChecked()));
-        onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(FOOTBALL)), withContentDescription(containsString(getStringResource(R.string.starredButton))))).check(matches(isNotChecked()));
+        onView(withId(R.id.signRecyclerView)).perform(scrollToHolder(getHolderForSignWithName(MAMA)));
+        onView(getSignWithName(MAMA)).check(matches(isNotChecked()));
+        onView(withId(R.id.signRecyclerView)).perform(scrollToHolder(getHolderForSignWithName(PAPA)));
+        onView(getSignWithName(PAPA)).check(matches(isNotChecked()));
+        onView(withId(R.id.signRecyclerView)).perform(scrollToHolder(getHolderForSignWithName(FOOTBALL)));
+        onView(getSignWithName(FOOTBALL)).check(matches(isNotChecked()));
     }
 
     @Test
     public void checkSignStarredInformationCanBePersisted() {
         try {
-            onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(MAMA)), withContentDescription(containsString(getStringResource(R.string.starredButton))))).check(matches(isNotChecked())).perform(click());
-            onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(MAMA)), withContentDescription(containsString(getStringResource(R.string.starredButton))))).check(matches(isChecked()));
+            onView(withId(R.id.signRecyclerView)).perform(scrollToHolder(getHolderForSignWithName(MAMA)));
+            onView(getSignWithName(MAMA)).check(matches(isNotChecked())).perform(click());
+            onView(getSignWithName(MAMA)).check(matches(isChecked()));
             onView(isRoot()).perform(orientationLandscape()); // trigger configuration change
         } finally {
             // reset
-            onView(allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(MAMA)), withContentDescription(containsString(getStringResource(R.string.starredButton))))).check(matches(isChecked())).perform(click());
+            onView(withId(R.id.signRecyclerView)).perform(scrollToHolder(getHolderForSignWithName(MAMA)));
+            onView(getSignWithName(MAMA)).check(matches(isChecked())).perform(click());
         }
     }
 
     @Test
     public void checkSignHasLearningProgressInformation() {
+        onView(withId(R.id.signRecyclerView)).perform(scrollToHolder(getHolderForSignWithName(MAMA)));
         onView(allOf(withId(R.id.signBrowserSingleRow), hasDescendant(withText(MAMA)), hasDescendant(withText(containsString(PROGRESS_0))))).check(matches(isDisplayed()));
+        onView(withId(R.id.signRecyclerView)).perform(scrollToHolder(getHolderForSignWithName(PAPA)));
         onView(allOf(withId(R.id.signBrowserSingleRow), hasDescendant(withText(PAPA)), hasDescendant(withText(containsString(PROGRESS_0))))).check(matches(isDisplayed()));
+        onView(withId(R.id.signRecyclerView)).perform(scrollToHolder(getHolderForSignWithName(FOOTBALL)));
         onView(allOf(withId(R.id.signBrowserSingleRow), hasDescendant(withText(FOOTBALL)), hasDescendant(withText(containsString(PROGRESS_0))))).check(matches(isDisplayed()));
     }
 
     @Test
     public void checkClickingOnSignNameNavigatesToVideoView() {
-        onView(allOf(withText(MAMA), withParent(withId(R.id.signBrowserSingleRow)))).check(matches(isDisplayed())).perform(click());
+        onView(withId(R.id.signRecyclerView)).perform(scrollToHolder(getHolderForSignWithName(MAMA)));
+        onView(allOf(withText(MAMA))).check(matches(isDisplayed())).perform(click());
         onView(allOf(withId(R.id.signVideoName), withText(MAMA))).check(matches(isDisplayed()));
     }
 
@@ -180,5 +224,11 @@ public class SignBrowserTest {
     @NonNull
     private String getStringResource(int stringResourceId) {
         return mainActivityActivityTestRule.getActivity().getResources().getString(stringResourceId);
+    }
+
+    @NonNull
+    private Matcher<View> getSignWithName(String name) {
+        return allOf(withParent(withId(R.id.signBrowserSingleRow)), hasSibling(withText(name)),
+                withContentDescription(containsString(getStringResource(R.string.starredButton))));
     }
 }

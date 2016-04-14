@@ -1,6 +1,5 @@
 package de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.video;
 
-import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
@@ -14,11 +13,13 @@ import org.junit.runner.RunWith;
 
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.activities.MainActivity;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.SignBrowserTest;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.contrib.RecyclerViewActions.scrollToHolder;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
@@ -52,11 +53,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 public class SignVideoTest {
 
     private static final String MAMA = "Mama";
-    private static final String MAMA_MNEMONIC = "Wange streicheln";
-
-    static {
-        Looper.prepare();
-    }
+    private static final String MAMA_MNEMONIC = "Wange kreisend streicheln";
 
     @Rule
     public final ActivityTestRule<MainActivity> mainActivityActivityTestRule = new ActivityTestRule<>(MainActivity.class);
@@ -98,8 +95,8 @@ public class SignVideoTest {
     }
 
     private void navigateToSignVideoUIFragment() {
-        onView(allOf(withText(MAMA), withParent(withId(R.id.signBrowserSingleRow))))
-                .check(matches(isDisplayed())).perform(click());
+        onView(withId(R.id.signRecyclerView)).perform(scrollToHolder(SignBrowserTest.getHolderForSignWithName(MAMA)));
+        onView(allOf(withText(MAMA))).check(matches(isDisplayed())).perform(click());
     }
 
     private void checkUpButtonNavigatesToSignBrowserInternal() {

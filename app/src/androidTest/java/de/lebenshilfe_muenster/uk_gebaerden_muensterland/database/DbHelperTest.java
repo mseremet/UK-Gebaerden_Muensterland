@@ -26,6 +26,8 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.isIn;
 import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.hamcrest.core.IsNot.not;
@@ -50,14 +52,16 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class DbHelperTest {
 
-    private static final Sign FOOTBALL = new Sign.Builder().setId(0).setName("football").setNameLocaleDe("Fußball")
+    private static final Sign FOOTBALL = new Sign.Builder().setId(0).setName("football").setNameLocaleDe("Fußball spielen")
             .setMnemonic("Faust tritt in Handfläche").setStarred(false).setLearningProgress(0).create();
     private static final Sign MAMA = new Sign.Builder().setId(0).setName("mama").setNameLocaleDe("Mama")
-            .setMnemonic("Wange streicheln").setStarred(false).setLearningProgress(0).create();
+            .setMnemonic("Wange kreisend streicheln").setStarred(false).setLearningProgress(0).create();
     private static final Sign PAPA = new Sign.Builder().setId(0).setName("papa").setNameLocaleDe("Papa")
-            .setMnemonic("Schnurrbart").setStarred(false).setLearningProgress(0).create();
+            .setMnemonic("Schnauzbart andeuten").setStarred(false).setLearningProgress(0).create();
     private static final Sign TEST_SIGN = new Sign.Builder().setId(0).setName("test_sign").setNameLocaleDe("test_sign_de")
             .setMnemonic("test_sign_mnemonic").setStarred(false).setLearningProgress(0).create();
+    private static final int INITIAL_NUMBER_OF_SIGNS = 210;
+
     @Rule
     public final ActivityTestRule<MainActivity> mainActivityActivityTestRule = new ActivityTestRule<>(MainActivity.class);
     @Rule
@@ -116,12 +120,11 @@ public class DbHelperTest {
 
     @Test
     public void testReadReturnsList() {
-        List<Sign> signs = new ArrayList<>();
-        signs.add(FOOTBALL);
-        signs.add(PAPA);
-        signs.add(MAMA);
         List<Sign> signsFromDb = signDAO.read();
-        assertThat(signsFromDb, containsInAnyOrder(signs.toArray(new Sign[signs.size()])));
+        assertThat(signsFromDb.size(), greaterThanOrEqualTo(INITIAL_NUMBER_OF_SIGNS));
+        assertThat(MAMA, isIn(signsFromDb));
+        assertThat(PAPA, isIn(signsFromDb));
+        assertThat(FOOTBALL, isIn(signsFromDb));
     }
 
     @Test
