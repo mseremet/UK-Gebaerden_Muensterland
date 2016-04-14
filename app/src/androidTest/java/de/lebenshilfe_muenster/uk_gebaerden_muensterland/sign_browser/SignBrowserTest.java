@@ -165,16 +165,6 @@ public class SignBrowserTest {
     }
 
     @Test
-    public void checkSignHasMnemonic() {
-        onView(withId(R.id.signRecyclerView)).perform(scrollToHolder(getHolderForSignWithName(MAMA)));
-        onView(allOf(withId(R.id.signBrowserSingleRow), hasDescendant(withText(containsString(MAMA_MNEMONIC))))).check(matches(isDisplayed()));
-        onView(withId(R.id.signRecyclerView)).perform(scrollToHolder(getHolderForSignWithName(PAPA)));
-        onView(allOf(withId(R.id.signBrowserSingleRow), hasDescendant(withText(containsString(PAPA_MNEMONIC))))).check(matches(isDisplayed()));
-        onView(withId(R.id.signRecyclerView)).perform(scrollToHolder(getHolderForSignWithName(FOOTBALL)));
-        onView(allOf(withId(R.id.signBrowserSingleRow), hasDescendant(withText(containsString(FOOTBALL_MNEMONIC))))).check(matches(isDisplayed()));
-    }
-
-    @Test
     public void checkSignHasStarredInformation() {
         onView(withId(R.id.signRecyclerView)).perform(scrollToHolder(getHolderForSignWithName(MAMA)));
         onView(getSignWithName(MAMA)).check(matches(isNotChecked()));
@@ -212,6 +202,13 @@ public class SignBrowserTest {
     public void checkClickingOnSignNameNavigatesToVideoView() {
         onView(withId(R.id.signRecyclerView)).perform(scrollToHolder(getHolderForSignWithName(MAMA)));
         onView(allOf(withText(MAMA))).check(matches(isDisplayed())).perform(click());
+        onView(allOf(withId(R.id.signVideoName), withText(MAMA))).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void checkClickingOnVideoIconNavigatesToVideoView() {
+        onView(withId(R.id.signRecyclerView)).perform(scrollToHolder(getHolderForSignWithName(MAMA)));
+        onView(allOf(withContentDescription(R.string.signIconDescription),hasSibling(withText(MAMA)))).check(matches(isDisplayed())).perform(click());
         onView(allOf(withId(R.id.signVideoName), withText(MAMA))).check(matches(isDisplayed()));
     }
 

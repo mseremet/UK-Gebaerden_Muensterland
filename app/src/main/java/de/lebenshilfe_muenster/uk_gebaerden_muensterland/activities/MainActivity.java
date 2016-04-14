@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity
     private void setupNavigationView() {
         final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-    }
+     }
 
     private void restoreInstanceStateOrShowDefault(Bundle savedInstanceState) {
         if (null == savedInstanceState) {

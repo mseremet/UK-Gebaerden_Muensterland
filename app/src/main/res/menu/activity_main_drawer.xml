@@ -4,15 +4,15 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_sign_browser"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_ondemand_video"
             android:title="@string/browse_signs" />
         <item
             android:id="@+id/nav_sign_trainer"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_school"
             android:title="@string/train_signs" />
         <item
             android:id="@+id/nav_sign_info"
-            android:icon="@drawable/ic_menu_share"
+            android:icon="@drawable/ic_info"
             android:title="@string/about_signs" />
         <item
             android:id="@+id/nav_sign_settings"

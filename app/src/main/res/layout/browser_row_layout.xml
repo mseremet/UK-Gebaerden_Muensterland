@@ -17,40 +17,27 @@
         android:layout_marginEnd="6dip"
         android:layout_marginRight="6dip"
         android:contentDescription="@string/signIconDescription"
-        android:src="@drawable/ic_menu_gallery" />
+        android:src="@drawable/ic_ondemand_video" />
 
 
     <TextView
         android:id="@+id/signName"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/mnemonic"
-        android:layout_alignStart="@+id/mnemonic"
-        android:layout_alignTop="@+id/icon"
+        android:layout_toEndOf="@+id/icon"
+        android:layout_toRightOf="@+id/icon"
+        android:layout_alignBaseline="@+id/icon"
         android:ellipsize="marquee"
         android:singleLine="true"
         android:text="Example sign"
         android:textSize="16sp"
         tools:ignore="HardcodedText" />
 
-    <TextView
-        android:id="@+id/mnemonic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/icon"
-        android:layout_toEndOf="@+id/icon"
-        android:layout_toRightOf="@+id/icon"
-        android:ellipsize="marquee"
-        android:singleLine="true"
-        android:text="Mnemonic"
-        android:textSize="12sp"
-        tools:ignore="HardcodedText" />
-
-    <TextView
+  <TextView
         android:id="@+id/learningProgressLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/mnemonic"
+        android:layout_alignBaseline="@+id/signName"
         android:layout_toLeftOf="@+id/learningProgressValue"
         android:layout_toStartOf="@+id/learningProgressValue"
         android:text="@string/learningProgress"
@@ -60,7 +47,7 @@
         android:id="@+id/learningProgressValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/mnemonic"
+        android:layout_alignBaseline="@+id/signName"
         android:layout_toLeftOf="@+id/starred"
         android:layout_toStartOf="@+id/starred"
         android:text="7"
@@ -71,7 +58,7 @@
         android:id="@+id/starred"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/mnemonic"
+        android:layout_alignBaseline="@+id/signName"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_marginLeft="6dip"

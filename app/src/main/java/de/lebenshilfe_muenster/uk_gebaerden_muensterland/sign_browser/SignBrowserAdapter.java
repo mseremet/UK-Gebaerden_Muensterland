@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.apache.commons.lang3.Validate;
@@ -55,15 +56,20 @@ public class SignBrowserAdapter extends RecyclerView.Adapter<SignBrowserAdapter.
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
+        holder.imgSignIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleClickOnIconOrTxtSignName(dataSet.get(position));
+            }
+        });
         final String nameLocaleDe = dataSet.get(position).getNameLocaleDe();
         holder.txtSignName.setText(nameLocaleDe);
         holder.txtSignName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                handleClickOnTxtSignName(dataSet.get(position));
+                handleClickOnIconOrTxtSignName(dataSet.get(position));
             }
         });
-        holder.txtSignMnemonic.setText(dataSet.get(position).getMnemonic());
         final DecimalFormat decimalFormat = new DecimalFormat(" 0;-0");
         holder.txtSignLearningProgress.setText(decimalFormat.format(dataSet.get(position).getLearningProgress()));
         holder.checkBoxStarred.setChecked(dataSet.get(position).isStarred());
@@ -75,7 +81,7 @@ public class SignBrowserAdapter extends RecyclerView.Adapter<SignBrowserAdapter.
         });
     }
 
-    private void handleClickOnTxtSignName(Sign sign) {
+    private void handleClickOnIconOrTxtSignName(Sign sign) {
         this.signBrowserUIFragment.onTxtSignNameClicked(sign);
     }
 
@@ -89,15 +95,15 @@ public class SignBrowserAdapter extends RecyclerView.Adapter<SignBrowserAdapter.
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        public final ImageView imgSignIcon;
         public final TextView txtSignName;
-        public final TextView txtSignMnemonic;
         public final TextView txtSignLearningProgress;
         public final CheckBox checkBoxStarred;
 
         public ViewHolder(View v) {
             super(v);
+            this.imgSignIcon = (ImageView) v.findViewById(R.id.icon);
             this.txtSignName = (TextView) v.findViewById(R.id.signName);
-            this.txtSignMnemonic = (TextView) v.findViewById(R.id.mnemonic);
             this.txtSignLearningProgress = (TextView) v.findViewById(R.id.learningProgressValue);
             this.checkBoxStarred = (CheckBox) v.findViewById(R.id.starred);
         }
