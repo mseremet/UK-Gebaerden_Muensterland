@@ -18,6 +18,11 @@ import java.util.List;
 
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.activities.MainActivity;
 
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants.FOOTBALL_SIGN;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants.INITIAL_NUMBER_OF_SIGNS;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants.MAMA_SIGN;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants.PAPA_SIGN;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants.TEST_SIGN;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -52,16 +57,6 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class DbHelperTest {
 
-    private static final Sign FOOTBALL = new Sign.Builder().setId(0).setName("football").setNameLocaleDe("Fußball spielen")
-            .setMnemonic("Faust tritt in Handfläche").setStarred(false).setLearningProgress(0).create();
-    private static final Sign MAMA = new Sign.Builder().setId(0).setName("mama").setNameLocaleDe("Mama")
-            .setMnemonic("Wange kreisend streicheln").setStarred(false).setLearningProgress(0).create();
-    private static final Sign PAPA = new Sign.Builder().setId(0).setName("papa").setNameLocaleDe("Papa")
-            .setMnemonic("Schnauzbart andeuten").setStarred(false).setLearningProgress(0).create();
-    private static final Sign TEST_SIGN = new Sign.Builder().setId(0).setName("test_sign").setNameLocaleDe("test_sign_de")
-            .setMnemonic("test_sign_mnemonic").setStarred(false).setLearningProgress(0).create();
-    private static final int INITIAL_NUMBER_OF_SIGNS = 210;
-
     @Rule
     public final ActivityTestRule<MainActivity> mainActivityActivityTestRule = new ActivityTestRule<>(MainActivity.class);
     @Rule
@@ -89,7 +84,7 @@ public class DbHelperTest {
     public void testDuplicateSignViolatesTableConstraint() {
         thrown.expect(IllegalStateException.class);
         thrown.expectMessage(allOf(startsWith("Inserting sign"), endsWith("a database error!")));
-        signDAO.create(FOOTBALL);
+        signDAO.create(FOOTBALL_SIGN);
     }
 
     // @Test - disabled because the app is shipped with an existing database and this test is very slow.
@@ -111,9 +106,9 @@ public class DbHelperTest {
         final List<Sign> signsFromDb = signDAO.read();
         stopWatch.stop();
         Log.d(DbHelperTest.class.getSimpleName(), "Reading the signs took " + stopWatch.getTime() + " milliseconds");
-        signsFromDb.remove(FOOTBALL);
-        signsFromDb.remove(MAMA);
-        signsFromDb.remove(PAPA);
+        signsFromDb.remove(FOOTBALL_SIGN);
+        signsFromDb.remove(MAMA_SIGN);
+        signsFromDb.remove(PAPA_SIGN);
         assertThat(signsFromDb, containsInAnyOrder(signs.toArray(new Sign[signs.size()])));
         signDAO.delete(signs);
     }
@@ -122,15 +117,15 @@ public class DbHelperTest {
     public void testReadReturnsList() {
         List<Sign> signsFromDb = signDAO.read();
         assertThat(signsFromDb.size(), greaterThanOrEqualTo(INITIAL_NUMBER_OF_SIGNS));
-        assertThat(MAMA, isIn(signsFromDb));
-        assertThat(PAPA, isIn(signsFromDb));
-        assertThat(FOOTBALL, isIn(signsFromDb));
+        assertThat(MAMA_SIGN, isIn(signsFromDb));
+        assertThat(PAPA_SIGN, isIn(signsFromDb));
+        assertThat(FOOTBALL_SIGN, isIn(signsFromDb));
     }
 
     @Test
     public void testReadWithNameLocaleDeReturnsSingleResult() {
         List<Sign> signs = new ArrayList<>();
-        signs.add(MAMA);
+        signs.add(MAMA_SIGN);
         List<Sign> signsFromDb = signDAO.read("mam");
         assertThat(signsFromDb, containsInAnyOrder(signs.toArray(new Sign[signs.size()])));
     }
@@ -168,8 +163,8 @@ public class DbHelperTest {
     @Test
     public void testReadRandomSignReturnsNotTheCurrentSign() {
         for (int i = 0; i < 100; i++) {
-            final Sign randomSign = signDAO.readRandomSign(FOOTBALL);
-            assertThat(randomSign, not(is(equalTo(FOOTBALL))));
+            final Sign randomSign = signDAO.readRandomSign(FOOTBALL_SIGN);
+            assertThat(randomSign, not(is(equalTo(FOOTBALL_SIGN))));
         }
 
     }

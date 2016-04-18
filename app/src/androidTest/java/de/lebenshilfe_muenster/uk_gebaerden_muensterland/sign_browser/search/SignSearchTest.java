@@ -25,6 +25,12 @@ import static android.support.test.espresso.matcher.ViewMatchers.withContentDesc
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants.ENTER;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants.FOOTBALL;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants.MAM;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants.MAMA;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants.PAP;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants.PAPA;
 import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.util.OrientationChangeAction.orientationLandscape;
 import static org.hamcrest.Matchers.allOf;
 
@@ -48,12 +54,6 @@ import static org.hamcrest.Matchers.allOf;
 public class SignSearchTest {
 
     private static final String TAG = SignSearchTest.class.getSimpleName();
-    private static final String ENTER = "\n";
-    private static final String MAM = "mam";
-    private static final String PAP = "paP";
-    private static final String MAMA = "Mama";
-    private static final String PAPA = "Papa";
-    private static final String FOOTBALL = "Fußball";
 
     @Rule
     public final ActivityTestRule<MainActivity> mainActivityActivityTestRule = new ActivityTestRule<>(MainActivity.class);

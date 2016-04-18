@@ -27,7 +27,6 @@ import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.util.Orientation
 import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.util.OrientationChangeAction.orientationPortrait;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.anyOf;
 
@@ -75,9 +74,9 @@ public class SignTrainerTest {
 
     @Test
     public void checkAnswerButtonsAreNotPresent() {
-        onView(withText("Einfach")).check(matches(not(isDisplayed())));
-        onView(withText("Normal")).check(matches(not(isDisplayed())));
-        onView(withText("Schwer")).check(matches(not(isDisplayed())));
+        onView(withText(getStringResource(R.string.questionWasEasy))).check(matches(not(isDisplayed())));
+        onView(withText(getStringResource(R.string.questionWasFair))).check(matches(not(isDisplayed())));
+        onView(withText(getStringResource(R.string.questionWasHard))).check(matches(not(isDisplayed())));
     }
 
     @Test

@@ -34,6 +34,10 @@ import static android.support.test.espresso.matcher.ViewMatchers.withContentDesc
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants.FOOTBALL;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants.MAMA;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants.PAPA;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants.PROGRESS_0;
 import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.util.OrientationChangeAction.orientationLandscape;
 import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.util.OrientationChangeAction.orientationPortrait;
 import static org.hamcrest.CoreMatchers.allOf;
@@ -58,14 +62,6 @@ import static org.hamcrest.CoreMatchers.not;
  */
 @RunWith(AndroidJUnit4.class)
 public class SignBrowserTest {
-
-    private static final String MAMA = "Mama";
-    private static final String PAPA = "Papa";
-    private static final String FOOTBALL = "Fußball spielen";
-    private static final String MAMA_MNEMONIC = "Wange kreisend streicheln";
-    private static final String PAPA_MNEMONIC = "Schnauzbart andeuten";
-    private static final String FOOTBALL_MNEMONIC = "Faust tritt in Handfläche";
-    private static final String PROGRESS_0 = "0";
 
     @Rule
     public final ActivityTestRule<MainActivity> mainActivityActivityTestRule = new ActivityTestRule<>(MainActivity.class);
@@ -208,7 +204,7 @@ public class SignBrowserTest {
     @Test
     public void checkClickingOnVideoIconNavigatesToVideoView() {
         onView(withId(R.id.signRecyclerView)).perform(scrollToHolder(getHolderForSignWithName(MAMA)));
-        onView(allOf(withContentDescription(R.string.signIconDescription),hasSibling(withText(MAMA)))).check(matches(isDisplayed())).perform(click());
+        onView(allOf(withContentDescription(R.string.signIconDescription), hasSibling(withText(MAMA)))).check(matches(isDisplayed())).perform(click());
         onView(allOf(withId(R.id.signVideoName), withText(MAMA))).check(matches(isDisplayed()));
     }
 

@@ -1,5 +1,6 @@
 package de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.SearchManager;
 import android.content.Context;
@@ -52,14 +53,15 @@ public class SignBrowserUIFragment extends Fragment {
     private boolean showStarredOnly = false;
     private OnSignClickedListener onSignClickedListener = null;
 
+    @SuppressWarnings("deprecation") // necessary for API 15!
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(Activity activity) {
         Log.d(TAG, "onAttach " + hashCode());
-        super.onAttach(context);
+        super.onAttach(activity);
         try {
-            this.onSignClickedListener = (OnSignClickedListener) context;
+            this.onSignClickedListener = (OnSignClickedListener) activity;
         } catch (ClassCastException ex) {
-            throw new ClassCastException(context.toString()
+            throw new ClassCastException(activity.toString()
                     + " must implement OnSignClickedListener");
         }
     }

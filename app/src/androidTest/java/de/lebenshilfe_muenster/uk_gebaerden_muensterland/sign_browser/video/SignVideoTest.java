@@ -27,6 +27,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVi
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants.MAMA;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants.MAMA_MNEMONIC;
 import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.util.OrientationChangeAction.orientationLandscape;
 import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.util.OrientationChangeAction.orientationPortrait;
 import static org.hamcrest.CoreMatchers.allOf;
@@ -52,8 +54,6 @@ import static org.hamcrest.CoreMatchers.containsString;
 @RunWith(AndroidJUnit4.class)
 public class SignVideoTest {
 
-    private static final String MAMA = "Mama";
-    private static final String MAMA_MNEMONIC = "Wange kreisend streicheln";
 
     @Rule
     public final ActivityTestRule<MainActivity> mainActivityActivityTestRule = new ActivityTestRule<>(MainActivity.class);
