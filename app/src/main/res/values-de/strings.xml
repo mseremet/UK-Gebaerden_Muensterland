@@ -30,5 +30,5 @@
     <string name="questionWasHard">Schwer</string>
     <string name="answer">Antwort</string>
     <string name="trainerMnemonic">Eselbrücke</string>
-    <string name="versionName">Version: 0.0.1 - Nur für Alpha-Tester</string>
+    <string name="versionName">Version: 0.0.2 - Nur für Alpha-Tester</string>
 </resources>
