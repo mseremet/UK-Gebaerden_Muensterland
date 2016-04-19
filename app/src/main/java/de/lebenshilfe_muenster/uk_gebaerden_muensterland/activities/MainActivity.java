@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
@@ -49,16 +50,29 @@ public class MainActivity extends AppCompatActivity
     private void setupToolbar() {
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        this.toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(this.toggle);
+        final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        final ActionBarDrawerToggle actionBarDrawerToggle =
+                new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open,
+                        R.string.navigation_drawer_close) {
+                    /**
+                     * Necessary because of API 15 Drawer Layout bug.
+                     See https://github.com/Scaronthesky/UK-Gebaerden_Muensterland/issues/28
+                     */
+                    @Override
+                    public void onDrawerSlide(View drawerView, float slideOffset) {
+                        super.onDrawerSlide(drawerView, slideOffset);
+                        drawerLayout.bringChildToFront(drawerView);
+                        drawerLayout.requestLayout();
+                    }
+                };
+        this.toggle = actionBarDrawerToggle;
+        drawerLayout.setDrawerListener(this.toggle);
     }
 
     private void setupNavigationView() {
         final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-     }
+    }
 
     private void restoreInstanceStateOrShowDefault(Bundle savedInstanceState) {
         if (null == savedInstanceState) {
