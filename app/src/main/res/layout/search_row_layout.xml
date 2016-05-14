@@ -17,7 +17,7 @@
         android:layout_marginEnd="6dip"
         android:layout_marginRight="6dip"
         android:contentDescription="@string/signIconDescription"
-        android:src="@drawable/ic_menu_gallery" />
+        android:src="@drawable/ic_ondemand_video" />
 
 
     <TextView
