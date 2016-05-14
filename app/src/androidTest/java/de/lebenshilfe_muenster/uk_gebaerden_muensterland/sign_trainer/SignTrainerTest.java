@@ -16,6 +16,7 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.activities.MainActivity
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
@@ -102,13 +103,13 @@ public class SignTrainerTest {
     }
 
     private void checkStateAfterSolveButtonClicked() {
-        onView(withText(getStringResource(R.string.questionWasEasy))).check(matches(isDisplayed()));
-        onView(withText(getStringResource(R.string.questionWasFair))).check(matches(isDisplayed()));
-        onView(withText(getStringResource(R.string.questionWasHard))).check(matches(isDisplayed()));
+        onView(withText(getStringResource(R.string.questionWasEasy))).check(matches(isCompletelyDisplayed()));
+        onView(withText(getStringResource(R.string.questionWasFair))).check(matches(isCompletelyDisplayed()));
+        onView(withText(getStringResource(R.string.questionWasHard))).check(matches(isCompletelyDisplayed()));
         onView(withText(getStringResource(R.string.solveQuestion))).check(matches((not(isEnabled()))));
-        onView(withContentDescription(getStringResource(R.string.answer))).check(matches(isDisplayed()));
-        onView(withContentDescription(getStringResource(R.string.trainerMnemonic))).check(matches(isDisplayed()));
-        onView(withContentDescription(getStringResource(R.string.learningProgress))).check(matches(isDisplayed()));
+        onView(withContentDescription(getStringResource(R.string.answer))).check(matches(isCompletelyDisplayed()));
+        onView(withContentDescription(getStringResource(R.string.trainerMnemonic))).check(matches(isCompletelyDisplayed()));
+        onView(withContentDescription(getStringResource(R.string.learningProgress))).check(matches(isCompletelyDisplayed()));
     }
 
     private void checkStateAfterAnswerButtonClicked() {
