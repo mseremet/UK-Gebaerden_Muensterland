@@ -23,7 +23,7 @@
     <string name="app_icon">App icon</string>
     <string name="signQuestion">Which sign is this?</string>
     <string name="solveQuestion">Solve</string>
-    <string name="noSignWasFound">No sign was found in the databae.</string>
+    <string name="noSignWasFound">No sign was found in the database.</string>
     <string name="questionWasEasy">Easy</string>
     <string name="questionWasFair">Fair</string>
     <string name="questionWasHard">Hard</string>
