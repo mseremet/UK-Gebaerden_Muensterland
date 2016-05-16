@@ -40,7 +40,7 @@
         android:layout_alignBaseline="@+id/signName"
         android:layout_toLeftOf="@+id/learningProgressValue"
         android:layout_toStartOf="@+id/learningProgressValue"
-        android:text="@string/learningProgress"
+        android:text="@string/progress"
         android:textSize="12sp" />
 
     <TextView

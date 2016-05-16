@@ -106,7 +106,7 @@ public class SignTrainerTest {
         onView(withText(getStringResource(R.string.questionWasEasy))).check(matches(isCompletelyDisplayed()));
         onView(withText(getStringResource(R.string.questionWasFair))).check(matches(isCompletelyDisplayed()));
         onView(withText(getStringResource(R.string.questionWasHard))).check(matches(isCompletelyDisplayed()));
-        onView(withText(getStringResource(R.string.solveQuestion))).check(matches((not(isEnabled()))));
+        onView(withText(getStringResource(R.string.solveQuestion))).check(matches((not(isDisplayed()))));
         onView(withContentDescription(getStringResource(R.string.answer))).check(matches(isCompletelyDisplayed()));
         onView(withContentDescription(getStringResource(R.string.trainerMnemonic))).check(matches(isCompletelyDisplayed()));
         onView(withContentDescription(getStringResource(R.string.learningProgress))).check(matches(isCompletelyDisplayed()));
