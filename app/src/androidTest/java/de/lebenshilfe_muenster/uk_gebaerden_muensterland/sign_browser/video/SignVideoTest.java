@@ -94,17 +94,9 @@ public class SignVideoTest {
         checkUpButtonNavigatesToSignBrowserInternal();
     }
 
-    private void navigateToSignVideoUIFragment() {
-        onView(withId(R.id.signRecyclerView)).perform(scrollToHolder(SignBrowserTest.getHolderForSignWithName(MAMA)));
-        onView(allOf(withText(MAMA))).check(matches(isDisplayed())).perform(click());
-    }
-
-    private void checkUpButtonNavigatesToSignBrowserInternal() {
-        onView(withContentDescription(getStringResource(R.string.navigate_up))).perform(click());
-        onView(ViewMatchers.withText(R.string.sign_browser)).check(matches(isDisplayed()));
-    }
-
-    // See https://github.com/Scaronthesky/UK-Gebaerden_Muensterland/issues/14
+    /**
+     * see this <a href="https://github.com/Scaronthesky/UK-Gebaerden_Muensterland/issues/14">Github issue</a>.
+     */
     @Test
     public void checkOrientationChangeDoesNotCauseIllegalStateException() {
         onView(isRoot()).perform(orientationLandscape());
@@ -114,6 +106,21 @@ public class SignVideoTest {
         onView(withText(getStringResource(R.string.browse_signs))).perform(click());
         navigateToSignVideoUIFragment();
         checkVideoIsLoadingAndPlaying();
+    }
+
+    @Test
+    public void checkControlInfoTextIsPresent() {
+        onView(withText(getStringResource(R.string.clickVideoToShowControls))).check(matches(isDisplayed()));
+    }
+
+    private void navigateToSignVideoUIFragment() {
+        onView(withId(R.id.signRecyclerView)).perform(scrollToHolder(SignBrowserTest.getHolderForSignWithName(MAMA)));
+        onView(allOf(withText(MAMA))).check(matches(isDisplayed())).perform(click());
+    }
+
+    private void checkUpButtonNavigatesToSignBrowserInternal() {
+        onView(withContentDescription(getStringResource(R.string.navigate_up))).perform(click());
+        onView(ViewMatchers.withText(R.string.sign_browser)).check(matches(isDisplayed()));
     }
 
 

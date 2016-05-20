@@ -44,10 +44,10 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.SignDAO;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class SignBrowserUIFragment extends Fragment {
+public class SignBrowserFragment extends Fragment {
 
     public static final boolean INTERRUPT_IF_RUNNING = true;
-    private static final String TAG = SignBrowserUIFragment.class.getSimpleName();
+    private static final String TAG = SignBrowserFragment.class.getSimpleName();
     private static final String KEY_SHOW_STARRED_ONLY = "sign_browser_show_starred_only";
     private LoadSignsTask loadSignsTask;
     private boolean showStarredOnly = false;
@@ -213,7 +213,7 @@ public class SignBrowserUIFragment extends Fragment {
             Log.d(LoadSignsTask.class.getSimpleName(), "onPostExecute " + hashCode());
             final RecyclerView recyclerView = (RecyclerView) getActivity().findViewById(R.id.signRecyclerView);
             Validate.notNull(recyclerView, "RecyclerView is null");
-            recyclerView.swapAdapter(new SignBrowserAdapter(SignBrowserUIFragment.this, getActivity(), result), true);
+            recyclerView.swapAdapter(new SignBrowserAdapter(SignBrowserFragment.this, getActivity(), result), true);
         }
 
     }

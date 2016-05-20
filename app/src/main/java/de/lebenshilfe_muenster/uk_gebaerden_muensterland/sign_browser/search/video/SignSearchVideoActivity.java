@@ -16,7 +16,7 @@ import org.apache.commons.lang3.Validate;
 
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.search.SignSearchActivity;
-import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.video.SignVideoUIFragment;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.video.SignVideoFragment;
 
 public class SignSearchVideoActivity extends AppCompatActivity {
 
@@ -39,14 +39,14 @@ public class SignSearchVideoActivity extends AppCompatActivity {
         Validate.notNull(bundle, "The bundle supplied to the activity is null.");
         this.originalQuery = bundle.getString(SignSearchActivity.QUERY);
         Validate.notNull(this.originalQuery, "Query string supplied to this activity is null.");
-        final Parcelable parcelledSign = bundle.getParcelable(SignVideoUIFragment.SIGN_TO_SHOW);
+        final Parcelable parcelledSign = bundle.getParcelable(SignVideoFragment.SIGN_TO_SHOW);
         Validate.notNull(parcelledSign, "Parcelled sign supplied to this activity is null.");
-        final SignVideoUIFragment signVideoUIFragment = new SignVideoUIFragment();
+        final SignVideoFragment signVideoFragment = new SignVideoFragment();
         final Bundle args = new Bundle();
-        args.putParcelable(SignVideoUIFragment.SIGN_TO_SHOW, parcelledSign);
-        signVideoUIFragment.setArguments(args);
+        args.putParcelable(SignVideoFragment.SIGN_TO_SHOW, parcelledSign);
+        signVideoFragment.setArguments(args);
         final FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.searchVideoActivityContentFrame, signVideoUIFragment, "SIGN_VIDEO_TAG");
+        transaction.replace(R.id.searchVideoActivityContentFrame, signVideoFragment, "SIGN_VIDEO_TAG");
         transaction.addToBackStack(null);
         transaction.commit();
     }

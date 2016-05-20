@@ -21,12 +21,12 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.about_signs.AboutSignsFragment;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.Sign;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.settings.SettingsFragment;
-import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.SignBrowserUIFragment;
-import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.video.SignVideoUIFragment;
-import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_trainer.SignTrainerUIFragment;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.SignBrowserFragment;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.video.SignVideoFragment;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_trainer.SignTrainerFragment;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, SignBrowserUIFragment.OnSignClickedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, SignBrowserFragment.OnSignClickedListener {
 
     private static final String SIGN_BROWSER_TAG = "sign_browser_tag";
     private static final String SIGN_TRAINER_TAG = "sign_trainer_tag";
@@ -155,8 +155,8 @@ public class MainActivity extends AppCompatActivity
 
     private void showSignBrowser() {
         Log.d(TAG, "showSignBrowser() " + hashCode());
-        final SignBrowserUIFragment signBrowserUIFragment = new SignBrowserUIFragment();
-        setFragment(signBrowserUIFragment, SIGN_BROWSER_TAG);
+        final SignBrowserFragment signBrowserFragment = new SignBrowserFragment();
+        setFragment(signBrowserFragment, SIGN_BROWSER_TAG);
         setActionBarTitle(getString(R.string.sign_browser));
     }
 
@@ -164,8 +164,8 @@ public class MainActivity extends AppCompatActivity
         Log.d(TAG, "showSignVideo() " + hashCode());
         final Intent intent = new Intent(this, LevelOneActivity.class);
         final Bundle bundle = new Bundle();
-        bundle.putString(LevelOneActivity.FRAGMENT_TO_SHOW, SignVideoUIFragment.class.getSimpleName());
-        bundle.putParcelable(SignVideoUIFragment.SIGN_TO_SHOW, sign);
+        bundle.putString(LevelOneActivity.FRAGMENT_TO_SHOW, SignVideoFragment.class.getSimpleName());
+        bundle.putParcelable(SignVideoFragment.SIGN_TO_SHOW, sign);
         intent.putExtra(LevelOneActivity.EXTRA, bundle);
         startActivity(intent);
     }
@@ -184,7 +184,7 @@ public class MainActivity extends AppCompatActivity
 
     private void showSignTrainer() {
         Log.d(TAG, "showSignTrainer " + hashCode());
-        setFragment(new SignTrainerUIFragment(), SIGN_TRAINER_TAG);
+        setFragment(new SignTrainerFragment(), SIGN_TRAINER_TAG);
         setActionBarTitle(getString(R.string.sign_trainer));
     }
 }

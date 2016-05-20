@@ -39,10 +39,10 @@ public class SignBrowserAdapter extends RecyclerView.Adapter<SignBrowserAdapter.
 
     private final List<Sign> dataSet;
     private final Context context;
-    private final SignBrowserUIFragment signBrowserUIFragment;
+    private final SignBrowserFragment signBrowserFragment;
 
-    public SignBrowserAdapter(SignBrowserUIFragment signBrowserUIFragment, Context context, List<Sign> dataSet) {
-        this.signBrowserUIFragment = signBrowserUIFragment;
+    public SignBrowserAdapter(SignBrowserFragment signBrowserFragment, Context context, List<Sign> dataSet) {
+        this.signBrowserFragment = signBrowserFragment;
         this.dataSet = dataSet;
         this.context = context;
     }
@@ -82,7 +82,7 @@ public class SignBrowserAdapter extends RecyclerView.Adapter<SignBrowserAdapter.
     }
 
     private void handleClickOnIconOrTxtSignName(Sign sign) {
-        this.signBrowserUIFragment.onTxtSignNameClicked(sign);
+        this.signBrowserFragment.onTxtSignNameClicked(sign);
     }
 
     private void handleClickOnCheckBoxStarred(Sign sign) {

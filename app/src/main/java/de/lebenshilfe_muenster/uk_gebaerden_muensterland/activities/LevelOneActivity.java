@@ -13,7 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
-import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.video.SignVideoUIFragment;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.video.SignVideoFragment;
 
 public class LevelOneActivity extends AppCompatActivity {
 
@@ -36,13 +36,13 @@ public class LevelOneActivity extends AppCompatActivity {
         final Bundle bundle = intent.getBundleExtra(EXTRA);
         Validate.notNull(bundle, "The bundle supplied to the activity is null.");
         final String fragmentToShow = bundle.getString(FRAGMENT_TO_SHOW, StringUtils.EMPTY);
-        if (SignVideoUIFragment.class.getSimpleName().equals(fragmentToShow)) {
-            final Parcelable sign = bundle.getParcelable(SignVideoUIFragment.SIGN_TO_SHOW);
-            SignVideoUIFragment signVideoUIFragment = new SignVideoUIFragment();
+        if (SignVideoFragment.class.getSimpleName().equals(fragmentToShow)) {
+            final Parcelable sign = bundle.getParcelable(SignVideoFragment.SIGN_TO_SHOW);
+            SignVideoFragment signVideoFragment = new SignVideoFragment();
             final Bundle args = new Bundle();
-            args.putParcelable(SignVideoUIFragment.SIGN_TO_SHOW, sign);
-            signVideoUIFragment.setArguments(args);
-            setFragment(signVideoUIFragment, SIGN_VIDEO_TAG);
+            args.putParcelable(SignVideoFragment.SIGN_TO_SHOW, sign);
+            signVideoFragment.setArguments(args);
+            setFragment(signVideoFragment, SIGN_VIDEO_TAG);
         } else {
             throw new IllegalArgumentException("Cannot show the fragment with name: " + fragmentToShow);
         }

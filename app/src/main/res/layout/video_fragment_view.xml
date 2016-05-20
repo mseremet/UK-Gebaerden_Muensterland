@@ -1,53 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/signVideoFragmentView"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/signVideoName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Example sign name"
-        android:textSize="20sp"
-        android:layout_gravity="center"
-        tools:ignore="HardcodedText"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:layout_marginBottom="6dip"
         android:layout_marginTop="6dip"
-        android:layout_marginBottom="6dip" />
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <VideoView
         android:id="@+id/signVideoView"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_below="@+id/signVideoName"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:id="@+id/signVideoMnemonic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/signVideoView"
-        android:text="Example sign mnemonic"
-        android:textSize="12sp"
-        android:layout_gravity="center"
-        tools:ignore="HardcodedText"
         android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:layout_marginBottom="6dip"
         android:layout_marginTop="6dip"
-        android:layout_marginBottom="6dip" />
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
+    <TextView
+        android:id="@+id/clickVideoToShowControls"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/signVideoMnemonic"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:layout_marginBottom="6dip"
+        android:layout_marginTop="6dip"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:ellipsize="marquee"
+        android:singleLine="true"
+        android:text="@string/clickVideoToShowControls" />
 
     <ProgressBar
         android:id="@+id/signVideoLoadingProgressBar"
+        style="@android:style/Widget.ProgressBar.Large.Inverse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:indeterminate="true"
-        style="@android:style/Widget.ProgressBar.Large.Inverse"/>
+        android:layout_centerVertical="true"
+        android:indeterminate="true" />
 
 </RelativeLayout>

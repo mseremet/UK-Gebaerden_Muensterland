@@ -1,11 +1,6 @@
 package de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_trainer;
 
-import android.app.Fragment;
 import android.content.Context;
-import android.content.res.Configuration;
-import android.media.MediaMetadataRetriever;
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.MediaController;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.VideoView;
@@ -26,6 +20,7 @@ import java.text.DecimalFormat;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.Sign;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.SignDAO;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_video_view.AbstractSignVideoFragment;
 
 /**
  * Copyright (c) 2016 Matthias Tonhäuser
@@ -43,19 +38,12 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.SignDAO;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class SignTrainerUIFragment extends Fragment {
+public class SignTrainerFragment extends AbstractSignVideoFragment {
 
-    private static final String TAG = SignTrainerUIFragment.class.getSimpleName();
-    private static final double MAXMIMUM_VIDEO_HEIGHT_ON_LANDSCAPE = 0.4;
-    private static final double MAXIMUM_VIDEO_WIDTH_ON_PORTRAIT = 0.8;
-    private static final String ANDROID_RESOURCE = "android.resource://";
-    private static final String SLASH = "/";
-    private static final String RAW = "raw";
+    private static final String TAG = SignTrainerFragment.class.getSimpleName();
     private static final String KEY_CURRENT_SIGN = "KEY_CURRENT_SIGN";
     private static final boolean INTERRUPT_IF_RUNNING = true;
     private static final String KEY_ANSWER_VISIBLE = "KEY_ANSWER_VISIBLE";
-    private VideoView videoView;
-    private ProgressBar progressBar;
     private TextView signQuestionText;
     private Button solveQuestionButton;
     private Sign currentSign = null;
@@ -132,7 +120,7 @@ public class SignTrainerUIFragment extends Fragment {
             final Sign parcelledSign = savedInstanceState.getParcelable(KEY_CURRENT_SIGN);
             if (null != parcelledSign) {
                 this.currentSign = parcelledSign;
-                if (!isSetupVideoViewSuccessful(this.currentSign)) {
+                if (!isSetupVideoViewSuccessful(this.currentSign, SOUND.OFF, CONTROLS.HIDE)) {
                     handleVideoCouldNotBeLoaded();
                     return;
                 }
@@ -241,76 +229,6 @@ public class SignTrainerUIFragment extends Fragment {
         }
     }
 
-    private boolean isSetupVideoViewSuccessful(final Sign sign) {
-        final MediaController mediaController = new MediaController(getActivity());
-        mediaController.setAnchorView(this.videoView);
-        this.videoView.setMediaController(mediaController);
-        final String mainActivityPackageName = getActivity().getPackageName();
-        final int signIdentifier = getActivity().getResources().getIdentifier(sign.getName(), RAW, mainActivityPackageName);
-        if (0 == signIdentifier) {
-            return false;
-        }
-        final Uri uri = Uri.parse(ANDROID_RESOURCE + mainActivityPackageName + SLASH + signIdentifier);
-        if (!isVideoViewDimensionSetToMatchVideoMetadata(this.videoView, uri)) {
-            return false;
-        }
-        this.videoView.setVideoURI(uri);
-        this.videoView.requestFocus();
-        this.videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            public void onPrepared(MediaPlayer mp) {
-                SignTrainerUIFragment.this.progressBar.setVisibility(View.GONE);
-                mp.setVolume(0f, 0f);
-                SignTrainerUIFragment.this.videoView.seekTo(0);
-                SignTrainerUIFragment.this.videoView.start();
-                SignTrainerUIFragment.this.videoView.setContentDescription(getActivity()
-                        .getString(R.string.videoIsPlaying) + ": " + sign.getName());
-                Log.d(TAG, String.format("Actual width: %s, Actual height: %s",
-                        SignTrainerUIFragment.this.videoView.getWidth(),
-                        SignTrainerUIFragment.this.videoView.getHeight()));
-            }
-        });
-        this.videoView.setMediaController(null);
-        return true;
-    }
-
-    private boolean isVideoViewDimensionSetToMatchVideoMetadata(VideoView videoView, Uri uri) {
-        String metadataVideoWidth;
-        String metadataVideoHeight;
-        try {
-            final MediaMetadataRetriever metaRetriever = new MediaMetadataRetriever();
-            metaRetriever.setDataSource(getActivity(), uri);
-            metadataVideoWidth = metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH);
-            metadataVideoHeight = metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT);
-            metaRetriever.release();
-            Validate.notEmpty(metadataVideoWidth);
-            Validate.notEmpty(metadataVideoHeight);
-        } catch (NullPointerException | IllegalArgumentException ex) {
-            return false;
-        }
-        final double videoWidth = Double.valueOf(metadataVideoWidth);
-        final double videoHeight = Double.valueOf(metadataVideoHeight);
-        final double videoRatio = videoWidth / videoHeight;
-        Log.d(TAG, String.format("videoWidth: %s, videoHeight: %s, videoRatio: %s", videoWidth, videoHeight, videoRatio));
-        boolean isOrientationPortrait = Configuration.ORIENTATION_PORTRAIT == getResources().getConfiguration().orientation;
-        int displayHeight = getResources().getDisplayMetrics().heightPixels;
-        int displayWidth = getResources().getDisplayMetrics().widthPixels;
-        Log.d(TAG, String.format("displayHeight: %s, displayWidth: %s", displayHeight, displayWidth));
-        final double desiredVideoWidth, desiredVideoHeight;
-        if (isOrientationPortrait) {
-            desiredVideoWidth = displayWidth * MAXIMUM_VIDEO_WIDTH_ON_PORTRAIT;
-            desiredVideoHeight = 1 / (videoRatio / desiredVideoWidth);
-            Log.d(TAG, String.format("OrientationPortrait: desiredVideoWidth: %s, desiredVideoHeight: %s", desiredVideoWidth, desiredVideoHeight));
-        } else { // orientation is Landscape
-            desiredVideoHeight = displayHeight * MAXMIMUM_VIDEO_HEIGHT_ON_LANDSCAPE;
-            desiredVideoWidth = desiredVideoHeight * videoRatio;
-            Log.d(TAG, String.format("OrientationLandscape: desiredVideoWidth: %s, desiredVideoHeight: %s", desiredVideoWidth, desiredVideoHeight));
-        }
-        final ViewGroup.LayoutParams layoutParams = videoView.getLayoutParams();
-        layoutParams.width = (int) desiredVideoWidth;
-        layoutParams.height = (int) desiredVideoHeight;
-        return true;
-    }
-
     /**
      * Reads a random sign from the database. Will return null if the task is cancelled. The current
      * sign can be provided as a parameter or be null, if there is no current sign.
@@ -347,14 +265,14 @@ public class SignTrainerUIFragment extends Fragment {
         protected void onPostExecute(Sign result) {
             Log.d(LoadRandomSignTask.class.getSimpleName(), "onPostExecute " + hashCode());
             if (null == result) {
-                SignTrainerUIFragment.this.signQuestionText.setText(R.string.noSignWasFound);
+                SignTrainerFragment.this.signQuestionText.setText(R.string.noSignWasFound);
             } else {
-                SignTrainerUIFragment.this.currentSign = result;
-                if (!isSetupVideoViewSuccessful(SignTrainerUIFragment.this.currentSign)) {
+                SignTrainerFragment.this.currentSign = result;
+                if (!isSetupVideoViewSuccessful(SignTrainerFragment.this.currentSign, SOUND.OFF, CONTROLS.HIDE)) {
                     handleVideoCouldNotBeLoaded();
                     return;
                 }
-                SignTrainerUIFragment.this.toggleAnswerTextAndButtonsVisibility(View.INVISIBLE);
+                SignTrainerFragment.this.toggleAnswerTextAndButtonsVisibility(View.INVISIBLE);
             }
         }
 

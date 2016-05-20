@@ -26,7 +26,7 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.Sign;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.SignDAO;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.search.video.SignSearchVideoActivity;
-import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.video.SignVideoUIFragment;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.video.SignVideoFragment;
 
 public class SignSearchActivity extends AppCompatActivity  {
 
@@ -111,7 +111,7 @@ public class SignSearchActivity extends AppCompatActivity  {
         final Intent intent = new Intent(this, SignSearchVideoActivity.class);
         final Bundle bundle = new Bundle();
         bundle.putString(SignSearchActivity.QUERY, this.query);
-        bundle.putParcelable(SignVideoUIFragment.SIGN_TO_SHOW, sign);
+        bundle.putParcelable(SignVideoFragment.SIGN_TO_SHOW, sign);
         intent.putExtra(SignSearchVideoActivity.EXTRA, bundle);
         startActivity(intent);
     }

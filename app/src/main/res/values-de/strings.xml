@@ -34,4 +34,5 @@
     <string name="versionName">Version: 0.0.2 - Nur für Alpha-Tester</string>
     <string name="progress">Fortschritt</string>
     <string name="signTrainerExplanation">\'Einfach\': Lernfortschritt +1, \'Schwer\': -1.</string>
+    <string name="clickVideoToShowControls">Für Steuerung Video anklicken.</string>
 </resources>
