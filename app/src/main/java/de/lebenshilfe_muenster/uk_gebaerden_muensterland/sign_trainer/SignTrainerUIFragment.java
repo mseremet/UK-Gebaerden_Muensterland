@@ -63,9 +63,14 @@ public class SignTrainerUIFragment extends Fragment {
     private TextView signAnswerTextView;
     private TextView signMnemonicTextView;
     private TextView signLearningProgressTextView;
+    private TextView signHowHardWasQuestionTextView;
+    private TextView signTrainerExplanationTextView;
     private Button questionWasEasyButton;
     private Button questionWasFairButton;
     private Button questionWasHardButton;
+    private View[] questionViews;
+    private View[] answerViews;
+
     private boolean answerTextAndButtonsVisible;
 
 
@@ -86,6 +91,8 @@ public class SignTrainerUIFragment extends Fragment {
         this.signAnswerTextView = (TextView) view.findViewById(R.id.signTrainerAnswer);
         this.signMnemonicTextView = (TextView) view.findViewById(R.id.signTrainerMnemonic);
         this.signLearningProgressTextView = (TextView) view.findViewById(R.id.signTrainerLearningProgress);
+        this.signHowHardWasQuestionTextView = (TextView) view.findViewById(R.id.signTrainerHowHardWasTheQuestion);
+        this.signTrainerExplanationTextView = (TextView) view.findViewById(R.id.signTrainerExplanation);
         this.questionWasEasyButton = (Button) view.findViewById(R.id.signTrainerEasyButton);
         this.questionWasEasyButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,6 +116,10 @@ public class SignTrainerUIFragment extends Fragment {
         });
         this.progressBar = (ProgressBar) view.findViewById(R.id.signTrainerVideoLoadingProgressBar);
         this.videoView.setContentDescription(getActivity().getString(R.string.videoIsLoading));
+        this.questionViews = new View[]{this.signQuestionText, this.videoView, this.solveQuestionButton};
+        this.answerViews = new View[]{this.signAnswerTextView, this.signMnemonicTextView,
+                this.signLearningProgressTextView, this.signHowHardWasQuestionTextView, this.signTrainerExplanationTextView,
+                this.questionWasEasyButton, this.questionWasFairButton, this.questionWasHardButton};
         toggleAnswerTextAndButtonsVisibility(View.INVISIBLE);
         return view;
     }
@@ -185,6 +196,8 @@ public class SignTrainerUIFragment extends Fragment {
         final DecimalFormat decimalFormat = new DecimalFormat(" 0;-0");
         this.signLearningProgressTextView.setText(getString(R.string.learningProgress) + ": " +
                 decimalFormat.format(this.currentSign.getLearningProgress()));
+        this.signHowHardWasQuestionTextView.setText(getString(R.string.howHardWasTheQuestion));
+        this.signTrainerExplanationTextView.setText(getString(R.string.signTrainerExplanation));
     }
 
     private void handleClickOnQuestionWasEasyButton() {
@@ -215,20 +228,17 @@ public class SignTrainerUIFragment extends Fragment {
             throw new IllegalArgumentException("Visibility can either be View.VISIBLE or VIEW.INVISIBLE, but was: " + visibility);
         }
         if (this.answerTextAndButtonsVisible) {
-            this.signQuestionText.setVisibility(View.GONE);
-            this.videoView.setVisibility(View.GONE);
-            this.solveQuestionButton.setVisibility(View.GONE);
+            for (final View questionView : this.questionViews) {
+                questionView.setVisibility(View.GONE);
+            }
         } else {
-            this.signQuestionText.setVisibility(View.VISIBLE);
-            this.videoView.setVisibility(View.VISIBLE);
-            this.solveQuestionButton.setVisibility(View.VISIBLE);
+            for (final View questionView : this.questionViews) {
+                questionView.setVisibility(View.VISIBLE);
+            }
         }
-        this.signAnswerTextView.setVisibility(visibility);
-        this.signMnemonicTextView.setVisibility(visibility);
-        this.signLearningProgressTextView.setVisibility(visibility);
-        this.questionWasEasyButton.setVisibility(visibility);
-        this.questionWasFairButton.setVisibility(visibility);
-        this.questionWasHardButton.setVisibility(visibility);
+        for (final View answerView: this.answerViews) {
+            answerView.setVisibility(visibility);
+        }
     }
 
     private boolean isSetupVideoViewSuccessful(final Sign sign) {

@@ -103,16 +103,21 @@ public class SignTrainerTest {
     }
 
     private void checkStateAfterSolveButtonClicked() {
+        onView(withText(getStringResource(R.string.solveQuestion))).check(matches((not(isDisplayed()))));
+        onView(withText(getStringResource(R.string.signQuestion))).check(matches((not(isDisplayed()))));
+        onView(withId(R.id.signTrainerVideoView)).check(matches((not(isDisplayed()))));
         onView(withText(getStringResource(R.string.questionWasEasy))).check(matches(isCompletelyDisplayed()));
         onView(withText(getStringResource(R.string.questionWasFair))).check(matches(isCompletelyDisplayed()));
         onView(withText(getStringResource(R.string.questionWasHard))).check(matches(isCompletelyDisplayed()));
-        onView(withText(getStringResource(R.string.solveQuestion))).check(matches((not(isDisplayed()))));
         onView(withContentDescription(getStringResource(R.string.answer))).check(matches(isCompletelyDisplayed()));
         onView(withContentDescription(getStringResource(R.string.trainerMnemonic))).check(matches(isCompletelyDisplayed()));
         onView(withContentDescription(getStringResource(R.string.learningProgress))).check(matches(isCompletelyDisplayed()));
+        onView(withContentDescription(getStringResource(R.string.howHardWasTheQuestion))).check(matches(isCompletelyDisplayed()));
+        onView(withContentDescription(getStringResource(R.string.signTrainerExplanation))).check(matches(isCompletelyDisplayed()));
     }
 
     private void checkStateAfterAnswerButtonClicked() {
+        onView(withId(R.id.signTrainerVideoView)).check(matches((isDisplayed())));
         onView(withText(getStringResource(R.string.solveQuestion))).check(matches(isEnabled()));
         onView(withText(getStringResource(R.string.questionWasEasy))).check(matches(not(isDisplayed())));
         onView(withText(getStringResource(R.string.questionWasFair))).check(matches(not(isDisplayed())));
@@ -120,6 +125,8 @@ public class SignTrainerTest {
         onView(withContentDescription(getStringResource(R.string.answer))).check(matches(not(isDisplayed())));
         onView(withContentDescription(getStringResource(R.string.trainerMnemonic))).check(matches(not(isDisplayed())));
         onView(withContentDescription(getStringResource(R.string.learningProgress))).check(matches(not(isDisplayed())));
+        onView(withContentDescription(getStringResource(R.string.howHardWasTheQuestion))).check(matches(not(isDisplayed())));
+        onView(withContentDescription(getStringResource(R.string.signTrainerExplanation))).check(matches(not(isDisplayed())));
     }
 
 
