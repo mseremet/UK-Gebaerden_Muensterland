@@ -14,7 +14,9 @@ import org.apache.commons.lang3.StringUtils;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Random;
+import java.util.concurrent.ArrayBlockingQueue;
 
 /**
  * Copyright (c) 2016 Matthias Tonhäuser
@@ -34,9 +36,12 @@ import java.util.Random;
  */
 public class SignDAO {
 
+    public static final int RANDOM_SIGNS_QUEUE_MAX_SIZE = 5;
     private static final String TAG = SignDAO.class.getSimpleName();
+    private static final boolean FIFO_ORDER = true;
     private static SignDAO instance;
     private final SQLiteOpenHelper openHelper;
+    private final Queue<Sign> randomSignsQueue = new ArrayBlockingQueue<Sign>(RANDOM_SIGNS_QUEUE_MAX_SIZE, FIFO_ORDER);
     private SQLiteDatabase database;
 
     /**
@@ -149,17 +154,27 @@ public class SignDAO {
 
     /**
      * From the signs with the least learning progress a random sign will be returned.
-     * The random sign will never be the same as the currentSign provided as a parameter.
+     * The random sign will never be the same as the last five non-null signs provided via the
+     * currentSign parameter before.
      *
-     * @param currentSign the current sign shown to the user.
-     * @return a random sign, null if no or only one sign exists in the database.
+     * @param currentSign the current sign shown to the user. Can be <code>null</code>.
+     * @return a random sign, null if no or less than seven signs exists in the database.
      */
     public Sign readRandomSign(Sign currentSign) {
         final List<Sign> signsOrderedByLearningProgress = readInternal(StringUtils.EMPTY, false, true);
-        if (signsOrderedByLearningProgress.size() < 2) {
+        if (signsOrderedByLearningProgress.size() < 7) {
             return null;
         }
-        signsOrderedByLearningProgress.remove(currentSign);
+        if (RANDOM_SIGNS_QUEUE_MAX_SIZE == this.randomSignsQueue.size()) {
+            this.randomSignsQueue.poll();
+        }
+        if (null != currentSign) {
+            this.randomSignsQueue.offer(currentSign);
+        }
+        final Sign[] upToTheLastFiveRandomSigns = this.randomSignsQueue.toArray(new Sign[this.randomSignsQueue.size()]);
+        for (int i = 0; i < upToTheLastFiveRandomSigns.length; i++) {
+            signsOrderedByLearningProgress.remove(upToTheLastFiveRandomSigns[i]);
+        }
         final Sign signWithLeastLearningProgress = signsOrderedByLearningProgress.get(0);
         signsOrderedByLearningProgress.remove(signWithLeastLearningProgress);
         final List<Sign> signsWithLeastLearningProgress = new ArrayList<>();

@@ -166,7 +166,6 @@ public class DbHelperTest {
             final Sign randomSign = signDAO.readRandomSign(FOOTBALL_SIGN);
             assertThat(randomSign, not(is(equalTo(FOOTBALL_SIGN))));
         }
-
     }
 
     @Test
@@ -189,25 +188,33 @@ public class DbHelperTest {
             // do the test
             final Sign firstSign = signDAO.readRandomSign(null);
             assertThat(firstSign.getLearningProgress(), is(equalTo(-5)));
+
             final Sign secondSign = signDAO.readRandomSign(firstSign);
             assertSignIsNotEqualToPreviousSignButHasSameLearningProgress(firstSign, secondSign);
+
             Sign thirdSign = signDAO.readRandomSign(secondSign);
             assertSignIsNotEqualToPreviousSignButHasSameLearningProgress(secondSign, thirdSign);
             thirdSign.increaseLearningProgress();
             thirdSign = signDAO.update(thirdSign);
+
             Sign fourthSign = signDAO.readRandomSign(thirdSign);
+            // FIXME: Does not work because recent signs are cached now.
             assertSignIsNotEqualToPreviousSignAndHasLowerLearningProgress(thirdSign, fourthSign);
             fourthSign.increaseLearningProgress();
             fourthSign = signDAO.update(fourthSign);
+
             Sign fifthSign = signDAO.readRandomSign(fourthSign);
             assertSignIsNotEqualToPreviousSignAndHasLowerLearningProgress(fourthSign, fifthSign);
             fifthSign.increaseLearningProgress();
             fifthSign = signDAO.update(fifthSign);
+
             Sign sixthSign = signDAO.readRandomSign(fifthSign);
             assertSignIsNotEqualToPreviousSignButHasSameLearningProgress(fifthSign, sixthSign);
+
             Sign seventhSign = signDAO.readRandomSign(sixthSign);
             assertSignIsNotEqualToPreviousSignButHasSameLearningProgress(sixthSign, seventhSign);
             assertThat(seventhSign.getLearningProgress(), is(equalTo(-4)));
+
             final List<Sign> signsFromDbAfterTest = getTestSigns();
             for (Sign sign : signsFromDbAfterTest) {
                 assertThat(sign.getLearningProgress(), not(is(equalTo(-5))));
@@ -240,6 +247,28 @@ public class DbHelperTest {
         assertThat(currentSign, (not(is(equalTo(previousSign)))));
         assertThat(currentSign.getLearningProgress(), is(lessThan(previousSign.getLearningProgress())));
     }
+
+    @Test
+    public void testGetRandomSignDoesNotRetrieveAnyOfTheLastFiveSigns() {
+        final String name = "Test_Sign_A";
+        final Sign testSignA = new Sign.Builder().setId(0).setName("name").setNameLocaleDe(name + "_de")
+                .setMnemonic(name + "_mnemonic").setStarred(false).setLearningProgress(-5).create();
+        try {
+            signDAO.create(testSignA);
+            Sign randomSign = signDAO.readRandomSign(testSignA);
+            assertThat(randomSign, not(is(equalTo(testSignA))));
+            for (int i = 0; i < 4; i++) {
+                randomSign = signDAO.readRandomSign(randomSign);
+                assertThat(String.format("Random sign on iteration %s equals created test sign.", i), randomSign, not(is(equalTo(testSignA))));
+            }
+            final Sign signShouldBeEqualToTestSignA = signDAO.readRandomSign(randomSign);
+            assertThat(signShouldBeEqualToTestSignA, (is(equalTo(testSignA))));
+        } finally {
+            signDAO.delete(testSignA);
+        }
+
+    }
+
 
     @Test
     public void testDelete() {
