@@ -70,7 +70,7 @@ public class SignBrowserAdapter extends RecyclerView.Adapter<SignBrowserAdapter.
                 handleClickOnIconOrTxtSignName(dataSet.get(position));
             }
         });
-        final DecimalFormat decimalFormat = new DecimalFormat(" 0;-0");
+        final DecimalFormat decimalFormat = new DecimalFormat("  0; -0");
         holder.txtSignLearningProgress.setText(decimalFormat.format(dataSet.get(position).getLearningProgress()));
         holder.checkBoxStarred.setChecked(dataSet.get(position).isStarred());
         holder.checkBoxStarred.setOnClickListener(new View.OnClickListener() {
