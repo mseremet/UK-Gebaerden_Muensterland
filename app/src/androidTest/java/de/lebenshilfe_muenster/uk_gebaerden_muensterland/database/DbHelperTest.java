@@ -198,27 +198,21 @@ public class DbHelperTest {
             thirdSign = signDAO.update(thirdSign);
 
             Sign fourthSign = signDAO.readRandomSign(thirdSign);
-            // FIXME: Does not work because recent signs are cached now.
-            assertSignIsNotEqualToPreviousSignAndHasLowerLearningProgress(thirdSign, fourthSign);
+            assertSignIsNotEqualToPreviousSignButHasSameLearningProgress(thirdSign, fourthSign);
             fourthSign.increaseLearningProgress();
             fourthSign = signDAO.update(fourthSign);
 
             Sign fifthSign = signDAO.readRandomSign(fourthSign);
-            assertSignIsNotEqualToPreviousSignAndHasLowerLearningProgress(fourthSign, fifthSign);
+            assertSignIsNotEqualToPreviousSignAndHasLessLearningProgress(fourthSign, fifthSign);
             fifthSign.increaseLearningProgress();
             fifthSign = signDAO.update(fifthSign);
 
             Sign sixthSign = signDAO.readRandomSign(fifthSign);
-            assertSignIsNotEqualToPreviousSignButHasSameLearningProgress(fifthSign, sixthSign);
+            assertSignIsNotEqualToPreviousSignAndHasLessLearningProgress(fifthSign, sixthSign);
 
             Sign seventhSign = signDAO.readRandomSign(sixthSign);
-            assertSignIsNotEqualToPreviousSignButHasSameLearningProgress(sixthSign, seventhSign);
-            assertThat(seventhSign.getLearningProgress(), is(equalTo(-4)));
+            assertThat(seventhSign, (is(equalTo(firstSign))));
 
-            final List<Sign> signsFromDbAfterTest = getTestSigns();
-            for (Sign sign : signsFromDbAfterTest) {
-                assertThat(sign.getLearningProgress(), not(is(equalTo(-5))));
-            }
         } finally {
             signDAO.delete(signs);
         }
@@ -243,7 +237,7 @@ public class DbHelperTest {
         assertThat(currentSign.getLearningProgress(), is(equalTo(previousSign.getLearningProgress())));
     }
 
-    private void assertSignIsNotEqualToPreviousSignAndHasLowerLearningProgress(Sign previousSign, Sign currentSign) {
+    private void assertSignIsNotEqualToPreviousSignAndHasLessLearningProgress(Sign previousSign, Sign currentSign) {
         assertThat(currentSign, (not(is(equalTo(previousSign)))));
         assertThat(currentSign.getLearningProgress(), is(lessThan(previousSign.getLearningProgress())));
     }
