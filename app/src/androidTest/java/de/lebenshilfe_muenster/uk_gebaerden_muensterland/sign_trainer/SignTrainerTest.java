@@ -102,6 +102,13 @@ public class SignTrainerTest {
         checkStateAfterAnswerButtonClicked();
     }
 
+    @Test
+    public void checkTogglingLearningModeWorks() {
+//        onView(withId(R.id.action_toggle_starred)).check(matches(isDisplayed())).perform(click());
+        onView(withId(R.id.action_toggle_learning_mode)).check(matches(isDisplayed())).perform(click());
+    }
+
+
     private void checkStateAfterSolveButtonClicked() {
         onView(withText(getStringResource(R.string.solveQuestion))).check(matches((not(isDisplayed()))));
         onView(withText(getStringResource(R.string.signQuestion))).check(matches((not(isDisplayed()))));

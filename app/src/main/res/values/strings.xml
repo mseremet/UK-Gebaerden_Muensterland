@@ -34,4 +34,5 @@
     <string name="howHardWasTheQuestion">This question was...</string>
     <string name="signTrainerExplanation">\'Easy\': learning progress +1, \'Hard\': -1.</string>
     <string name="clickVideoToShowControls">Click video to show controls.</string>
+    <string name="action_toggle_learning_mode">Toggle mode</string>
 </resources>

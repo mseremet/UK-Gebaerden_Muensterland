@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -58,15 +61,14 @@ public class SignTrainerFragment extends AbstractSignVideoFragment {
     private Button questionWasHardButton;
     private View[] questionViews;
     private View[] answerViews;
-
     private boolean answerTextAndButtonsVisible;
-
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView " + hashCode());
         final View view = inflater.inflate(R.layout.trainer_fragment, container, false);
+        setHasOptionsMenu(true);
         this.videoView = (VideoView) view.findViewById(R.id.signTrainerVideoView);
         this.signQuestionText = (TextView) view.findViewById(R.id.signTrainerQuestionText);
         this.solveQuestionButton = (Button) view.findViewById(R.id.signTrainerSolveQuestionButton);
@@ -120,7 +122,7 @@ public class SignTrainerFragment extends AbstractSignVideoFragment {
             final Sign parcelledSign = savedInstanceState.getParcelable(KEY_CURRENT_SIGN);
             if (null != parcelledSign) {
                 this.currentSign = parcelledSign;
-                if (!isSetupVideoViewSuccessful(this.currentSign, SOUND.OFF, CONTROLS.HIDE)) {
+                if (!isSetupVideoViewSuccessful(this.currentSign, SOUND.OFF, CONTROLS.SHOW)) {
                     handleVideoCouldNotBeLoaded();
                     return;
                 }
@@ -156,6 +158,14 @@ public class SignTrainerFragment extends AbstractSignVideoFragment {
         }
         super.onPause();
     }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        Log.d(TAG, "onCreateOptionsMenu " + hashCode());
+        inflater.inflate(R.menu.options_sign_trainer, menu);
+        final MenuItem item = menu.findItem(R.id.action_toggle_learning_mode);
+    }
+
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -268,7 +278,7 @@ public class SignTrainerFragment extends AbstractSignVideoFragment {
                 SignTrainerFragment.this.signQuestionText.setText(R.string.noSignWasFound);
             } else {
                 SignTrainerFragment.this.currentSign = result;
-                if (!isSetupVideoViewSuccessful(SignTrainerFragment.this.currentSign, SOUND.OFF, CONTROLS.HIDE)) {
+                if (!isSetupVideoViewSuccessful(SignTrainerFragment.this.currentSign, SOUND.OFF, CONTROLS.SHOW)) {
                     handleVideoCouldNotBeLoaded();
                     return;
                 }
