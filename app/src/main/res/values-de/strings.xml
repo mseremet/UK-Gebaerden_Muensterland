@@ -36,4 +36,5 @@
     <string name="signTrainerExplanation">\'Einfach\': Lernfortschritt +1, \'Schwer\': -1.</string>
     <string name="clickVideoToShowControls">Für Steuerung Video anklicken.</string>
     <string name="action_toggle_learning_mode">Modus wechseln</string>
+    <string name="howDoesThisSignLookLike">How does this sign look like?</string>
 </resources>

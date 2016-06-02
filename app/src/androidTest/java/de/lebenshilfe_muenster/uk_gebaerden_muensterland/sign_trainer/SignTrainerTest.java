@@ -104,8 +104,8 @@ public class SignTrainerTest {
 
     @Test
     public void checkTogglingLearningModeWorks() {
-//        onView(withId(R.id.action_toggle_starred)).check(matches(isDisplayed())).perform(click());
         onView(withId(R.id.action_toggle_learning_mode)).check(matches(isDisplayed())).perform(click());
+        onView(withText(R.string.howDoesThisSignLookLike)).check(matches(isDisplayed()));
     }
 
 
