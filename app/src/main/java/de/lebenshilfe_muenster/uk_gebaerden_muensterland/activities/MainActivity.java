@@ -23,7 +23,7 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.Sign;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.settings.SettingsFragment;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.SignBrowserFragment;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.video.SignVideoFragment;
-import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_trainer.SignTrainerFragment;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_trainer.SignTrainerPassiveFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, SignBrowserFragment.OnSignClickedListener {
@@ -184,7 +184,7 @@ public class MainActivity extends AppCompatActivity
 
     private void showSignTrainer() {
         Log.d(TAG, "showSignTrainer " + hashCode());
-        setFragment(new SignTrainerFragment(), SIGN_TRAINER_TAG);
+        setFragment(new SignTrainerPassiveFragment(), SIGN_TRAINER_TAG);
         setActionBarTitle(getString(R.string.sign_trainer));
     }
 }

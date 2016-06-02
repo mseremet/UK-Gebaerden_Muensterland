@@ -11,21 +11,22 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:text="@string/signQuestion"
+        android:text="@string/howDoesThisSignLookLike"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <VideoView
-        android:id="@+id/signTrainerVideoView"
-        android:layout_width="0dip"
-        android:layout_height="0dip"
-        android:layout_below="@+id/signTrainerQuestionText"
-        android:layout_centerHorizontal="true" />
+    <TextView
+        android:id="@+id/signTrainerQuestionTextDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <Button
         android:id="@+id/signTrainerSolveQuestionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/signTrainerVideoView"
+        android:layout_below="@+id/signTrainerQuestionTextDetail"
         android:layout_centerHorizontal="true"
         android:text="@string/solveQuestion" />
 
@@ -33,7 +34,6 @@
         android:id="@+id/signTrainerAnswer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/signTrainerSolveQuestionButton"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="6dip"
         android:layout_marginEnd="6dip"
@@ -43,6 +43,13 @@
         android:layout_marginTop="6dip"
         android:contentDescription="@string/answer"
         android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <VideoView
+        android:id="@+id/signTrainerVideoView"
+        android:layout_width="0dip"
+        android:layout_height="0dip"
+        android:layout_below="@+id/signTrainerAnswer"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:id="@+id/signTrainerMnemonic"

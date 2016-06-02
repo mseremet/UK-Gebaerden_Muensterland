@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:padding="6dip">
+
+    <TextView
+        android:id="@+id/signTrainerQuestionText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/signQuestion"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <VideoView
+        android:id="@+id/signTrainerVideoView"
+        android:layout_width="0dip"
+        android:layout_height="0dip"
+        android:layout_below="@+id/signTrainerQuestionText"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/signTrainerSolveQuestionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/signTrainerVideoView"
+        android:layout_centerHorizontal="true"
+        android:text="@string/solveQuestion" />
+
+    <TextView
+        android:id="@+id/signTrainerAnswer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="6dip"
+        android:layout_marginEnd="6dip"
+        android:layout_marginLeft="6dip"
+        android:layout_marginRight="6dip"
+        android:layout_marginStart="6dip"
+        android:layout_marginTop="6dip"
+        android:contentDescription="@string/answer"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/signTrainerMnemonic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/signTrainerAnswer"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="@string/trainerMnemonic"
+        android:ellipsize="marquee"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/signTrainerLearningProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/signTrainerMnemonic"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="@string/learningProgress"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/signTrainerHowHardWasTheQuestion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/signTrainerLearningProgress"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="6dip"
+        android:layout_marginEnd="6dip"
+        android:layout_marginLeft="6dip"
+        android:layout_marginRight="6dip"
+        android:layout_marginStart="6dip"
+        android:layout_marginTop="6dip"
+        android:contentDescription="@string/howHardWasTheQuestion"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <Button
+        android:id="@+id/signTrainerEasyButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/signTrainerHowHardWasTheQuestion"
+        android:layout_marginBottom="6dip"
+        android:layout_marginTop="6dip"
+        android:layout_toLeftOf="@+id/signTrainerFairButton"
+        android:text="@string/questionWasEasy" />
+
+    <Button
+        android:id="@+id/signTrainerFairButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/signTrainerHowHardWasTheQuestion"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="6dip"
+        android:layout_marginTop="6dip"
+        android:text="@string/questionWasFair" />
+
+    <Button
+        android:id="@+id/signTrainerHardButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/signTrainerHowHardWasTheQuestion"
+        android:layout_marginTop="6dip"
+        android:layout_marginBottom="6dip"
+        android:layout_toRightOf="@id/signTrainerFairButton"
+        android:text="@string/questionWasHard" />
+
+    <TextView
+        android:id="@+id/signTrainerExplanation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/signTrainerHardButton"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="@string/signTrainerExplanation"
+        android:ellipsize="marquee"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <ProgressBar
+        android:id="@+id/signTrainerVideoLoadingProgressBar"
+        style="@android:style/Widget.ProgressBar.Large.Inverse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:indeterminate="true"
+        android:visibility="gone" />
+
+</RelativeLayout>
