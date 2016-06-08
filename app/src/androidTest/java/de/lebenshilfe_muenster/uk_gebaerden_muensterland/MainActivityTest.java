@@ -81,7 +81,7 @@ public class MainActivityTest {
 
     @Test
     public void clickTrainSignsButton() {
-        clickNavigationButtonAndCheckToolbarTitle((R.string.train_signs), R.string.sign_trainer_active);
+        clickNavigationButtonAndCheckToolbarTitle((R.string.train_signs), R.string.sign_trainer_passive);
     }
 
     @Test

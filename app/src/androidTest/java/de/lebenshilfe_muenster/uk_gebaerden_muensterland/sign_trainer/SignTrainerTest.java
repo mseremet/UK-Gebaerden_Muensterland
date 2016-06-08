@@ -48,7 +48,7 @@ public class SignTrainerTest {
         onView(withContentDescription(R.string.navigation_drawer_open)).perform(click());
         onView(withId(R.id.nav_view)).check(matches(isDisplayed()));
         final String navigationButtonText = mainActivityActivityTestRule.getActivity().getResources().getString(R.string.train_signs);
-        final String toolbarTitle = mainActivityActivityTestRule.getActivity().getResources().getString(R.string.sign_trainer_active);
+        final String toolbarTitle = mainActivityActivityTestRule.getActivity().getResources().getString(R.string.sign_trainer_passive);
         onView(withText(navigationButtonText)).perform(click());
         onView(allOf(withText(toolbarTitle), withParent((withId(R.id.toolbar))))).check(matches(isDisplayed()));
     }
@@ -105,6 +105,8 @@ public class SignTrainerTest {
     @Test
     public void checkTogglingLearningModeWorks() {
         onView(withId(R.id.action_toggle_learning_mode)).check(matches(isDisplayed())).perform(click());
+        final String toolbarTitle = mainActivityActivityTestRule.getActivity().getResources().getString(R.string.sign_trainer_active);
+        onView(allOf(withText(toolbarTitle), withParent((withId(R.id.toolbar))))).check(matches(isDisplayed()));
         onView(withText(getStringResource(R.string.howDoesThisSignLookLike))).check(matches(isDisplayed()));
     }
 
