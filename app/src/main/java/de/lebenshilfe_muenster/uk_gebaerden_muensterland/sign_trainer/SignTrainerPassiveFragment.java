@@ -5,20 +5,16 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.VideoView;
 
 import org.apache.commons.lang3.Validate;
 
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.Sign;
+
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_trainer.AbstractSignTrainerFragment.OnToggleLearningModeListener.LearningMode;
 
 /**
  * Copyright (c) 2016 Matthias Tonhäuser
@@ -39,11 +35,6 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.Sign;
 public class SignTrainerPassiveFragment extends AbstractSignTrainerFragment {
 
     private static final String TAG = SignTrainerPassiveFragment.class.getSimpleName();
-    private static final String KEY_CURRENT_SIGN = "KEY_CURRENT_SIGN";
-    private static final boolean INTERRUPT_IF_RUNNING = true;
-    private static final String KEY_ANSWER_VISIBLE = "KEY_ANSWER_VISIBLE";
-    private Button solveQuestionButton;
-    private LoadRandomSignTask loadRandomSignTask;
 
     @Nullable
     @Override
@@ -51,18 +42,9 @@ public class SignTrainerPassiveFragment extends AbstractSignTrainerFragment {
         Log.d(TAG, "onCreateView " + hashCode());
         final View view = inflater.inflate(R.layout.trainer_passive_fragment, container, false);
         setHasOptionsMenu(true);
-        this.videoView = (VideoView) view.findViewById(R.id.signTrainerVideoView);
-        this.signQuestionText = (TextView) view.findViewById(R.id.signTrainerQuestionText);
-        this.solveQuestionButton = (Button) view.findViewById(R.id.signTrainerSolveQuestionButton);
-        this.solveQuestionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleClickOnSolveQuestionButton();
-            }
-        });
+        initializeQuestionViews(view);
         initializeAnswerViews(view);
-        this.progressBar = (ProgressBar) view.findViewById(R.id.signTrainerVideoLoadingProgressBar);
-        this.videoView.setContentDescription(getActivity().getString(R.string.videoIsLoading));
+        initializeVideoViews(view);
         this.questionViews = new View[]{this.signQuestionText, this.videoView, this.solveQuestionButton};
         this.answerViews = new View[]{this.signAnswerTextView, this.signMnemonicTextView,
                 this.signLearningProgressTextView, this.signHowHardWasQuestionTextView, this.signTrainerExplanationTextView,
@@ -102,6 +84,15 @@ public class SignTrainerPassiveFragment extends AbstractSignTrainerFragment {
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Log.d(TAG, "onOptionsItemSelected " + hashCode());
+        if (R.id.action_toggle_learning_mode == item.getItemId()) {
+            this.onToggleLearningModeListener.toggleLearningMode(LearningMode.ACTIVE);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onStart() {
         Log.d(TAG, "onStart " + hashCode());
         super.onStart();
@@ -118,14 +109,6 @@ public class SignTrainerPassiveFragment extends AbstractSignTrainerFragment {
         }
         super.onPause();
     }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        Log.d(TAG, "onCreateOptionsMenu " + hashCode());
-        inflater.inflate(R.menu.options_sign_trainer, menu);
-        final MenuItem item = menu.findItem(R.id.action_toggle_learning_mode);
-    }
-
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -151,5 +134,14 @@ public class SignTrainerPassiveFragment extends AbstractSignTrainerFragment {
         setAnswerTextViews();
     }
 
+    @Override
+    protected void handleLoadRandomSignTaskOnPostExecute() {
+        if (!isSetupVideoViewSuccessful(SignTrainerPassiveFragment.this.currentSign, SOUND.OFF, CONTROLS.HIDE)) {
+            handleVideoCouldNotBeLoaded();
+            return;
+        }
+        setVisibility(SignTrainerPassiveFragment.this.questionViews, View.VISIBLE);
+        setVisibility(SignTrainerPassiveFragment.this.answerViews, View.GONE);
+    }
 }
 

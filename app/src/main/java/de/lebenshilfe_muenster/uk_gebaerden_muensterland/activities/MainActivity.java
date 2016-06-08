@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
@@ -23,13 +24,16 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.Sign;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.settings.SettingsFragment;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.SignBrowserFragment;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.video.SignVideoFragment;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_trainer.AbstractSignTrainerFragment;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_trainer.SignTrainerActiveFragment;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_trainer.SignTrainerPassiveFragment;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, SignBrowserFragment.OnSignClickedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, SignBrowserFragment.OnSignClickedListener, AbstractSignTrainerFragment.OnToggleLearningModeListener {
 
     private static final String SIGN_BROWSER_TAG = "sign_browser_tag";
-    private static final String SIGN_TRAINER_TAG = "sign_trainer_tag";
+    private static final String SIGN_TRAINER_ACTIVE_TAG = "sign_trainer_active_tag";
+    private static final String SIGN_TRAINER_PASSIVE_TAG = "sign_trainer_passive_tag";
     private static final String ABOUT_SIGNS_TAG = "about_signs_tag";
     private static final String SETTINGS_TAG = "settings_tag";
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -114,7 +118,7 @@ public class MainActivity extends AppCompatActivity
         if (R.id.nav_sign_browser == id) {
             showSignBrowser();
         } else if (R.id.nav_sign_trainer == id) {
-            showSignTrainer();
+            showSignTrainer(LearningMode.PASSIVE);
         } else if (R.id.nav_sign_info == id) {
             showAboutSigns();
         } else if (R.id.nav_sign_settings == id) {
@@ -135,6 +139,12 @@ public class MainActivity extends AppCompatActivity
     public void onSignSelected(Sign sign) {
         Log.d(TAG, "onSignSelected: " + sign.getName() + StringUtils.SPACE + hashCode());
         showSignVideo(sign);
+    }
+
+    @Override
+    public void toggleLearningMode(LearningMode learningMode) {
+        Log.d(TAG, "toggleLearningMode() learningMode: " + learningMode + StringUtils.SPACE + hashCode());
+        showSignTrainer(learningMode);
     }
 
     // TODO: https://github.com/Scaronthesky/UK-Gebaerden_Muensterland/issues/7
@@ -171,20 +181,29 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void showSettings() {
-        Log.d(TAG, "showSettings " + hashCode());
+        Log.d(TAG, "showSettings() " + hashCode());
         setFragment(new SettingsFragment(), SETTINGS_TAG);
         setActionBarTitle(getString(R.string.settings));
     }
 
     private void showAboutSigns() {
-        Log.d(TAG, "showAboutSigns " + hashCode());
+        Log.d(TAG, "showAboutSigns() " + hashCode());
         setFragment(new AboutSignsFragment(), ABOUT_SIGNS_TAG);
         setActionBarTitle(getString(R.string.about_signs));
     }
 
-    private void showSignTrainer() {
-        Log.d(TAG, "showSignTrainer " + hashCode());
-        setFragment(new SignTrainerPassiveFragment(), SIGN_TRAINER_TAG);
-        setActionBarTitle(getString(R.string.sign_trainer));
+    private void showSignTrainer(LearningMode learningMode) {
+        Log.d(TAG, "showSignTrainer() learningMode: " + learningMode + StringUtils.SPACE + hashCode());
+        if (LearningMode.ACTIVE == learningMode) {
+            setFragment(new SignTrainerActiveFragment(), SIGN_TRAINER_ACTIVE_TAG);
+            setActionBarTitle(getString(R.string.sign_trainer_active));
+        } else if (LearningMode.PASSIVE == learningMode) {
+            setFragment(new SignTrainerPassiveFragment(), SIGN_TRAINER_PASSIVE_TAG);
+            setActionBarTitle(getString(R.string.sign_trainer_passive));
+        } else {
+            throw new NotImplementedException(String.format("LearningMode %s not yet implemented.", learningMode));
+        }
     }
+
+
 }

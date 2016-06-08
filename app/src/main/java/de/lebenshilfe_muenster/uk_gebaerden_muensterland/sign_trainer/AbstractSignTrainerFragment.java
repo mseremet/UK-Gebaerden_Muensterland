@@ -1,11 +1,17 @@
 package de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_trainer;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import org.apache.commons.lang3.Validate;
 
@@ -33,6 +39,9 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_video_view.Abstrac
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 public abstract class AbstractSignTrainerFragment extends AbstractSignVideoFragment {
+    protected static final String KEY_CURRENT_SIGN = "KEY_CURRENT_SIGN";
+    protected static final boolean INTERRUPT_IF_RUNNING = true;
+    protected static final String KEY_ANSWER_VISIBLE = "KEY_ANSWER_VISIBLE";
     private static final String TAG = AbstractSignTrainerFragment.class.getSimpleName();
     protected Sign currentSign = null;
     protected TextView signAnswerTextView;
@@ -46,6 +55,30 @@ public abstract class AbstractSignTrainerFragment extends AbstractSignVideoFragm
     protected TextView signQuestionText;
     protected View[] questionViews;
     protected View[] answerViews;
+    protected Button solveQuestionButton;
+    protected LoadRandomSignTask loadRandomSignTask;
+
+    protected OnToggleLearningModeListener onToggleLearningModeListener= null;
+
+    @SuppressWarnings("deprecation") // necessary for API 15!
+    @Override
+    public void onAttach(Activity activity) {
+        Log.d(TAG, "onAttach " + hashCode());
+        super.onAttach(activity);
+        try {
+            this.onToggleLearningModeListener = (OnToggleLearningModeListener) activity;
+        } catch (ClassCastException ex) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnToggleLearningModeListener");
+        }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        Log.d(TAG, "onCreateOptionsMenu " + hashCode());
+        inflater.inflate(R.menu.options_sign_trainer, menu);
+        final MenuItem item = menu.findItem(R.id.action_toggle_learning_mode);
+    }
 
     protected void initializeAnswerViews(View view) {
         this.signAnswerTextView = (TextView) view.findViewById(R.id.signTrainerAnswer);
@@ -74,6 +107,33 @@ public abstract class AbstractSignTrainerFragment extends AbstractSignVideoFragm
                 handleClickOnQuestionWasHardButton();
             }
         });
+    }
+
+    protected void initializeQuestionViews(View view) {
+        this.signQuestionText = (TextView) view.findViewById(R.id.signTrainerQuestionText);
+        this.solveQuestionButton = (Button) view.findViewById(R.id.signTrainerSolveQuestionButton);
+        this.solveQuestionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleClickOnSolveQuestionButton();
+            }
+        });
+    }
+
+    protected void initializeVideoViews(View view) {
+        this.videoView = (VideoView) view.findViewById(R.id.signTrainerVideoView);
+        this.videoView.setContentDescription(getActivity().getString(R.string.videoIsLoading));
+        this.progressBar = (ProgressBar) view.findViewById(R.id.signTrainerVideoLoadingProgressBar);
+    }
+
+    protected void setAnswerTextViews() {
+        this.signAnswerTextView.setText(this.currentSign.getNameLocaleDe());
+        this.signMnemonicTextView.setText(this.currentSign.getMnemonic());
+        final DecimalFormat decimalFormat = new DecimalFormat(" 0;-0");
+        this.signLearningProgressTextView.setText(getString(R.string.learningProgress) + ": " +
+                decimalFormat.format(this.currentSign.getLearningProgress()));
+        this.signHowHardWasQuestionTextView.setText(getString(R.string.howHardWasTheQuestion));
+        this.signTrainerExplanationTextView.setText(getString(R.string.signTrainerExplanation));
     }
 
     protected void handleVideoCouldNotBeLoaded() {
@@ -106,22 +166,24 @@ public abstract class AbstractSignTrainerFragment extends AbstractSignVideoFragm
         if (View.VISIBLE != visibility && View.INVISIBLE != visibility && View.GONE != visibility) {
             throw new IllegalArgumentException("Visibility can either be View.VISIBLE, VIEW.INVISIBLE or View.GONE, but was: " + visibility);
         }
-        for (View view: views) {
+        for (View view : views) {
             view.setVisibility(visibility);
         }
     }
 
-    protected void setAnswerTextViews() {
-        this.signAnswerTextView.setText(this.currentSign.getNameLocaleDe());
-        this.signMnemonicTextView.setText(this.currentSign.getMnemonic());
-        final DecimalFormat decimalFormat = new DecimalFormat(" 0;-0");
-        this.signLearningProgressTextView.setText(getString(R.string.learningProgress) + ": " +
-                decimalFormat.format(this.currentSign.getLearningProgress()));
-        this.signHowHardWasQuestionTextView.setText(getString(R.string.howHardWasTheQuestion));
-        this.signTrainerExplanationTextView.setText(getString(R.string.signTrainerExplanation));
-    }
-
     protected abstract void handleClickOnSolveQuestionButton();
+
+    protected abstract void handleLoadRandomSignTaskOnPostExecute();
+
+    /**
+     * Has to be implemented by parent activity.
+     */
+    public interface OnToggleLearningModeListener {
+        enum LearningMode {
+            ACTIVE, PASSIVE;
+        }
+        void toggleLearningMode(LearningMode learningMode);
+    }
 
     /**
      * Reads a random sign from the database. Will return null if the task is cancelled. The current
@@ -162,12 +224,7 @@ public abstract class AbstractSignTrainerFragment extends AbstractSignVideoFragm
                 AbstractSignTrainerFragment.this.signQuestionText.setText(R.string.noSignWasFound);
             } else {
                 AbstractSignTrainerFragment.this.currentSign = result;
-                if (!isSetupVideoViewSuccessful(AbstractSignTrainerFragment.this.currentSign, SOUND.OFF, CONTROLS.HIDE)) {
-                    handleVideoCouldNotBeLoaded();
-                    return;
-                }
-                setVisibility(AbstractSignTrainerFragment.this.questionViews, View.VISIBLE);
-                setVisibility(AbstractSignTrainerFragment.this.answerViews, View.GONE);
+                handleLoadRandomSignTaskOnPostExecute();
             }
         }
 
@@ -187,7 +244,7 @@ public abstract class AbstractSignTrainerFragment extends AbstractSignVideoFragm
         @Override
         protected Void doInBackground(Sign... params) {
             Log.d(UpdateLearningProgressTask.class.getSimpleName(), "doInBackground " + hashCode());
-            Validate.isTrue(1 ==  params.length, "Exactly one sign as a parameter allowed.");
+            Validate.isTrue(1 == params.length, "Exactly one sign as a parameter allowed.");
             final SignDAO signDAO = SignDAO.getInstance(this.context);
             signDAO.open();
             signDAO.update(params[0]);
