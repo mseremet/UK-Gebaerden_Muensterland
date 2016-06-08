@@ -129,6 +129,7 @@ public class SignBrowserFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         Log.d(TAG, "onCreateOptionsMenu " + hashCode());
+        super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.options_sign_browser, menu);
         final MenuItem item = menu.findItem(R.id.action_toggle_starred);
         if (this.showStarredOnly) {

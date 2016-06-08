@@ -90,6 +90,7 @@ public class SignSearchActivity extends AppCompatActivity  {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         Log.d(TAG, "onCreateOptionsMenu()" + this.hashCode());
+        super.onCreateOptionsMenu(menu);
         final MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.options_sign_browser_search, menu);
         final SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
