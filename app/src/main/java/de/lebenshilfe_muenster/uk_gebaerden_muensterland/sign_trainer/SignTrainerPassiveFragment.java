@@ -1,6 +1,5 @@
 package de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_trainer;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -90,40 +89,6 @@ public class SignTrainerPassiveFragment extends AbstractSignTrainerFragment {
             this.onToggleLearningModeListener.toggleLearningMode(LearningMode.ACTIVE);
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onStart() {
-        Log.d(TAG, "onStart " + hashCode());
-        super.onStart();
-    }
-
-    @Override
-    public void onPause() {
-        Log.d(TAG, "onPause " + hashCode());
-        if (null != this.loadRandomSignTask) {
-            final AsyncTask.Status status = this.loadRandomSignTask.getStatus();
-            if (status.equals(AsyncTask.Status.PENDING) || status.equals(AsyncTask.Status.RUNNING)) {
-                this.loadRandomSignTask.cancel(INTERRUPT_IF_RUNNING);
-            }
-        }
-        super.onPause();
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        Log.d(TAG, "onSaveInstance " + hashCode());
-        super.onSaveInstanceState(outState);
-        if (null != this.answerViews) {
-            Validate.notEmpty(this.answerViews, "AnswerViews should always contain at least one view!");
-            final boolean answerVisible = View.VISIBLE == this.answerViews[0].getVisibility();
-            outState.putBoolean(KEY_ANSWER_VISIBLE, answerVisible);
-        } else {
-            outState.putBoolean(KEY_ANSWER_VISIBLE, Boolean.FALSE);
-        }
-        if (null != this.currentSign) {
-            outState.putParcelable(KEY_CURRENT_SIGN, this.currentSign);
-        }
     }
 
     @Override

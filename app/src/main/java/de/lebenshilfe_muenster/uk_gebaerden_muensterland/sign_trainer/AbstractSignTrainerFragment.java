@@ -3,6 +3,7 @@ package de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_trainer;
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -58,7 +59,7 @@ public abstract class AbstractSignTrainerFragment extends AbstractSignVideoFragm
     protected Button solveQuestionButton;
     protected LoadRandomSignTask loadRandomSignTask;
 
-    protected OnToggleLearningModeListener onToggleLearningModeListener= null;
+    protected OnToggleLearningModeListener onToggleLearningModeListener = null;
 
     @SuppressWarnings("deprecation") // necessary for API 15!
     @Override
@@ -74,10 +75,44 @@ public abstract class AbstractSignTrainerFragment extends AbstractSignVideoFragm
     }
 
     @Override
+    public void onStart() {
+        Log.d(AbstractSignTrainerFragment.TAG, "onStart " + hashCode());
+        super.onStart();
+    }
+
+    @Override
+    public void onPause() {
+        Log.d(AbstractSignTrainerFragment.TAG, "onPause " + hashCode());
+        if (null != this.loadRandomSignTask) {
+            final AsyncTask.Status status = this.loadRandomSignTask.getStatus();
+            if (status.equals(AsyncTask.Status.PENDING) || status.equals(AsyncTask.Status.RUNNING)) {
+                this.loadRandomSignTask.cancel(INTERRUPT_IF_RUNNING);
+            }
+        }
+        super.onPause();
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         Log.d(TAG, "onCreateOptionsMenu " + hashCode());
         inflater.inflate(R.menu.options_sign_trainer, menu);
         final MenuItem item = menu.findItem(R.id.action_toggle_learning_mode);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        Log.d(AbstractSignTrainerFragment.TAG, "onSaveInstance " + hashCode());
+        super.onSaveInstanceState(outState);
+        if (null != this.answerViews) {
+            Validate.notEmpty(this.answerViews, "AnswerViews should always contain at least one view!");
+            final boolean answerVisible = View.VISIBLE == this.answerViews[0].getVisibility();
+            outState.putBoolean(KEY_ANSWER_VISIBLE, answerVisible);
+        } else {
+            outState.putBoolean(KEY_ANSWER_VISIBLE, Boolean.FALSE);
+        }
+        if (null != this.currentSign) {
+            outState.putParcelable(KEY_CURRENT_SIGN, this.currentSign);
+        }
     }
 
     protected void initializeAnswerViews(View view) {
@@ -171,6 +206,7 @@ public abstract class AbstractSignTrainerFragment extends AbstractSignVideoFragm
         }
     }
 
+
     protected abstract void handleClickOnSolveQuestionButton();
 
     protected abstract void handleLoadRandomSignTaskOnPostExecute();
@@ -179,10 +215,11 @@ public abstract class AbstractSignTrainerFragment extends AbstractSignVideoFragm
      * Has to be implemented by parent activity.
      */
     public interface OnToggleLearningModeListener {
+        void toggleLearningMode(LearningMode learningMode);
+
         enum LearningMode {
             ACTIVE, PASSIVE;
         }
-        void toggleLearningMode(LearningMode learningMode);
     }
 
     /**

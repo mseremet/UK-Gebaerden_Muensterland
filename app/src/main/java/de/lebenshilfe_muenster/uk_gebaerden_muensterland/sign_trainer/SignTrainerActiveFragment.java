@@ -71,6 +71,10 @@ public class SignTrainerActiveFragment extends AbstractSignTrainerFragment {
             if (answerVisible && (null != this.currentSign)) {
                 setVisibility(this.questionViews, View.GONE);
                 setVisibility(this.answerViews, View.VISIBLE);
+                if (!isSetupVideoViewSuccessful(this.currentSign, SOUND.ON, CONTROLS.SHOW)) {
+                    handleVideoCouldNotBeLoaded();
+                    return;
+                }
                 setAnswerTextViews();
             } else {
                 setVisibility(this.questionViews, View.VISIBLE);
@@ -82,7 +86,7 @@ public class SignTrainerActiveFragment extends AbstractSignTrainerFragment {
         }
     }
 
-   @Override
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.d(TAG, "onOptionsItemSelected " + hashCode());
         if (R.id.action_toggle_learning_mode == item.getItemId()) {
@@ -95,8 +99,7 @@ public class SignTrainerActiveFragment extends AbstractSignTrainerFragment {
     protected void handleClickOnSolveQuestionButton() {
         setVisibility(this.questionViews, View.GONE);
         setVisibility(this.answerViews, View.VISIBLE);
-        // FIXME: Orientation change causes ANR because currentSign is null.
-        if (!isSetupVideoViewSuccessful(this.currentSign, SOUND.OFF, CONTROLS.SHOW)) {
+        if (!isSetupVideoViewSuccessful(this.currentSign, SOUND.ON, CONTROLS.SHOW)) {
             handleVideoCouldNotBeLoaded();
             return;
         }
