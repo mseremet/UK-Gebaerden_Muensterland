@@ -4,15 +4,15 @@
     android:layout_height="fill_parent"
     android:orientation="vertical">
 
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/scrollView"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+    <HorizontalScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true">
 
         <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:padding="6dip">
 
             <TextView
@@ -21,21 +21,23 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:text="@string/signQuestion"
+                android:text="@string/howDoesThisSignLookLike"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
-            <VideoView
-                android:id="@+id/signTrainerVideoView"
-                android:layout_width="0dip"
-                android:layout_height="0dip"
+            <TextView
+                android:id="@+id/signTrainerQuestionTextDetail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/signTrainerQuestionText"
-                android:layout_centerHorizontal="true" />
+                android:layout_centerHorizontal="true"
+                android:contentDescription="@string/signTrainerQuestionTextDetail"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <Button
                 android:id="@+id/signTrainerSolveQuestionButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/signTrainerVideoView"
+                android:layout_below="@+id/signTrainerQuestionTextDetail"
                 android:layout_centerHorizontal="true"
                 android:text="@string/solveQuestion" />
 
@@ -43,7 +45,7 @@
                 android:id="@+id/signTrainerAnswer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
+                android:layout_alignParentTop="true"
                 android:layout_marginBottom="6dip"
                 android:layout_marginEnd="6dip"
                 android:layout_marginLeft="6dip"
@@ -53,14 +55,24 @@
                 android:contentDescription="@string/answer"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
+            <VideoView
+                android:id="@+id/signTrainerVideoView"
+                android:layout_width="0dip"
+                android:layout_height="0dip"
+                android:layout_below="@+id/signTrainerAnswer"
+                android:layout_marginEnd="6dip"
+                android:layout_marginRight="6dip" />
+
             <TextView
                 android:id="@+id/signTrainerMnemonic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/signTrainerAnswer"
-                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/signTrainerVideoView"
+                android:layout_marginLeft="6dip"
+                android:layout_marginStart="6dip"
                 android:contentDescription="@string/trainerMnemonic"
                 android:ellipsize="marquee"
+                android:gravity="center"
                 android:singleLine="true"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -69,7 +81,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/signTrainerMnemonic"
-                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="6dip"
+                android:layout_marginStart="6dip"
                 android:contentDescription="@string/learningProgress"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -77,14 +90,10 @@
                 android:id="@+id/signTrainerHowHardWasTheQuestion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/signTrainerLearningProgress"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="6dip"
-                android:layout_marginEnd="6dip"
+                android:layout_alignBaseline="@+id/signTrainerAnswer"
                 android:layout_marginLeft="6dip"
-                android:layout_marginRight="6dip"
                 android:layout_marginStart="6dip"
-                android:layout_marginTop="6dip"
+                android:layout_toRightOf="@id/signTrainerVideoView"
                 android:contentDescription="@string/howHardWasTheQuestion"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -95,7 +104,7 @@
                 android:layout_below="@+id/signTrainerHowHardWasTheQuestion"
                 android:layout_marginBottom="6dip"
                 android:layout_marginTop="6dip"
-                android:layout_toLeftOf="@+id/signTrainerFairButton"
+                android:layout_toRightOf="@id/signTrainerVideoView"
                 android:text="@string/questionWasEasy" />
 
             <Button
@@ -103,9 +112,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/signTrainerHowHardWasTheQuestion"
-                android:layout_centerHorizontal="true"
                 android:layout_marginBottom="6dip"
                 android:layout_marginTop="6dip"
+                android:layout_toRightOf="@id/signTrainerEasyButton"
                 android:text="@string/questionWasFair" />
 
             <Button
@@ -123,7 +132,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/signTrainerHardButton"
-                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="6dip"
+                android:layout_marginStart="6dip"
+                android:layout_toRightOf="@id/signTrainerVideoView"
                 android:contentDescription="@string/signTrainerExplanation"
                 android:ellipsize="marquee"
                 android:singleLine="true"
@@ -140,5 +151,5 @@
                 android:visibility="gone" />
 
         </RelativeLayout>
-    </ScrollView>
+    </HorizontalScrollView>
 </RelativeLayout>

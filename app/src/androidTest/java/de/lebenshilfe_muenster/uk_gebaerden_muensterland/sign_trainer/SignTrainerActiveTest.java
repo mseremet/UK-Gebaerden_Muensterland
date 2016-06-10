@@ -10,6 +10,7 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -69,11 +70,11 @@ public class SignTrainerActiveTest extends  AbstractSignTrainerTest {
 
     @Test
     public void checkSignTrainerIsWorkingCorrectly() {
-        onView(withText(getStringResource(R.string.howDoesThisSignLookLike))).check(matches(isDisplayed()));
+        checkSignQuestionTextAndDetailIsDisplayed();
         checkSolveButtonIsDisplayedInternal(matches(isDisplayed()));
         // trigger configuration change and check state afterwards
         onView(isRoot()).perform(orientationLandscape());
-        onView(withText(getStringResource(R.string.howDoesThisSignLookLike))).check(matches(isDisplayed()));
+        checkSignQuestionTextAndDetailIsDisplayed();
         checkSolveButtonIsDisplayedInternal(matches(isDisplayed()));
         // click solve button
         onView(withText(getStringResource(R.string.solveQuestion))).check(matches(isDisplayed())).perform(click());
@@ -86,6 +87,11 @@ public class SignTrainerActiveTest extends  AbstractSignTrainerTest {
         // click on answer button
         onView(withText(getStringResource(R.string.questionWasFair))).perform(click());
         checkStateAfterAnswerButtonClicked();
+    }
+
+    private void checkSignQuestionTextAndDetailIsDisplayed() {
+        onView(withText(getStringResource(R.string.howDoesThisSignLookLike))).check(matches(isDisplayed()));
+        onView(withContentDescription(getStringResource(R.string.signTrainerQuestionTextDetail))).check(matches(isDisplayed()));
     }
 
 }

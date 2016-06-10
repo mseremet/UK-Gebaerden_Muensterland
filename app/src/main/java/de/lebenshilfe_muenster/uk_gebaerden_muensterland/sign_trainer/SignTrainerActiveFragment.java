@@ -63,9 +63,7 @@ public class SignTrainerActiveFragment extends AbstractSignTrainerFragment {
         super.onActivityCreated(savedInstanceState);
         if (null != savedInstanceState) {
             final Sign parcelledSign = savedInstanceState.getParcelable(KEY_CURRENT_SIGN);
-            if (null != parcelledSign) {
-                this.currentSign = parcelledSign;
-            }
+            if (null != parcelledSign) this.currentSign = parcelledSign;
             final Boolean answerVisible = savedInstanceState.getBoolean(KEY_ANSWER_VISIBLE);
             Validate.notNull(answerVisible, "AnswerVisible should always be non-null in savedInstance bundle.");
             if (answerVisible && (null != this.currentSign)) {
@@ -78,6 +76,7 @@ public class SignTrainerActiveFragment extends AbstractSignTrainerFragment {
                 setAnswerTextViews();
             } else {
                 setVisibility(this.questionViews, View.VISIBLE);
+                if (null != this.currentSign) this.signQuestionTextDetail.setText(this.currentSign.getNameLocaleDe());
                 setVisibility(this.answerViews, View.GONE);
             }
         } else {

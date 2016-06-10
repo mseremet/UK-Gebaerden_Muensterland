@@ -37,4 +37,5 @@
     <string name="action_toggle_learning_mode">Toggle mode</string>
     <string name="howDoesThisSignLookLike">How does this sign look like?</string>
     <string name="sign_trainer_passive">Sign trainer passive</string>
+    <string name="signTrainerQuestionTextDetail">Sign trainer question text detail</string>
 </resources>

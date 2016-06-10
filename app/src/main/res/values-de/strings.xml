@@ -38,4 +38,5 @@
     <string name="action_toggle_learning_mode">Modus wechseln</string>
     <string name="howDoesThisSignLookLike">Wie sieht die Gebärde aus?</string>
     <string name="sign_trainer_passive">Gebärden-Trainer (Passiv)</string>
+    <string name="signTrainerQuestionTextDetail">Gebärden-Trainer Frage Detail</string>
 </resources>

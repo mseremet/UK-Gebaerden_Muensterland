@@ -37,19 +37,17 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.Sign;
  */
 public abstract class AbstractSignVideoFragment extends Fragment {
 
+    protected static final double MAXMIMUM_VIDEO_HEIGHT_ON_LANDSCAPE = 0.4;
+    protected static final double MAXIMUM_VIDEO_WIDTH_ON_PORTRAIT = 0.8;
     private final static String TAG = AbstractSignVideoFragment.class.getSimpleName();
-    private static final double MAXMIMUM_VIDEO_HEIGHT_ON_LANDSCAPE = 0.4;
-    private static final double MAXIMUM_VIDEO_WIDTH_ON_PORTRAIT = 0.8;
     private static final String ANDROID_RESOURCE = "android.resource://";
     private static final String SLASH = "/";
     private static final String RAW = "raw";
     protected VideoView videoView;
     protected ProgressBar progressBar;
 
-    protected boolean isSetupVideoViewSuccessful(final Sign sign, final SOUND sound, CONTROLS controls) {
-        final MediaController mediaController = new MediaController(getActivity());
-        mediaController.setAnchorView(this.videoView);
-        this.videoView.setMediaController(mediaController);
+    protected boolean isSetupVideoViewSuccessful(final Sign sign, final SOUND sound, final CONTROLS controls) {
+        initializeMediaController();
         final String mainActivityPackageName = getActivity().getPackageName();
         final int signIdentifier = getActivity().getResources().getIdentifier(sign.getName(), RAW, mainActivityPackageName);
         if (0 == signIdentifier) {
@@ -67,19 +65,32 @@ public abstract class AbstractSignVideoFragment extends Fragment {
                 if (sound.equals(SOUND.OFF)) {
                     mp.setVolume(0f, 0f);
                 }
-                AbstractSignVideoFragment.this.videoView.seekTo(0);
                 AbstractSignVideoFragment.this.videoView.start();
                 AbstractSignVideoFragment.this.videoView.setContentDescription(getActivity()
                         .getString(R.string.videoIsPlaying) + ": " + sign.getName());
                 Log.d(TAG, String.format("Actual width: %s, Actual height: %s",
                         AbstractSignVideoFragment.this.videoView.getWidth(),
                         AbstractSignVideoFragment.this.videoView.getHeight()));
+                // Set the MediaController to null so the controls are not 'popping up'
+                // when the video plays for the first time.
+                AbstractSignVideoFragment.this.videoView.setMediaController(null);
             }
         });
-        if (controls.equals(CONTROLS.HIDE)) {
-            this.videoView.setMediaController(null);
-        }
+        this.videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                if (controls.equals(CONTROLS.SHOW)) {
+                    initializeMediaController();
+                }
+            }
+        });
         return true;
+    }
+
+    private void initializeMediaController() {
+        final MediaController mediaController = new MediaController(getActivity(), false);
+        mediaController.setAnchorView(this.videoView);
+        this.videoView.setMediaController(mediaController);
     }
 
     protected boolean isVideoViewDimensionSetToMatchVideoMetadata(VideoView videoView, Uri uri) {
