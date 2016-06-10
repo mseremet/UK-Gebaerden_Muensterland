@@ -61,7 +61,7 @@ public class SignTrainerPassiveFragment extends AbstractSignTrainerFragment {
             final Sign parcelledSign = savedInstanceState.getParcelable(KEY_CURRENT_SIGN);
             if (null != parcelledSign) {
                 this.currentSign = parcelledSign;
-                if (!isSetupVideoViewSuccessful(this.currentSign, SOUND.OFF, CONTROLS.HIDE)) {
+                if (!isSetupVideoViewSuccessful(this.currentSign, SOUND.OFF, CONTROLS.SHOW)) {
                     handleVideoCouldNotBeLoaded();
                     return;
                 }
@@ -101,7 +101,7 @@ public class SignTrainerPassiveFragment extends AbstractSignTrainerFragment {
 
     @Override
     protected void handleLoadRandomSignTaskOnPostExecute() {
-        if (!isSetupVideoViewSuccessful(SignTrainerPassiveFragment.this.currentSign, SOUND.OFF, CONTROLS.HIDE)) {
+        if (!isSetupVideoViewSuccessful(SignTrainerPassiveFragment.this.currentSign, SOUND.OFF, CONTROLS.SHOW)) {
             handleVideoCouldNotBeLoaded();
             return;
         }
