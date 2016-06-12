@@ -1,25 +1,26 @@
 package de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.search;
 
-import android.support.annotation.NonNull;
-import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
 
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Rule;
+import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
-import de.lebenshilfe_muenster.uk_gebaerden_muensterland.activities.MainActivity;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.AbstractSignBrowserTest;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.contrib.RecyclerViewActions.scrollToHolder;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -31,7 +32,9 @@ import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants.MA
 import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants.MAMA;
 import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants.PAP;
 import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants.PAPA;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants.PROGRESS_0;
 import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.util.OrientationChangeAction.orientationLandscape;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.Matchers.allOf;
 
 /**
@@ -51,12 +54,9 @@ import static org.hamcrest.Matchers.allOf;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 @RunWith(AndroidJUnit4.class)
-public class SignSearchTest {
+public class SignSearchTest extends AbstractSignBrowserTest {
 
     private static final String TAG = SignSearchTest.class.getSimpleName();
-
-    @Rule
-    public final ActivityTestRule<MainActivity> mainActivityActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
     public void checkToolbarTitleIsEmpty() {
@@ -104,6 +104,28 @@ public class SignSearchTest {
         checkActivityTitle(PAP);
     }
 
+    @Test
+    public void checkStarredButtonIsPresent() {
+        try {
+            performSearch(MAMA);
+            onView(getSignWithName(MAMA)).check(matches(isNotChecked())).perform(click());
+            onView(getSignWithName(MAMA)).check(matches(isChecked()));
+            navigateUp();
+            onView(withId(R.id.signRecyclerView)).perform(scrollToHolder(getHolderForSignWithName(MAMA)));
+            onView(getSignWithName(MAMA)).check(matches(isChecked()));
+        } finally {
+            performSearch(MAMA);
+            onView(getSignWithName(MAMA)).check(matches(isChecked())).perform(click());
+        }
+    }
+
+    @Test
+    public void checkSignHasLearningProgressInformation() {
+        performSearch(MAMA);
+        onView(CoreMatchers.allOf(withId(R.id.signBrowserSingleRow), hasDescendant(withText(MAMA)), hasDescendant(withText(containsString(PROGRESS_0))))).check(matches(isDisplayed()));
+    }
+
+
     private void performSearch(String query) {
         Log.d(TAG, "Perform search");
         onView(withId(R.id.action_search)).check(matches(isDisplayed())).perform(click());
@@ -119,14 +141,8 @@ public class SignSearchTest {
      * Navigate back to the sign browser -- Up button is only accessible via a localized content description ('Nach oben')
      */
     private void navigateUp() {
-        Log.d(TAG, "navigateUp()" );
+        Log.d(TAG, "navigateUp()");
         onView(withContentDescription(getStringResource(R.string.navigate_up))).perform(click());
     }
-
-    @NonNull
-    private String getStringResource(int stringResourceId) {
-        return mainActivityActivityTestRule.getActivity().getResources().getString(stringResourceId);
-    }
-
 
 }

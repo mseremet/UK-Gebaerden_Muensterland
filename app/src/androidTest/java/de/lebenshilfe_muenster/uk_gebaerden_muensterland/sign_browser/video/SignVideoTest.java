@@ -13,7 +13,7 @@ import org.junit.runner.RunWith;
 
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.activities.MainActivity;
-import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.SignBrowserTest;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.AbstractSignBrowserTest;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -114,7 +114,7 @@ public class SignVideoTest {
     }
 
     private void navigateToSignVideoUIFragment() {
-        onView(withId(R.id.signRecyclerView)).perform(scrollToHolder(SignBrowserTest.getHolderForSignWithName(MAMA)));
+        onView(withId(R.id.signRecyclerView)).perform(scrollToHolder(AbstractSignBrowserTest.getHolderForSignWithName(MAMA)));
         onView(allOf(withText(MAMA))).check(matches(isDisplayed())).perform(click());
     }
 
