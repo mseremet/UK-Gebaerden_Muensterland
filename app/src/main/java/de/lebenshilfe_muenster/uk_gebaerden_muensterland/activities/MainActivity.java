@@ -29,7 +29,7 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_trainer.SignTraine
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_trainer.SignTrainerPassiveFragment;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, SignBrowserFragment.OnSignClickedListener, AbstractSignTrainerFragment.OnToggleLearningModeListener {
+        implements NavigationView.OnNavigationItemSelectedListener, SignBrowserFragment.OnSignBrowserSignClickedListener, AbstractSignTrainerFragment.OnToggleLearningModeListener {
 
     private static final String SIGN_BROWSER_TAG = "sign_browser_tag";
     private static final String SIGN_TRAINER_ACTIVE_TAG = "sign_trainer_active_tag";
@@ -136,8 +136,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onSignSelected(Sign sign) {
-        Log.d(TAG, "onSignSelected: " + sign.getName() + StringUtils.SPACE + hashCode());
+    public void onSignBrowserSignSelected(Sign sign) {
+        Log.d(TAG, "onSignBrowserSignSelected: " + sign.getName() + StringUtils.SPACE + hashCode());
         showSignVideo(sign);
     }
 

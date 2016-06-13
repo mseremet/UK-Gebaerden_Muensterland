@@ -25,10 +25,11 @@ import java.util.List;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.Sign;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.SignDAO;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.SignBrowserAdapter;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.search.video.SignSearchVideoActivity;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.video.SignVideoFragment;
 
-public class SignSearchActivity extends AppCompatActivity  {
+public class SignSearchActivity extends AppCompatActivity implements SignBrowserAdapter.OnSignBrowserAdapterSignClickedListener {
 
     public static final String QUERY = "sign_browser_search_query";
     private static final String TAG = SignSearchActivity.class.getSimpleName();
@@ -55,10 +56,10 @@ public class SignSearchActivity extends AppCompatActivity  {
     }
 
     private void setupRecyclerView() {
-        final RecyclerView recyclerView = (RecyclerView) this.findViewById(R.id.signSearchRecyclerView);
+        final RecyclerView recyclerView = (RecyclerView) this.findViewById(R.id.signRecyclerView);
         recyclerView.setHasFixedSize(true); // performance fix
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new SignSearchAdapter(new ArrayList<Sign>(), this));
+        recyclerView.setAdapter(new SignBrowserAdapter(this, this, new ArrayList<Sign>()));
     }
 
     private void setupSupportActionBar() {
@@ -107,8 +108,9 @@ public class SignSearchActivity extends AppCompatActivity  {
         outState.putString(QUERY, this.query);
     }
 
-    public void onTxtSignNameClicked(Sign sign) {
-        Log.d(TAG, "onTxtSignNameClicked() " + this.hashCode());
+    @Override
+    public void onSignBrowserAdapterSignClicked(Sign sign) {
+        Log.d(TAG, "onSignBrowserAdapterSignClicked() " + this.hashCode());
         final Intent intent = new Intent(this, SignSearchVideoActivity.class);
         final Bundle bundle = new Bundle();
         bundle.putString(SignSearchActivity.QUERY, this.query);
@@ -147,9 +149,9 @@ public class SignSearchActivity extends AppCompatActivity  {
         @Override
         protected void onPostExecute(List<Sign> result) {
             Log.d(TAG, "onPostExecute " + this.hashCode());
-            final RecyclerView mRecyclerView = (RecyclerView) SignSearchActivity.this.findViewById(R.id.signSearchRecyclerView);
+            final RecyclerView mRecyclerView = (RecyclerView) SignSearchActivity.this.findViewById(R.id.signRecyclerView);
             Validate.notNull(mRecyclerView, "RecyclerView is null.");
-            mRecyclerView.swapAdapter(new SignSearchAdapter(result, SignSearchActivity.this), false);
+            mRecyclerView.swapAdapter(new SignBrowserAdapter(SignSearchActivity.this, SignSearchActivity.this, result), false);
         }
 
     }

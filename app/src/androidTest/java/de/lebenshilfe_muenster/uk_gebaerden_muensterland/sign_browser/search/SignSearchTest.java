@@ -61,7 +61,7 @@ public class SignSearchTest extends AbstractSignBrowserTest {
     @Test
     public void checkToolbarTitleIsEmpty() {
         performSearch(MAM);
-        onView(allOf(withText(MAMA), withParent(withId(R.id.signSearchSingleRow)))).check(matches(isDisplayed())).perform(click());
+        onView(allOf(withText(MAMA), withParent(withId(R.id.signBrowserSingleRow)))).check(matches(isDisplayed())).perform(click());
         onView(allOf(withText("SignSearchVideoActivity"), withParent((withId(R.id.toolbar))))).check(doesNotExist());
     }
 
@@ -69,18 +69,18 @@ public class SignSearchTest extends AbstractSignBrowserTest {
     public void checkSearchingForSignsWorks() {
         Log.d(TAG, "Search from sign browser");
         performSearch(MAM);
-        onView(allOf(withId(R.id.signSearchRecyclerView), hasDescendant((withText(MAMA))))).check(matches(isDisplayed()));
-        onView(allOf(withId(R.id.signSearchRecyclerView), hasDescendant((withText(PAPA))))).check(doesNotExist());
-        onView(allOf(withId(R.id.signSearchRecyclerView), hasDescendant((withText(FOOTBALL))))).check(doesNotExist());
+        onView(allOf(withId(R.id.signRecyclerView), hasDescendant((withText(MAMA))))).check(matches(isDisplayed()));
+        onView(allOf(withId(R.id.signRecyclerView), hasDescendant((withText(PAPA))))).check(doesNotExist());
+        onView(allOf(withId(R.id.signRecyclerView), hasDescendant((withText(FOOTBALL))))).check(doesNotExist());
         checkActivityTitle(MAM);
         Log.d(TAG, "trigger configuration change");
         onView(isRoot()).perform(orientationLandscape());
         checkActivityTitle(MAM);
         Log.d(TAG, "Search from the list of results again");
         performSearch(PAP);
-        onView(allOf(withId(R.id.signSearchRecyclerView), hasDescendant((withText(MAMA))))).check(doesNotExist());
-        onView(allOf(withId(R.id.signSearchRecyclerView), hasDescendant((withText(PAPA))))).check(matches(isDisplayed()));
-        onView(allOf(withId(R.id.signSearchRecyclerView), hasDescendant((withText(FOOTBALL))))).check(doesNotExist());
+        onView(allOf(withId(R.id.signRecyclerView), hasDescendant((withText(MAMA))))).check(doesNotExist());
+        onView(allOf(withId(R.id.signRecyclerView), hasDescendant((withText(PAPA))))).check(matches(isDisplayed()));
+        onView(allOf(withId(R.id.signRecyclerView), hasDescendant((withText(FOOTBALL))))).check(doesNotExist());
         checkActivityTitle(PAP);
         Log.d(TAG, "trigger configuration change");
         onView(isRoot()).perform(orientationLandscape());
@@ -92,12 +92,12 @@ public class SignSearchTest extends AbstractSignBrowserTest {
     @Test
     public void checkNavigatingToVideosAndReturningWorks() {
         performSearch(MAM);
-        onView(allOf(withText(MAMA), withParent(withId(R.id.signSearchSingleRow)))).check(matches(isDisplayed())).perform(click());
+        onView(allOf(withText(MAMA), withParent(withId(R.id.signBrowserSingleRow)))).check(matches(isDisplayed())).perform(click());
         onView(allOf(withId(R.id.signVideoName), withText(MAMA))).check(matches(isDisplayed()));
         navigateUp();
         checkActivityTitle(MAM);
         performSearch(PAP);
-        onView(allOf(withText(PAPA), withParent(withId(R.id.signSearchSingleRow)))).check(matches(isDisplayed())).perform(click());
+        onView(allOf(withText(PAPA), withParent(withId(R.id.signBrowserSingleRow)))).check(matches(isDisplayed())).perform(click());
         onView(allOf(withId(R.id.signVideoName), withText(PAPA))).check(matches(isDisplayed()));
         onView(isRoot()).perform(orientationLandscape());
         navigateUp();

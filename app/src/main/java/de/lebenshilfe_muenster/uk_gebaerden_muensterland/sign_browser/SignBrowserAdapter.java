@@ -21,17 +21,17 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.SignDAO;
 
 /**
  * Copyright (c) 2016 Matthias Tonhäuser
- * <p/>
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * <p/>
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p/>
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -39,10 +39,14 @@ public class SignBrowserAdapter extends RecyclerView.Adapter<SignBrowserAdapter.
 
     private final List<Sign> dataSet;
     private final Context context;
-    private final SignBrowserFragment signBrowserFragment;
+    private final OnSignBrowserAdapterSignClickedListener onSignBrowserAdapterSignClickedListener;
 
-    public SignBrowserAdapter(SignBrowserFragment signBrowserFragment, Context context, List<Sign> dataSet) {
-        this.signBrowserFragment = signBrowserFragment;
+    public SignBrowserAdapter(OnSignBrowserAdapterSignClickedListener onSignBrowserAdapterSignClickedListener, Context context, List<Sign> dataSet) {
+        Validate.notNull(onSignBrowserAdapterSignClickedListener, "Calling activity or fragment " +
+                "has to implement the OnSignBrowserAdapterSignClickedListener");
+        Validate.notNull(context);
+        Validate.notNull(dataSet);
+        this.onSignBrowserAdapterSignClickedListener = onSignBrowserAdapterSignClickedListener;
         this.dataSet = dataSet;
         this.context = context;
     }
@@ -52,7 +56,6 @@ public class SignBrowserAdapter extends RecyclerView.Adapter<SignBrowserAdapter.
                                                             int viewType) {
         return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.browser_row_layout, parent, false));
     }
-
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
@@ -82,7 +85,7 @@ public class SignBrowserAdapter extends RecyclerView.Adapter<SignBrowserAdapter.
     }
 
     private void handleClickOnIconOrTxtSignName(Sign sign) {
-        this.signBrowserFragment.onTxtSignNameClicked(sign);
+        this.onSignBrowserAdapterSignClickedListener.onSignBrowserAdapterSignClicked(sign);
     }
 
     private void handleClickOnCheckBoxStarred(Sign sign) {
@@ -92,6 +95,13 @@ public class SignBrowserAdapter extends RecyclerView.Adapter<SignBrowserAdapter.
     @Override
     public int getItemCount() {
         return dataSet.size();
+    }
+
+    /**
+     * Has to be implemented by activity or fragment using the {@link RecyclerView}.
+     */
+    public interface OnSignBrowserAdapterSignClickedListener {
+        void onSignBrowserAdapterSignClicked(Sign sign);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

@@ -44,14 +44,14 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.SignDAO;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class SignBrowserFragment extends Fragment {
+public class SignBrowserFragment extends Fragment implements SignBrowserAdapter.OnSignBrowserAdapterSignClickedListener{
 
     public static final boolean INTERRUPT_IF_RUNNING = true;
     private static final String TAG = SignBrowserFragment.class.getSimpleName();
     private static final String KEY_SHOW_STARRED_ONLY = "sign_browser_show_starred_only";
     private LoadSignsTask loadSignsTask;
     private boolean showStarredOnly = false;
-    private OnSignClickedListener onSignClickedListener = null;
+    private OnSignBrowserSignClickedListener onSignBrowserSignClickedListener = null;
 
     @SuppressWarnings("deprecation") // necessary for API 15!
     @Override
@@ -59,10 +59,10 @@ public class SignBrowserFragment extends Fragment {
         Log.d(TAG, "onAttach " + hashCode());
         super.onAttach(activity);
         try {
-            this.onSignClickedListener = (OnSignClickedListener) activity;
+            this.onSignBrowserSignClickedListener = (OnSignBrowserSignClickedListener) activity;
         } catch (ClassCastException ex) {
             throw new ClassCastException(activity.toString()
-                    + " must implement OnSignClickedListener");
+                    + " must implement OnSignBrowserSignClickedListener");
         }
     }
 
@@ -167,17 +167,19 @@ public class SignBrowserFragment extends Fragment {
         outState.putBoolean(KEY_SHOW_STARRED_ONLY, this.showStarredOnly);
     }
 
-    public void onTxtSignNameClicked(Sign sign) {
-        Log.d(TAG, "onTxtSignNameClicked " + hashCode());
-        Validate.notNull(this.onSignClickedListener, "Parent activity has to implement the OnSignClickedListener");
-        this.onSignClickedListener.onSignSelected(sign);
+    @Override
+    public void onSignBrowserAdapterSignClicked(Sign sign) {
+        Log.d(TAG, "onSignBrowserAdapterSignClicked " + hashCode());
+        Validate.notNull(this.onSignBrowserSignClickedListener, "Parent activity has to implement the OnSignBrowserSignClickedListener");
+        this.onSignBrowserSignClickedListener.onSignBrowserSignSelected(sign);
+
     }
 
     /**
      * Has to be implemented by parent activity.
      */
-    public interface OnSignClickedListener {
-        void onSignSelected(Sign sign);
+    public interface OnSignBrowserSignClickedListener {
+        void onSignBrowserSignSelected(Sign sign);
     }
 
     /**
