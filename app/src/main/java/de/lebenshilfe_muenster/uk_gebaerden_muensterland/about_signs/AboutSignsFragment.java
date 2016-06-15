@@ -3,6 +3,7 @@ package de.lebenshilfe_muenster.uk_gebaerden_muensterland.about_signs;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,21 +29,23 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
  */
 public class AboutSignsFragment extends Fragment {
 
+    private static final String TAG = AboutSignsFragment.class.getSimpleName();
     private WebView webView;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView " + hashCode());
         final View view = inflater.inflate(R.layout.about_signs_fragment, container, false);
-        this.webView = (WebView) view.findViewById(R.id.webView);
+        this.webView = (WebView) view.findViewById(R.id.aboutSignsWebView);
         return view;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+        Log.d(TAG, "onActivityCreated " + hashCode());
         super.onActivityCreated(savedInstanceState);
-        final String summary = "<html><body>You scored <b>192</b> points.</body></html>";
-        this.webView.loadData(summary, "text/html", null);
+        this.webView.loadUrl("file:///android_res/raw/about_signs.html");
     }
-}
 
+}

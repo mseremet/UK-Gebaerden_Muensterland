@@ -5,7 +5,8 @@
     android:orientation="vertical">
 
     <WebView
-        android:id="@+id/webView"
+        android:id="@+id/aboutSignsWebView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
+
 </RelativeLayout>

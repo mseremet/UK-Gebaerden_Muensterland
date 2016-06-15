@@ -4,6 +4,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.MainActivityTest;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.about_signs.AboutSignsTest;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.SignBrowserTest;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.search.SignSearchTest;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.video.SignVideoTest;
@@ -28,6 +29,6 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_trainer.SignTraine
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({MainActivityTest.class, SignBrowserTest.class, SignSearchTest.class,
-        SignVideoTest.class, SignTrainerPassiveTest.class, SignTrainerActiveTest.class})
+        SignVideoTest.class, SignTrainerPassiveTest.class, SignTrainerActiveTest.class, AboutSignsTest.class})
 public class AllEspressoUITests {
 }
