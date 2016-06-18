@@ -31,17 +31,17 @@ import static org.hamcrest.CoreMatchers.not;
 
 /**
  * Copyright (c) 2016 Matthias Tonhäuser
- * <p/>
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * <p/>
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p/>
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -70,7 +70,8 @@ public class MainActivityTest {
         onView(withText(R.string.browse_signs)).check(matches(allOf(isDisplayed(), isEnabled())));
         onView(withText(R.string.train_signs)).check((matches(allOf(isDisplayed(), isEnabled()))));
         onView(withText(R.string.about_signs)).check((matches(allOf(isDisplayed(), isEnabled()))));
-        onView(withText(R.string.settings)).check((matches(allOf(isDisplayed(), isEnabled()))));
+        // #54 Disabled because the settings view is not used right now.
+        // onView(withText(R.string.settings)).check((matches(allOf(isDisplayed(), isEnabled()))));
         pressBack(); // close navigation drawer
     }
 
@@ -89,25 +90,49 @@ public class MainActivityTest {
         clickNavigationButtonAndCheckToolbarTitle((R.string.about_signs), R.string.about_signs);
     }
 
+    // #54 Disabled because the settings view is not used right now.
+    //    @Test
+    //    public void clickSettingsButton() {
+    //        clickNavigationButtonAndCheckToolbarTitle((R.string.settings), R.string.settings);
+    //    }
+
     @Test
-    public void clickSettingsButton() {
-        clickNavigationButtonAndCheckToolbarTitle((R.string.settings), R.string.settings);
+    public void testBackNavigation() {
+        // TODO Check if working with additional orientation changes.
+        clickNavigationButtonAndCheckToolbarTitle((R.string.train_signs), R.string.sign_trainer_passive);
+        onView(isRoot()).perform(orientationPortrait());
+        pressBack();
+        checkToolbarTitle(R.string.sign_browser);
+        openNavigationDrawer();
+        clickNavigationButtonAndCheckToolbarTitle((R.string.about_signs), R.string.about_signs);
+        pressBack();
+        checkToolbarTitle(R.string.sign_browser);
+        openNavigationDrawer();
+        clickNavigationButtonAndCheckToolbarTitle((R.string.about_signs), R.string.about_signs);
+        openNavigationDrawer();
+        clickNavigationButtonAndCheckToolbarTitle((R.string.train_signs), R.string.sign_trainer_passive);
+        pressBack();
+        pressBack();
+        checkToolbarTitle(R.string.sign_browser);
+
+
     }
 
     private void clickNavigationButtonAndCheckToolbarTitle(final int navigationButtonTextId, final int toolbarTitleId) {
-        final String navigationButtonText = mainActivityActivityTestRule.getActivity().getResources().getString(navigationButtonTextId);
-        final String toolbarTitle = mainActivityActivityTestRule.getActivity().getResources().getString(toolbarTitleId);
+        final String navigationButtonText = getStringResource(navigationButtonTextId);
         Log.d(MainActivityTest.class.getSimpleName(), "beforeClick");
         onView(withText(navigationButtonText)).perform(click());
         Log.d(MainActivityTest.class.getSimpleName(), "afterClick");
-        onView(allOf(withText(toolbarTitle), withParent((withId(R.id.toolbar))))).check(matches(isDisplayed()));
+        checkToolbarTitle(toolbarTitleId);
         Log.d(MainActivityTest.class.getSimpleName(), "beforeOrientationLandscape");
         onView(isRoot()).perform(orientationLandscape());
         Log.d(MainActivityTest.class.getSimpleName(), "afterOrientationLandscape");
+        checkToolbarTitle(toolbarTitleId);
+    }
+
+    private void checkToolbarTitle(int toolbarTitleId) {
+        final String toolbarTitle = getStringResource(toolbarTitleId);
         onView(allOf(withText(toolbarTitle), withParent((withId(R.id.toolbar))))).check(matches(isDisplayed()));
-        if (toolbarTitle.equals(getStringResource(R.string.about_signs)) || toolbarTitle.equals(getStringResource(R.string.settings))) {
-            onView(allOf(withId(R.id.dummyTxt), withText(toolbarTitle))).check(matches(isDisplayed()));
-        }
     }
 
     @NonNull
