@@ -53,9 +53,10 @@ public class MainActivity extends AppCompatActivity
         final ActionBarDrawerToggle actionBarDrawerToggle =
                 new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open,
                         R.string.navigation_drawer_close) {
+
                     /**
                      * Necessary because of API 15 Drawer Layout bug.
-                     See https://github.com/Scaronthesky/UK-Gebaerden_Muensterland/issues/28
+                     * See https://github.com/Scaronthesky/UK-Gebaerden_Muensterland/issues/28
                      */
                     @Override
                     public void onDrawerSlide(View drawerView, float slideOffset) {
@@ -77,12 +78,15 @@ public class MainActivity extends AppCompatActivity
         if (null == savedInstanceState) {
             showSignBrowser();
         } else {
-            setActionBarTitle(savedInstanceState.getString(KEY_TOOLBAR_TITLE));
+            final String toolbarTitle = savedInstanceState.getString(KEY_TOOLBAR_TITLE);
+            Validate.notEmpty(toolbarTitle, "Toolbar title is empty in saved instance state bundle.");
+            setActionBarTitle(toolbarTitle);
         }
     }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onPostCreate " + hashCode());
         super.onPostCreate(savedInstanceState);
         this.toggle.syncState();
 
@@ -130,6 +134,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Log.d(TAG, "onOptionsItemSelected " + hashCode());
         this.toggle.onOptionsItemSelected(item);
         return super.onOptionsItemSelected(item);
     }

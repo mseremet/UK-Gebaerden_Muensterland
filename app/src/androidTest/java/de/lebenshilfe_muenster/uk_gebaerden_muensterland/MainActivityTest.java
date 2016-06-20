@@ -5,7 +5,6 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -17,6 +16,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
@@ -31,17 +31,17 @@ import static org.hamcrest.CoreMatchers.not;
 
 /**
  * Copyright (c) 2016 Matthias Tonhäuser
- * <p>
+ * <p/>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * <p>
+ * <p/>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ * <p/>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -58,12 +58,11 @@ public class MainActivityTest {
         onView(withId(R.id.nav_view)).check(matches(isDisplayed()));
     }
 
-    @After
-    public void checkNavigationDrawerIsClosed() {
-        onView(withId(R.id.nav_view)).check(matches(not(isDisplayed())));
-        Log.d(MainActivityTest.class.getSimpleName(), "Reset orientation");
-        onView(isRoot()).perform(orientationPortrait());
-    }
+//    @After // deactivate this when looking for bugs as it hides exceptions in test methods.
+//    public void checkNavigationDrawerIsClosed() {
+//        Log.d(MainActivityTest.class.getSimpleName(), "checkNavigationDrawerIsClosed");
+//        onView(withId(R.id.nav_view)).check(matches(not(isDisplayed())));
+//    }
 
     @Test
     public void testAllMenuItemsArePresent() {
@@ -72,7 +71,7 @@ public class MainActivityTest {
         onView(withText(R.string.about_signs)).check((matches(allOf(isDisplayed(), isEnabled()))));
         // #54 Disabled because the settings view is not used right now.
         // onView(withText(R.string.settings)).check((matches(allOf(isDisplayed(), isEnabled()))));
-        pressBack(); // close navigation drawer
+        pressBack(); // close navigation drawer because there are no fragments in the back stack.
     }
 
     @Test
@@ -98,15 +97,18 @@ public class MainActivityTest {
 
     @Test
     public void testBackNavigation() {
-        // TODO Check if working with additional orientation changes.
+        // one fragment in the back stack
         clickNavigationButtonAndCheckToolbarTitle((R.string.train_signs), R.string.sign_trainer_passive);
-        onView(isRoot()).perform(orientationPortrait());
         pressBack();
         checkToolbarTitle(R.string.sign_browser);
+        checkNoneOfTheMenuItemsAreChecked();
+        // one fragment in the back stack
         openNavigationDrawer();
         clickNavigationButtonAndCheckToolbarTitle((R.string.about_signs), R.string.about_signs);
         pressBack();
         checkToolbarTitle(R.string.sign_browser);
+        checkNoneOfTheMenuItemsAreChecked();
+        // two fragments in the back stack
         openNavigationDrawer();
         clickNavigationButtonAndCheckToolbarTitle((R.string.about_signs), R.string.about_signs);
         openNavigationDrawer();
@@ -114,26 +116,47 @@ public class MainActivityTest {
         pressBack();
         pressBack();
         checkToolbarTitle(R.string.sign_browser);
-
-
+        checkNoneOfTheMenuItemsAreChecked();
+        // three fragments in the back stack
+        openNavigationDrawer();
+        clickNavigationButtonAndCheckToolbarTitle((R.string.train_signs), R.string.sign_trainer_passive);
+        onView(withId(R.id.action_toggle_learning_mode)).check(matches(isDisplayed())).perform(click());
+        onView(allOf(withText(getStringResource(R.string.sign_trainer_active)), withParent((withId(R.id.toolbar))))).check(matches(isDisplayed()));
+        openNavigationDrawer();
+        clickNavigationButtonAndCheckToolbarTitle((R.string.train_signs), R.string.sign_trainer_passive);
+        pressBack();
+        pressBack();
+        checkToolbarTitle(R.string.sign_trainer_passive);
+        checkNoneOfTheMenuItemsAreChecked();
+        pressBack();
+        checkToolbarTitle(R.string.sign_browser);
+        checkNoneOfTheMenuItemsAreChecked();
     }
 
     private void clickNavigationButtonAndCheckToolbarTitle(final int navigationButtonTextId, final int toolbarTitleId) {
         final String navigationButtonText = getStringResource(navigationButtonTextId);
-        Log.d(MainActivityTest.class.getSimpleName(), "beforeClick");
         onView(withText(navigationButtonText)).perform(click());
-        Log.d(MainActivityTest.class.getSimpleName(), "afterClick");
         checkToolbarTitle(toolbarTitleId);
-        Log.d(MainActivityTest.class.getSimpleName(), "beforeOrientationLandscape");
+        Log.d(MainActivityTest.class.getSimpleName(), "Setting orientation to landscape.");
         onView(isRoot()).perform(orientationLandscape());
-        Log.d(MainActivityTest.class.getSimpleName(), "afterOrientationLandscape");
         checkToolbarTitle(toolbarTitleId);
+        Log.d(MainActivityTest.class.getSimpleName(), "Setting orientation to portrait.");
+        onView(isRoot()).perform(orientationPortrait());
     }
 
     private void checkToolbarTitle(int toolbarTitleId) {
         final String toolbarTitle = getStringResource(toolbarTitleId);
         onView(allOf(withText(toolbarTitle), withParent((withId(R.id.toolbar))))).check(matches(isDisplayed()));
     }
+
+    private void checkNoneOfTheMenuItemsAreChecked() {
+        openNavigationDrawer();
+        onView(withText(R.string.browse_signs)).check(matches(allOf(isDisplayed(), not(isChecked()))));
+        onView(withText(R.string.train_signs)).check(matches(allOf(isDisplayed(), not(isChecked()))));
+        onView(withText(R.string.about_signs)).check(matches(allOf(isDisplayed(), not(isChecked()))));
+        pressBack(); // close navigation drawer
+    }
+
 
     @NonNull
     private String getStringResource(int stringResourceId) {
