@@ -135,7 +135,7 @@ public class SignBrowserFragment extends Fragment implements SignBrowserAdapter.
         if (this.showStarredOnly) {
             item.setIcon(R.drawable.ic_sign_browser_grade_checked);
         } else {
-            item.setIcon(R.drawable.ic_sign_browser_grade);
+            item.setIcon(R.drawable.ic_sign_browser_grade_no_stroke);
         }
         final SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
         final MenuItem searchItem = menu.findItem(R.id.action_search);
@@ -152,7 +152,7 @@ public class SignBrowserFragment extends Fragment implements SignBrowserAdapter.
                 item.setIcon(R.drawable.ic_sign_browser_grade_checked);
             } else {
                 this.showStarredOnly = false;
-                item.setIcon(R.drawable.ic_sign_browser_grade);
+                item.setIcon(R.drawable.ic_sign_browser_grade_no_stroke);
             }
             this.loadSignsTask = new LoadSignsTask(getActivity());
             this.loadSignsTask.execute(this.showStarredOnly);

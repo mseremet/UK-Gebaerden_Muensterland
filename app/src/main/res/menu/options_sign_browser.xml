@@ -8,6 +8,6 @@
         app:actionViewClass="android.support.v7.widget.SearchView" />
     <item android:id="@+id/action_toggle_starred"
         android:title="@string/action_toggle_starred"
-        android:icon="@drawable/ic_sign_browser_grade"
+        android:icon="@drawable/ic_sign_browser_grade_no_stroke"
         app:showAsAction="ifRoom" />
 </menu>
