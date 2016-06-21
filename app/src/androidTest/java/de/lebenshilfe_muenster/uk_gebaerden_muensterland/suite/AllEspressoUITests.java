@@ -27,6 +27,7 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_trainer.SignTraine
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+@SuppressWarnings("unused")
 @RunWith(Suite.class)
 @Suite.SuiteClasses({MainActivityTest.class, SignBrowserTest.class, SignSearchTest.class,
         SignVideoTest.class, SignTrainerPassiveTest.class, SignTrainerActiveTest.class, AboutSignsTest.class})

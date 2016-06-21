@@ -20,7 +20,7 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.video.Sign
 
 public class SignSearchVideoActivity extends AppCompatActivity {
 
-    public static final String TAG = SignSearchVideoActivity.class.getSimpleName();
+    private static final String TAG = SignSearchVideoActivity.class.getSimpleName();
     public static final String EXTRA = "extra";
     private String originalQuery;
 

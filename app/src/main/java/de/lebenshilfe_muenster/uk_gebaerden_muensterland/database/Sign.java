@@ -75,7 +75,7 @@ public class Sign implements Parcelable {
         this.name = in.readString();
         this.nameLocaleDe = in.readString();
         this.mnemonic = in.readString();
-        this.starred = (boolean) in.readValue(null);
+        this.starred = (boolean) in.readValue(getClass().getClassLoader());
         this.learningProgress = in.readInt();
     }
 

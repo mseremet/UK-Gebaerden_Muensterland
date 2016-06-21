@@ -58,7 +58,7 @@ public class SignBrowserAdapter extends RecyclerView.Adapter<SignBrowserAdapter.
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.imgSignIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,12 +130,10 @@ public class SignBrowserAdapter extends RecyclerView.Adapter<SignBrowserAdapter.
             } else {
                 sign.setStarred(true);
             }
-            if (null != SignBrowserAdapter.this.context) {
-                final SignDAO signDAO = SignDAO.getInstance(SignBrowserAdapter.this.context);
-                signDAO.open();
-                signDAO.update(sign);
-                signDAO.close();
-            }
+            final SignDAO signDAO = SignDAO.getInstance(SignBrowserAdapter.this.context);
+            signDAO.open();
+            signDAO.update(sign);
+            signDAO.close();
             return null;
         }
     }

@@ -29,9 +29,7 @@
         android:layout_alignBaseline="@+id/icon"
         android:ellipsize="marquee"
         android:singleLine="true"
-        android:text="Example sign"
-        android:textSize="16sp"
-        tools:ignore="HardcodedText" />
+        android:textSize="16sp" />
 
   <TextView
         android:id="@+id/learningProgressLabel"
@@ -41,7 +39,8 @@
         android:layout_toLeftOf="@+id/learningProgressValue"
         android:layout_toStartOf="@+id/learningProgressValue"
         android:text="@string/progress"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+      tools:ignore="RelativeOverlap" />
 
     <TextView
         android:id="@+id/learningProgressValue"

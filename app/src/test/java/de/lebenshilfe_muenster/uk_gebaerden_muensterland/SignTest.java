@@ -28,6 +28,7 @@ import static org.hamcrest.core.Is.is;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+@SuppressWarnings("unused")
 public class SignTest {
 
     private static final String FOOTBALL = "football";

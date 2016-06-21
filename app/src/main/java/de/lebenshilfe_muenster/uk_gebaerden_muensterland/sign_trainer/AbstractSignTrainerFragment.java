@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -39,9 +38,10 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_video_view.Abstrac
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+@SuppressWarnings("WeakerAccess")
 public abstract class AbstractSignTrainerFragment extends AbstractSignVideoFragment {
     protected static final String KEY_CURRENT_SIGN = "KEY_CURRENT_SIGN";
-    protected static final boolean INTERRUPT_IF_RUNNING = true;
+    private static final boolean INTERRUPT_IF_RUNNING = true;
     protected static final String KEY_ANSWER_VISIBLE = "KEY_ANSWER_VISIBLE";
     private static final String TAG = AbstractSignTrainerFragment.class.getSimpleName();
     protected Sign currentSign = null;
@@ -96,7 +96,6 @@ public abstract class AbstractSignTrainerFragment extends AbstractSignVideoFragm
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         Log.d(TAG, "onCreateOptionsMenu " + hashCode());
         inflater.inflate(R.menu.options_sign_trainer, menu);
-        final MenuItem item = menu.findItem(R.id.action_toggle_learning_mode);
     }
 
     @Override
@@ -165,8 +164,7 @@ public abstract class AbstractSignTrainerFragment extends AbstractSignVideoFragm
         this.signAnswerTextView.setText(this.currentSign.getNameLocaleDe());
         this.signMnemonicTextView.setText(this.currentSign.getMnemonic());
         final DecimalFormat decimalFormat = new DecimalFormat(" 0;-0");
-        this.signLearningProgressTextView.setText(getString(R.string.learningProgress) + ": " +
-                decimalFormat.format(this.currentSign.getLearningProgress()));
+        this.signLearningProgressTextView.setText(String.format(getString(R.string.learningProgress), decimalFormat.format(this.currentSign.getLearningProgress())));
         this.signHowHardWasQuestionTextView.setText(getString(R.string.howHardWasTheQuestion));
         this.signTrainerExplanationTextView.setText(getString(R.string.signTrainerExplanation));
     }
@@ -218,7 +216,7 @@ public abstract class AbstractSignTrainerFragment extends AbstractSignVideoFragm
         void toggleLearningMode(LearningMode learningMode);
 
         enum LearningMode {
-            ACTIVE, PASSIVE;
+            ACTIVE, PASSIVE
         }
     }
 

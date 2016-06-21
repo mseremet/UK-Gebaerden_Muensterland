@@ -61,7 +61,7 @@ public abstract class AbstractSignBrowserTest {
 
             @Override
             public void describeTo(Description description) {
-                description.appendText("with sign name: " + signNameLocaleDe.toString());
+                description.appendText("with sign name: " + signNameLocaleDe);
             }
         };
     }

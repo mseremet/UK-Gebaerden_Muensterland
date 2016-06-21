@@ -17,8 +17,6 @@ import org.apache.commons.lang3.Validate;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.Sign;
 
-;
-
 /**
  * Copyright (c) 2016 Matthias Tonhäuser
  * <p/>
@@ -37,8 +35,8 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.Sign;
  */
 public abstract class AbstractSignVideoFragment extends Fragment {
 
-    protected static final double MAXMIMUM_VIDEO_HEIGHT_ON_LANDSCAPE = 0.4;
-    protected static final double MAXIMUM_VIDEO_WIDTH_ON_PORTRAIT = 0.8;
+    private static final double MAXMIMUM_VIDEO_HEIGHT_ON_LANDSCAPE = 0.4;
+    private static final double MAXIMUM_VIDEO_WIDTH_ON_PORTRAIT = 0.8;
     private final static String TAG = AbstractSignVideoFragment.class.getSimpleName();
     private static final String ANDROID_RESOURCE = "android.resource://";
     private static final String SLASH = "/";
@@ -46,6 +44,7 @@ public abstract class AbstractSignVideoFragment extends Fragment {
     protected VideoView videoView;
     protected ProgressBar progressBar;
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     protected boolean isSetupVideoViewSuccessful(final Sign sign, final SOUND sound, final CONTROLS controls) {
         initializeMediaController();
         final String mainActivityPackageName = getActivity().getPackageName();
@@ -93,7 +92,7 @@ public abstract class AbstractSignVideoFragment extends Fragment {
         this.videoView.setMediaController(mediaController);
     }
 
-    protected boolean isVideoViewDimensionSetToMatchVideoMetadata(VideoView videoView, Uri uri) {
+    private boolean isVideoViewDimensionSetToMatchVideoMetadata(VideoView videoView, Uri uri) {
         String metadataVideoWidth;
         String metadataVideoHeight;
         try {

@@ -46,31 +46,32 @@ public class MainActivity extends AppCompatActivity
         restoreInstanceStateOrShowDefault(savedInstanceState);
     }
 
+    @SuppressWarnings("deprecation")
     private void setupToolbar() {
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        final ActionBarDrawerToggle actionBarDrawerToggle =
-                new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open,
-                        R.string.navigation_drawer_close) {
+        Validate.notNull(drawerLayout);
+        this.toggle = new ActionBarDrawerToggle(MainActivity.this, drawerLayout, toolbar, R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close) {
 
-                    /**
-                     * Necessary because of API 15 Drawer Layout bug.
-                     * See https://github.com/Scaronthesky/UK-Gebaerden_Muensterland/issues/28
-                     */
-                    @Override
-                    public void onDrawerSlide(View drawerView, float slideOffset) {
-                        super.onDrawerSlide(drawerView, slideOffset);
-                        drawerLayout.bringChildToFront(drawerView);
-                        drawerLayout.requestLayout();
-                    }
-                };
-        this.toggle = actionBarDrawerToggle;
+            /**
+             * Necessary because of API 15 Drawer Layout bug.
+             * See https://github.com/Scaronthesky/UK-Gebaerden_Muensterland/issues/28
+             */
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                super.onDrawerSlide(drawerView, slideOffset);
+                drawerLayout.bringChildToFront(drawerView);
+                drawerLayout.requestLayout();
+            }
+        };
         drawerLayout.setDrawerListener(this.toggle);
     }
 
     private void setupNavigationView() {
         final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        Validate.notNull(navigationView);
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -79,7 +80,7 @@ public class MainActivity extends AppCompatActivity
             showSignBrowser();
         } else {
             final String toolbarTitle = savedInstanceState.getString(KEY_TOOLBAR_TITLE);
-            Validate.notEmpty(toolbarTitle, "Toolbar title is empty in saved instance state bundle.");
+            Validate.notNull(toolbarTitle, "Toolbar title is empty in saved instance state bundle.");
             setActionBarTitle(toolbarTitle);
         }
     }
@@ -103,6 +104,7 @@ public class MainActivity extends AppCompatActivity
     public void onBackPressed() {
         Log.d(TAG, "onBackPressed " + hashCode());
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        Validate.notNull(drawer);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else if (1 < getFragmentManager().getBackStackEntryCount()) {
@@ -128,6 +130,7 @@ public class MainActivity extends AppCompatActivity
         //            showSettings();
         //        }
         final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        Validate.notNull(drawer);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

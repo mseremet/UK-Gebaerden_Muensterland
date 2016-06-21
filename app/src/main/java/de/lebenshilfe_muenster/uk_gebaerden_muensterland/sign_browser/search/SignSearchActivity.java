@@ -57,6 +57,7 @@ public class SignSearchActivity extends AppCompatActivity implements SignBrowser
 
     private void setupRecyclerView() {
         final RecyclerView recyclerView = (RecyclerView) this.findViewById(R.id.signRecyclerView);
+        Validate.notNull(recyclerView);
         recyclerView.setHasFixedSize(true); // performance fix
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new SignBrowserAdapter(this, this, new ArrayList<Sign>()));

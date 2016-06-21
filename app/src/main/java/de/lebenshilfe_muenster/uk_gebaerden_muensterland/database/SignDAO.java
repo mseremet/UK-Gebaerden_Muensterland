@@ -36,12 +36,12 @@ import java.util.concurrent.ArrayBlockingQueue;
  */
 public class SignDAO {
 
-    public static final int RANDOM_SIGNS_QUEUE_MAX_SIZE = 5;
+    private static final int RANDOM_SIGNS_QUEUE_MAX_SIZE = 5;
     private static final String TAG = SignDAO.class.getSimpleName();
     private static final boolean FIFO_ORDER = true;
     private static SignDAO instance;
     private final SQLiteOpenHelper openHelper;
-    private final Queue<Sign> randomSignsQueue = new ArrayBlockingQueue<Sign>(RANDOM_SIGNS_QUEUE_MAX_SIZE, FIFO_ORDER);
+    private final Queue<Sign> randomSignsQueue = new ArrayBlockingQueue<>(RANDOM_SIGNS_QUEUE_MAX_SIZE, FIFO_ORDER);
     private SQLiteDatabase database;
 
     /**
@@ -172,8 +172,8 @@ public class SignDAO {
             this.randomSignsQueue.offer(currentSign);
         }
         final Sign[] upToTheLastFiveRandomSigns = this.randomSignsQueue.toArray(new Sign[this.randomSignsQueue.size()]);
-        for (int i = 0; i < upToTheLastFiveRandomSigns.length; i++) {
-            signsOrderedByLearningProgress.remove(upToTheLastFiveRandomSigns[i]);
+        for (Sign upToTheLastFiveRandomSign : upToTheLastFiveRandomSigns) {
+            signsOrderedByLearningProgress.remove(upToTheLastFiveRandomSign);
         }
         final Sign signWithLeastLearningProgress = signsOrderedByLearningProgress.get(0);
         signsOrderedByLearningProgress.remove(signWithLeastLearningProgress);

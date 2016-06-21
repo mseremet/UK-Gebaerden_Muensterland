@@ -22,6 +22,7 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.SignParcelable
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+@SuppressWarnings("unused")
 @RunWith(Suite.class)
 @Suite.SuiteClasses({DbHelperTest.class, SignParcelableTest.class})
 public class AllInstrumentedUnitTests {

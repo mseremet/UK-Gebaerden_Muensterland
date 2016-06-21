@@ -46,7 +46,7 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.SignDAO;
  */
 public class SignBrowserFragment extends Fragment implements SignBrowserAdapter.OnSignBrowserAdapterSignClickedListener{
 
-    public static final boolean INTERRUPT_IF_RUNNING = true;
+    private static final boolean INTERRUPT_IF_RUNNING = true;
     private static final String TAG = SignBrowserFragment.class.getSimpleName();
     private static final String KEY_SHOW_STARRED_ONLY = "sign_browser_show_starred_only";
     private LoadSignsTask loadSignsTask;

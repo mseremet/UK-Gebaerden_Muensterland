@@ -10,7 +10,7 @@
     <string name="browse_signs">Gebärden anzeigen</string>
     <string name="navigation_drawer_close">Navigation schließen</string>
     <string name="navigation_drawer_open">Navigation öffnen</string>
-    <string name="learningProgress">Lernfortschritt</string>
+    <string name="learningProgress">Lernfortschritt %s</string>
     <string name="search_hint">Gebärden suchen</string>
     <string name="search_results">Suche nach: </string>
     <string name="settings">Einstellungen</string>
@@ -25,7 +25,7 @@
     <string name="signQuestion">Welche Gebärde ist das?</string>
     <string name="solveQuestion">Auflösen</string>
     <string name="noSignWasFound">Keine Gebärde in der Datenbank gefunden. </string>
-    <string name="howHardWasTheQuestion">Die Frage war...</string>
+    <string name="howHardWasTheQuestion">Die Frage war…</string>
     <string name="questionWasEasy">Einfach</string>
     <string name="questionWasFair">Normal</string>
     <string name="questionWasHard">Schwer</string>
