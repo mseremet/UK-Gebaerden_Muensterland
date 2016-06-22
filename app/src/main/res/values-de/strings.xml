@@ -31,7 +31,7 @@
     <string name="questionWasHard">Schwer</string>
     <string name="answer">Antwort</string>
     <string name="trainerMnemonic">Eselbrücke</string>
-    <string name="versionName">Version: 0.1.1 - Nur für Beta-Tester</string>
+    <string name="versionName">Version: 0.1.2 - Nur für Beta-Tester</string>
     <string name="progress">Fortschritt</string>
     <string name="signTrainerExplanation">\'Einfach\': Lernfortschritt +1, \'Schwer\': -1.</string>
     <string name="clickVideoToShowControls">Für Steuerung Video anklicken.</string>
