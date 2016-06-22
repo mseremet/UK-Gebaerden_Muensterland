@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity
         } else if (1 < getFragmentManager().getBackStackEntryCount()) {
             popBackStack();
         } else {
-            super.onBackPressed();
+            finish();
         }
     }
 
