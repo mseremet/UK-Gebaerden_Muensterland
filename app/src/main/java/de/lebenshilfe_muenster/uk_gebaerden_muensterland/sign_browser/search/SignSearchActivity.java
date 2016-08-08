@@ -46,7 +46,7 @@ public class SignSearchActivity extends AppCompatActivity implements SignBrowser
             this.query = savedInstanceState.getString(QUERY);
         } else {
             final Intent intent = getIntent();
-            this.query = intent.getStringExtra(SearchManager.QUERY);
+            this.query = StringUtils.trimToEmpty(StringUtils.stripToEmpty(intent.getStringExtra(SearchManager.QUERY)));
             Validate.notNull(this.query, "The query supplied to this activity is null!");
         }
         setupRecyclerView();

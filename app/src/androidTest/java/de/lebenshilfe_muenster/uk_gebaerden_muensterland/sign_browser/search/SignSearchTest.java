@@ -91,6 +91,18 @@ public class SignSearchTest extends AbstractSignBrowserTest {
     }
 
     @Test
+    public void checkSearchStringsCanIncludeLeadingOrTrailingSpaces() {
+       performSearch("Mam ");
+       onView(allOf(withId(R.id.signRecyclerView), hasDescendant((withText(MAMA))))).check(matches(isDisplayed()));
+       performSearch("Mama ");
+       onView(allOf(withId(R.id.signRecyclerView), hasDescendant((withText(MAMA))))).check(matches(isDisplayed()));
+       performSearch(" Mam");
+       onView(allOf(withId(R.id.signRecyclerView), hasDescendant((withText(MAMA))))).check(matches(isDisplayed()));
+       performSearch(" Mama ");
+       onView(allOf(withId(R.id.signRecyclerView), hasDescendant((withText(MAMA))))).check(matches(isDisplayed()));
+    }
+
+    @Test
     public void checkNavigatingToVideosAndReturningWorks() {
         performSearch(MAM);
         onView(allOf(withText(MAMA), withParent(withId(R.id.signBrowserSingleRow)))).check(matches(isDisplayed())).perform(click());
@@ -125,7 +137,6 @@ public class SignSearchTest extends AbstractSignBrowserTest {
         performSearch(MAMA);
         onView(CoreMatchers.allOf(withId(R.id.signBrowserSingleRow), hasDescendant(withText(MAMA)), hasDescendant(withText(containsString(PROGRESS_0))))).check(matches(isDisplayed()));
     }
-
 
     private void performSearch(String query) {
         Log.d(TAG, "Perform search");
