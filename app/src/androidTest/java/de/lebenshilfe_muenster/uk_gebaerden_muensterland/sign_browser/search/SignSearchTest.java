@@ -12,6 +12,7 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.AbstractSignBrowserTest;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
@@ -115,6 +116,18 @@ public class SignSearchTest extends AbstractSignBrowserTest {
         onView(isRoot()).perform(orientationLandscape());
         navigateUp();
         checkActivityTitle(PAP);
+    }
+
+    /**
+     * @see <a href="https://github.com/Scaronthesky/UK-Gebaerden_Muensterland/issues/71">GitHub issue #71</a>.
+     */
+    @Test
+    public void checkNavigatingToVideosAndReturningViaBackButtonWorks() {
+        performSearch(MAM);
+        onView(allOf(withText(MAMA), withParent(withId(R.id.signBrowserSingleRow)))).check(matches(isDisplayed())).perform(click());
+        onView(allOf(withId(R.id.signVideoName), withText(MAMA))).check(matches(isDisplayed()));
+        pressBack();
+        checkActivityTitle(MAM);
     }
 
     @Test

@@ -5,6 +5,7 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -28,12 +29,39 @@ public class SignSearchVideoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate() " + this.hashCode());
         super.onCreate(savedInstanceState);
+        setupToolbar();
+        final SignVideoFragment signVideoFragment = setupSignVideoFragment();
+        showSignVideoFragment(signVideoFragment);
+    }
+
+    private void setupToolbar() {
         setContentView(R.layout.search_video_activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Validate.notNull(getSupportActionBar(), "SupportActionBar is null.");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(StringUtils.EMPTY);
+    }
+
+    @NonNull
+    private SignVideoFragment setupSignVideoFragment() {
+        final Parcelable parcelledSign = getParcelable();
+        final SignVideoFragment signVideoFragment = new SignVideoFragment();
+        final Bundle args = new Bundle();
+        args.putParcelable(SignVideoFragment.SIGN_TO_SHOW, parcelledSign);
+        signVideoFragment.setArguments(args);
+        return signVideoFragment;
+    }
+
+    private void showSignVideoFragment(SignVideoFragment signVideoFragment) {
+        final FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.searchVideoActivityContentFrame, signVideoFragment, "SIGN_VIDEO_TAG");
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    @NonNull
+    private Parcelable getParcelable() {
         final Intent intent = getIntent();
         final Bundle bundle = intent.getBundleExtra(EXTRA);
         Validate.notNull(bundle, "The bundle supplied to the activity is null.");
@@ -41,14 +69,13 @@ public class SignSearchVideoActivity extends AppCompatActivity {
         Validate.notNull(this.originalQuery, "Query string supplied to this activity is null.");
         final Parcelable parcelledSign = bundle.getParcelable(SignVideoFragment.SIGN_TO_SHOW);
         Validate.notNull(parcelledSign, "Parcelled sign supplied to this activity is null.");
-        final SignVideoFragment signVideoFragment = new SignVideoFragment();
-        final Bundle args = new Bundle();
-        args.putParcelable(SignVideoFragment.SIGN_TO_SHOW, parcelledSign);
-        signVideoFragment.setArguments(args);
-        final FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.searchVideoActivityContentFrame, signVideoFragment, "SIGN_VIDEO_TAG");
-        transaction.addToBackStack(null);
-        transaction.commit();
+        return parcelledSign;
+    }
+
+    @Override
+    public void onBackPressed() {
+        Log.d(TAG, "onBackPressed() " + this.hashCode());
+        finish();
     }
 
     @Override
