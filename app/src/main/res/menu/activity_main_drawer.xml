@@ -7,9 +7,13 @@
             android:icon="@drawable/ic_ondemand_video"
             android:title="@string/browse_signs" />
         <item
-            android:id="@+id/nav_sign_trainer"
+            android:id="@+id/nav_sign_trainer_passive"
             android:icon="@drawable/ic_school"
-            android:title="@string/train_signs" />
+            android:title="@string/train_signs_passive" />
+        <item
+            android:id="@+id/nav_sign_trainer_active"
+            android:icon="@drawable/ic_school"
+            android:title="@string/train_signs_active" />
         <item
             android:id="@+id/nav_sign_info"
             android:icon="@drawable/ic_info"

@@ -58,7 +58,7 @@ public abstract class AbstractSignTrainerTest {
         onView(isRoot()).perform(orientationPortrait());
         onView(withContentDescription(R.string.navigation_drawer_open)).perform(click());
         onView(withId(R.id.nav_view)).check(matches(isDisplayed()));
-        final String navigationButtonText = mainActivityActivityTestRule.getActivity().getResources().getString(R.string.train_signs);
+        final String navigationButtonText = mainActivityActivityTestRule.getActivity().getResources().getString(R.string.train_signs_passive);
         final String toolbarTitle = mainActivityActivityTestRule.getActivity().getResources().getString(R.string.sign_trainer_passive);
         onView(withText(navigationButtonText)).perform(click());
         onView(allOf(withText(toolbarTitle), withParent((withId(R.id.toolbar))))).check(matches(isDisplayed()));

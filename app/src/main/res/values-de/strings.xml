@@ -18,7 +18,8 @@
     <string name="sign_browser">Gebärden-Katalog</string>
     <string name="sign_trainer_active">Gebärden-Trainer (Aktiv)</string>
     <string name="starredButton">Merken-Knopf</string>
-    <string name="train_signs">Gebärden üben</string>
+    <string name="train_signs_passive">Gebärden passiv üben</string>
+    <string name="train_signs_active">Gebärden aktiv üben</string>
     <string name="videoCouldNotBeLoaded">Video konnte nicht geladen werden.</string>
     <string name="videoIsLoading">Video wird geladen.</string>
     <string name="videoIsPlaying">Video wird abgespielt.</string>

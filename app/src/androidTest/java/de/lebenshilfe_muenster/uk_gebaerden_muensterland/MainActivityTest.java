@@ -68,7 +68,8 @@ public class MainActivityTest {
     @Test
     public void testAllMenuItemsArePresent() {
         onView(withText(R.string.browse_signs)).check(matches(allOf(isDisplayed(), isEnabled())));
-        onView(withText(R.string.train_signs)).check((matches(allOf(isDisplayed(), isEnabled()))));
+        onView(withText(R.string.train_signs_passive)).check((matches(allOf(isDisplayed(), isEnabled()))));
+        onView(withText(R.string.train_signs_active)).check((matches(allOf(isDisplayed(), isEnabled()))));
         onView(withText(R.string.about_signs)).check((matches(allOf(isDisplayed(), isEnabled()))));
         // #54 Disabled because the settings view is not used right now.
         // onView(withText(R.string.settings)).check((matches(allOf(isDisplayed(), isEnabled()))));
@@ -81,8 +82,13 @@ public class MainActivityTest {
     }
 
     @Test
-    public void clickTrainSignsButton() {
-        clickNavigationButtonAndCheckToolbarTitle((R.string.train_signs), R.string.sign_trainer_passive);
+    public void clickTrainSignsPassiveButton() {
+        clickNavigationButtonAndCheckToolbarTitle((R.string.train_signs_passive), R.string.sign_trainer_passive);
+    }
+
+    @Test
+    public void clickTrainSignsActiveButton() {
+        clickNavigationButtonAndCheckToolbarTitle((R.string.train_signs_active), R.string.sign_trainer_active);
     }
 
     @Test
@@ -99,7 +105,7 @@ public class MainActivityTest {
     @Test
     public void testBackNavigation() {
         // one fragment in the back stack
-        clickNavigationButtonAndCheckToolbarTitle((R.string.train_signs), R.string.sign_trainer_passive);
+        clickNavigationButtonAndCheckToolbarTitle((R.string.train_signs_passive), R.string.sign_trainer_passive);
         pressBack();
         checkToolbarTitle(R.string.sign_browser);
         checkNoneOfTheMenuItemsAreChecked();
@@ -113,18 +119,18 @@ public class MainActivityTest {
         openNavigationDrawer();
         clickNavigationButtonAndCheckToolbarTitle((R.string.about_signs), R.string.about_signs);
         openNavigationDrawer();
-        clickNavigationButtonAndCheckToolbarTitle((R.string.train_signs), R.string.sign_trainer_passive);
+        clickNavigationButtonAndCheckToolbarTitle((R.string.train_signs_passive), R.string.sign_trainer_passive);
         pressBack();
         pressBack();
         checkToolbarTitle(R.string.sign_browser);
         checkNoneOfTheMenuItemsAreChecked();
         // three fragments in the back stack
         openNavigationDrawer();
-        clickNavigationButtonAndCheckToolbarTitle((R.string.train_signs), R.string.sign_trainer_passive);
+        clickNavigationButtonAndCheckToolbarTitle((R.string.train_signs_passive), R.string.sign_trainer_passive);
         onView(withId(R.id.action_toggle_learning_mode)).check(matches(isDisplayed())).perform(click());
         onView(allOf(withText(getStringResource(R.string.sign_trainer_active)), withParent((withId(R.id.toolbar))))).check(matches(isDisplayed()));
         openNavigationDrawer();
-        clickNavigationButtonAndCheckToolbarTitle((R.string.train_signs), R.string.sign_trainer_passive);
+        clickNavigationButtonAndCheckToolbarTitle((R.string.train_signs_passive), R.string.sign_trainer_passive);
         pressBack();
         pressBack();
         checkToolbarTitle(R.string.sign_trainer_passive);
@@ -153,7 +159,7 @@ public class MainActivityTest {
     private void checkNoneOfTheMenuItemsAreChecked() {
         openNavigationDrawer();
         onView(withText(R.string.browse_signs)).check(matches(allOf(isDisplayed(), not(isChecked()))));
-        onView(withText(R.string.train_signs)).check(matches(allOf(isDisplayed(), not(isChecked()))));
+        onView(withText(R.string.train_signs_passive)).check(matches(allOf(isDisplayed(), not(isChecked()))));
         onView(withText(R.string.about_signs)).check(matches(allOf(isDisplayed(), not(isChecked()))));
         pressBack(); // close navigation drawer
     }

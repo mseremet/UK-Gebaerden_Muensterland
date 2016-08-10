@@ -120,8 +120,10 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
         if (R.id.nav_sign_browser == id) {
             showSignBrowser();
-        } else if (R.id.nav_sign_trainer == id) {
+        } else if (R.id.nav_sign_trainer_passive == id) {
             showSignTrainer(LearningMode.PASSIVE);
+        } else if (R.id.nav_sign_trainer_active == id) {
+            showSignTrainer(LearningMode.ACTIVE);
         } else if (R.id.nav_sign_info == id) {
             showAboutSigns();
         }
