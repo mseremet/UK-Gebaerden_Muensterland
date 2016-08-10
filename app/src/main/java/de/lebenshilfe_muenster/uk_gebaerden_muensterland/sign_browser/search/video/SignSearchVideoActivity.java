@@ -12,7 +12,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
@@ -40,7 +39,7 @@ public class SignSearchVideoActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         Validate.notNull(getSupportActionBar(), "SupportActionBar is null.");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(StringUtils.EMPTY);
+        getSupportActionBar().setTitle(R.string.sign_viewer);
     }
 
     @NonNull

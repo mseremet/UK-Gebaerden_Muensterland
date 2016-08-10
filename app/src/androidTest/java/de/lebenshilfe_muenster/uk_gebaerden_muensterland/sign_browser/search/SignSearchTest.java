@@ -107,6 +107,7 @@ public class SignSearchTest extends AbstractSignBrowserTest {
     public void checkNavigatingToVideosAndReturningWorks() {
         performSearch(MAM);
         onView(allOf(withText(MAMA), withParent(withId(R.id.signBrowserSingleRow)))).check(matches(isDisplayed())).perform(click());
+        onView(allOf(withText(getStringResource(R.string.sign_viewer)), withParent((withId(R.id.toolbar))))).check(matches(isDisplayed()));
         onView(allOf(withId(R.id.signVideoName), withText(MAMA))).check(matches(isDisplayed()));
         navigateUp();
         checkActivityTitle(MAM);

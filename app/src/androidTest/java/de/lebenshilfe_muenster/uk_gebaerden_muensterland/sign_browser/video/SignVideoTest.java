@@ -5,7 +5,6 @@ import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -16,8 +15,8 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.activities.MainActivity
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.AbstractSignBrowserTest;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.scrollToHolder;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -66,8 +65,8 @@ public class SignVideoTest {
     }
 
     @Test
-    public void checkToolbarTitleIsEmpty() {
-        onView(allOf(withText(StringUtils.EMPTY), withParent((withId(R.id.toolbar))))).check(doesNotExist());
+    public void checkToolbarTitle() {
+        onView(allOf(withText(getStringResource(R.string.sign_viewer)), withParent((withId(R.id.toolbar))))).check(matches(isDisplayed()));
     }
 
     @Test
@@ -93,6 +92,18 @@ public class SignVideoTest {
         navigateToSignVideoUIFragment();
         onView(isRoot()).perform(orientationLandscape());
         checkUpButtonNavigatesToSignBrowserInternal();
+    }
+
+    @Test
+    public void checkBackButtonNavigatesToSignBrowser() {
+        pressBack();
+        onView(ViewMatchers.withText(getStringResource(R.string.sign_browser))).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void checkManualBackButtonNavigatesToSignBrowser() {
+        onView(ViewMatchers.withText(getStringResource(R.string.back_to_sign_browser))).check(matches(isDisplayed())).perform(click());
+        onView(ViewMatchers.withText(getStringResource(R.string.sign_browser))).check(matches(isDisplayed()));
     }
 
     /**

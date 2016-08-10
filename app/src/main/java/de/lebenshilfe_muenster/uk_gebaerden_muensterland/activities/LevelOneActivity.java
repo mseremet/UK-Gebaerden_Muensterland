@@ -26,12 +26,20 @@ public class LevelOneActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
+        setupView();
+        setupVideoFragment();
+    }
+
+    private void setupView() {
         setContentView(R.layout.level_one_activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Validate.notNull(getSupportActionBar(), "SupportActionBar is null.");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(StringUtils.EMPTY);
+        getSupportActionBar().setTitle(R.string.sign_viewer);
+    }
+
+    private void setupVideoFragment() {
         final Intent intent = getIntent();
         final Bundle bundle = intent.getBundleExtra(EXTRA);
         Validate.notNull(bundle, "The bundle supplied to the activity is null.");
@@ -54,6 +62,12 @@ public class LevelOneActivity extends AppCompatActivity {
         transaction.replace(R.id.content_frame_level_one, fragment, fragmentTag);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Log.d(TAG, "onBackPressed() " + this.hashCode());
+        finish();
     }
 
 }

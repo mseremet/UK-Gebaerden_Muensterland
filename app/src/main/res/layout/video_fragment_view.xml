@@ -43,10 +43,22 @@
         android:layout_gravity="center"
         android:layout_marginBottom="6dip"
         android:layout_marginTop="6dip"
-        android:textAppearance="?android:attr/textAppearanceSmall"
         android:ellipsize="marquee"
         android:singleLine="true"
-        android:text="@string/clickVideoToShowControls" />
+        android:text="@string/clickVideoToShowControls"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <Button
+        android:id="@+id/backToSignBrowserButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_below="@+id/clickVideoToShowControls"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="6dip"
+        android:ellipsize="marquee"
+        android:singleLine="true"
+        android:text="@string/back_to_sign_browser" />
 
     <ProgressBar
         android:id="@+id/signVideoLoadingProgressBar"
@@ -56,5 +68,6 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:indeterminate="true" />
+
 
 </RelativeLayout>

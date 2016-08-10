@@ -40,4 +40,6 @@
     <string name="howDoesThisSignLookLike">Wie sieht die Gebärde aus?</string>
     <string name="sign_trainer_passive">Gebärden-Trainer (Passiv)</string>
     <string name="signTrainerQuestionTextDetail">Gebärden-Trainer Frage Detail</string>
+    <string name="back_to_sign_browser">Zurück zum Katalog</string>
+    <string name="sign_viewer">Gebärden-Anzeige</string>
 </resources>

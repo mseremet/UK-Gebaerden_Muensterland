@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.VideoView;
@@ -38,6 +39,7 @@ public class SignVideoFragment extends AbstractSignVideoFragment {
     private static final String TAG = SignVideoFragment.class.getSimpleName();
     private TextView signVideoName;
     private TextView signVideoMnemonic;
+    private Button backToSignBrowserButton;
 
     @Nullable
     @Override
@@ -47,6 +49,13 @@ public class SignVideoFragment extends AbstractSignVideoFragment {
         this.signVideoName = (TextView) view.findViewById(R.id.signVideoName);
         this.videoView = (VideoView) view.findViewById(R.id.signVideoView);
         this.signVideoMnemonic = (TextView) view.findViewById(R.id.signVideoMnemonic);
+        this.backToSignBrowserButton = (Button) view.findViewById(R.id.backToSignBrowserButton);
+        this.backToSignBrowserButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
         this.progressBar = (ProgressBar) view.findViewById(R.id.signVideoLoadingProgressBar);
         this.videoView.setContentDescription(getActivity().getString(R.string.videoIsLoading));
         return view;

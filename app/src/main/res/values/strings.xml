@@ -39,4 +39,6 @@
     <string name="howDoesThisSignLookLike">How does this sign look like?</string>
     <string name="sign_trainer_passive">Sign trainer passive</string>
     <string name="signTrainerQuestionTextDetail">Sign trainer question text detail</string>
+    <string name="back_to_sign_browser">Back to sign browser</string>
+    <string name="sign_viewer">Sign viewer</string>
 </resources>
