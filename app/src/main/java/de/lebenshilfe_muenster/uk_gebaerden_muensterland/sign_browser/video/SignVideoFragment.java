@@ -39,6 +39,7 @@ public class SignVideoFragment extends AbstractSignVideoFragment {
     private static final String TAG = SignVideoFragment.class.getSimpleName();
     private TextView signVideoName;
     private TextView signVideoMnemonic;
+    @SuppressWarnings("FieldCanBeLocal")
     private Button backToSignBrowserButton;
 
     @Nullable

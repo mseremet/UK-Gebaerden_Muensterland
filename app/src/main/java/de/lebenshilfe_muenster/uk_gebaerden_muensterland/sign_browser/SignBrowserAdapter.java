@@ -1,5 +1,6 @@
 package de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
@@ -57,6 +58,7 @@ public class SignBrowserAdapter extends RecyclerView.Adapter<SignBrowserAdapter.
         return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.browser_row_layout, parent, false));
     }
 
+    @SuppressLint("RecyclerView") // Suggested improvement does not work.
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.imgSignIcon.setOnClickListener(new View.OnClickListener() {
