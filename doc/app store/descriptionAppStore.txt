@@ -1,0 +1,11 @@
+Diese App soll dazu dienen, sprachunterstützende Gebärden aus dem System "UK-Gebärden Münsterland" (UKGM) nachzuschlagen und zu lernen. Das System besteht aus 210 alltagstauglichen Gebärden und soll Menschen, die Probleme haben, Sprechen zu lernen, helfen mit ihren Verwandten, Freunden und Bekannten zu kommunizieren. Die App besteht aus drei Teilen: 
+
+- Einem Katalog, in dem die Gebärden durchsucht und Favoriten markiert werden können
+- Einem Videoplayer, mit dem die Videos zu den Gebärden angeschaut werden können
+- Einem Trainer, mit dem die Gebärden in zwei Lernmodi gelernt werden können
+
+Diese App will ausdrücklich nicht die Deutsche Gebärdensprache (DGS) abbilden. Die DGS richtet sich an Menschen, die taub oder schwerhörig sind. Die UKGM haben hingegen jene Menschen zum Ziel, bei denen sich der Spracherwerb verzögert oder die nur ein eingeschränktes Vokabular haben. Von diesen sprachunterstützenden Gebärdensystemen gibt es in Deutschland allerdings einige. Im Münsterland hat man sich daher auf die UKGM geeinigt. 
+
+Wenn Sie die Gebärden mit dem Trainer lernen möchten, empfehlen wir, zunächst den passiven Modus zu benutzen. Hier bekommen Sie Videos von Gebärden vorgespielt und müssen dann beantworten, um welche Gebärde es sich gehandelt hat. Im Anschluss müssen Sie bewerten, wie schwer Ihnen diese Frage gefallen ist. Dadurch steigt oder sinkt Ihr Lernfortschritt für diese Gebärde. Gebärden, bei denen Ihnen die Antwort schwer fällt, werden Ihnen häufiger angezeigt. Der aktive Modus funktioniert umgekehrt: Hier müssen Sie selbst die Gebärde machen und können dann mit Hilfe des Videos kontrollieren, ob Sie recht hatten.
+
+Diese App wird von der Lebenshilfe Münster veröffentlicht. 
