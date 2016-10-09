@@ -16,7 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/app_icon"
-        android:src="@drawable/uk_gebaerden_logo_nav_menu" />
+        android:src="@drawable/uk_gebaerden_icon_nav_menu" />
 
     <TextView
         android:id="@+id/txtAppName"
