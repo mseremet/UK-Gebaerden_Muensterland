@@ -6,6 +6,15 @@ Diese App soll dazu dienen, sprachunterstützende Gebärden aus dem System "UK-G
 
 Diese App will ausdrücklich nicht die Deutsche Gebärdensprache (DGS) abbilden. Die DGS richtet sich an Menschen, die taub oder schwerhörig sind. Die UKGM haben hingegen jene Menschen zum Ziel, bei denen sich der Spracherwerb verzögert oder die nur ein eingeschränktes Vokabular haben. Von diesen sprachunterstützenden Gebärdensystemen gibt es in Deutschland allerdings einige. Im Münsterland hat man sich daher auf die UKGM geeinigt. 
 
-Wenn Sie die Gebärden mit dem Trainer lernen möchten, empfehlen wir, zunächst den passiven Modus zu benutzen. Hier bekommen Sie Videos von Gebärden vorgespielt und müssen dann beantworten, um welche Gebärde es sich gehandelt hat. Im Anschluss müssen Sie bewerten, wie schwer Ihnen diese Frage gefallen ist. Dadurch steigt oder sinkt Ihr Lernfortschritt für diese Gebärde. Gebärden, bei denen Ihnen die Antwort schwer fällt, werden Ihnen häufiger angezeigt. Der aktive Modus funktioniert umgekehrt: Hier müssen Sie selbst die Gebärde machen und können dann mit Hilfe des Videos kontrollieren, ob Sie recht hatten.
+Wenn Sie die Gebärden mit dem Trainer lernen möchten, empfehlen wir, zunächst den passiven Modus zu benutzen. Hier bekommen Sie Videos von Gebärden vorgespielt und müssen dann beantworten, um welche Gebärde es sich gehandelt hat. Im Anschluss müssen Sie bewerten, wie schwer Ihnen diese Frage gefallen ist. Dadurch steigt oder sinkt Ihr Lernfortschritt für diese Gebärde. Gebärden, bei denen Ihnen die Antwort schwer fällt, werden Ihnen häufiger angezeigt. Der aktive Modus funktioniert umgekehrt: Hier müssen Sie selbst die Gebärde machen und können dann mit Hilfe des Videos kontrollieren, ob Sie Recht hatten.
 
-Diese App wird von der Lebenshilfe Münster veröffentlicht. 
+Diese App wird von der Lebenshilfe Münster veröffentlicht.
+
+Änderungen in den Versionen: 
+- 1.0.1: Neues Logo
+
+Bekannte Probleme: 
+- Auf einem Samsung GT-I8200N mit der Android-Version 4.2.2. lassen sich die Videos im Gebärden-Trainer nicht abspielen, der Bildschirm flackert. 
+- Auf zwei Samsung Smartphones mit der Android-Version 4.1.2 können die Videos nicht geladen werden, ein entsprechender Schriftzug wird eingeblendet. Dieses Problem tritt auf der von Google veröffentlichten, ursprünglichen Android-Version 4.1.2 nicht auf. 
+
+Wir arbeiten daran, diese Fehler zu beheben. Wenn einer davon bei Ihnen auch auftritt, melden Sie sich bitte.
