@@ -33,6 +33,7 @@ import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.util.Orientation
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.anyOf;
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.not;
 
 /**
  * Copyright (c) 2016 Matthias Tonhäuser
@@ -124,6 +125,28 @@ public class SignVideoTest {
     public void checkControlInfoTextIsPresent() {
         onView(withText(getStringResource(R.string.clickVideoToShowControls))).check(matches(isDisplayed()));
     }
+
+    /**
+     * This test is disabled by default because it is meant to check the error message, which is
+     * displayed when a video cannot be loaded. This is difficult to mock. It can be tested by
+     * deleting the 'afterwards.mp4' (Dann/Danach) video in thr res/raw folder and running the test.
+     */
+    // @Test
+    public void checkErrorMessageIsDisplayedWhenVideoCannotBeLoaded() {
+        // setup - navigate back to sign browser as @before method navigates to sign viewer
+        checkUpButtonNavigatesToSignBrowserInternal();
+        // do the test
+        final String missingSignName = "Dann/Danach";
+        onView(withId(R.id.signRecyclerView)).perform(scrollToHolder(AbstractSignBrowserTest.getHolderForSignWithName(missingSignName)));
+        onView(allOf(withText(missingSignName))).check(matches(isDisplayed())).perform(click());
+        onView(allOf(withId(R.id.signVideoName), withText(getStringResource(R.string.videoError)))).check(matches(isDisplayed()));
+        onView(allOf(withId(R.id.signVideoView))).check(matches(not(isDisplayed())));
+        onView(allOf(withId(R.id.clickVideoToShowControls))).check(matches(not(isDisplayed())));
+        onView(allOf(withId(R.id.signVideoExceptionMessage), withText(getStringResource(R.string.ASVF_1)))).check(matches(isDisplayed()));
+        onView(withId(R.id.signVideoLoadingProgressCircle)).check(matches(not((isDisplayed()))));
+        onView(allOf(withId(R.id.backToSignBrowserButton), withText(getStringResource(R.string.back_to_sign_browser)))).check(matches(isDisplayed()));
+    }
+
 
     private void navigateToSignVideoUIFragment() {
         onView(withId(R.id.signRecyclerView)).perform(scrollToHolder(AbstractSignBrowserTest.getHolderForSignWithName(MAMA)));

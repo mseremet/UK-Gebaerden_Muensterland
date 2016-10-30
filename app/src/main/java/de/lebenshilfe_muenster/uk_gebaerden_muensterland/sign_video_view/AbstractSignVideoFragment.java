@@ -44,18 +44,15 @@ public abstract class AbstractSignVideoFragment extends Fragment {
     protected VideoView videoView;
     protected ProgressBar progressBar;
 
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    protected boolean isSetupVideoViewSuccessful(final Sign sign, final SOUND sound, final CONTROLS controls) {
+    protected void setupVideoView(final Sign sign, final SOUND sound, final CONTROLS controls) {
         initializeMediaController();
         final String mainActivityPackageName = getActivity().getPackageName();
         final int signIdentifier = getActivity().getResources().getIdentifier(sign.getName(), RAW, mainActivityPackageName);
         if (0 == signIdentifier) {
-            return false;
+            throw new VideoSetupException(getActivity().getString(R.string.ASVF_1));
         }
         final Uri uri = Uri.parse(ANDROID_RESOURCE + mainActivityPackageName + SLASH + signIdentifier);
-        if (!isVideoViewDimensionSetToMatchVideoMetadata(this.videoView, uri)) {
-            return false;
-        }
+        setVideoViewDimensionToMatchVideoMetadata(this.videoView, uri);
         this.videoView.setVideoURI(uri);
         this.videoView.requestFocus();
         this.videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -83,7 +80,6 @@ public abstract class AbstractSignVideoFragment extends Fragment {
                 }
             }
         });
-        return true;
     }
 
     private void initializeMediaController() {
@@ -92,7 +88,7 @@ public abstract class AbstractSignVideoFragment extends Fragment {
         this.videoView.setMediaController(mediaController);
     }
 
-    private boolean isVideoViewDimensionSetToMatchVideoMetadata(VideoView videoView, Uri uri) {
+    private void setVideoViewDimensionToMatchVideoMetadata(VideoView videoView, Uri uri) {
         String metadataVideoWidth;
         String metadataVideoHeight;
         try {
@@ -104,7 +100,13 @@ public abstract class AbstractSignVideoFragment extends Fragment {
             Validate.notEmpty(metadataVideoWidth);
             Validate.notEmpty(metadataVideoHeight);
         } catch (NullPointerException | IllegalArgumentException ex) {
-            return false;
+            throw new VideoSetupException(getActivity().getString(R.string.ASVF_2) + ex.getLocalizedMessage(), ex);
+        }
+        if (null == metadataVideoWidth) {
+            throw new VideoSetupException(getActivity().getString(R.string.ASVF_3));
+        }
+        if (null == metadataVideoHeight) {
+            throw new VideoSetupException(getActivity().getString(R.string.ASVF_4));
         }
         final double videoWidth = Double.valueOf(metadataVideoWidth);
         final double videoHeight = Double.valueOf(metadataVideoHeight);
@@ -127,7 +129,6 @@ public abstract class AbstractSignVideoFragment extends Fragment {
         final ViewGroup.LayoutParams layoutParams = videoView.getLayoutParams();
         layoutParams.width = (int) desiredVideoWidth;
         layoutParams.height = (int) desiredVideoHeight;
-        return true;
     }
 
     public enum SOUND {ON, OFF}

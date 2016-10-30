@@ -16,6 +16,7 @@ import org.apache.commons.lang3.Validate;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.Sign;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_video_view.AbstractSignVideoFragment;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_video_view.VideoSetupException;
 
 /**
  * Copyright (c) 2016 Matthias Tonhäuser
@@ -39,7 +40,8 @@ public class SignVideoFragment extends AbstractSignVideoFragment {
     private static final String TAG = SignVideoFragment.class.getSimpleName();
     private TextView signVideoName;
     private TextView signVideoMnemonic;
-    @SuppressWarnings("FieldCanBeLocal")
+    private TextView signVideoExceptionMessage;
+    private TextView clickVideoToShowControls;
     private Button backToSignBrowserButton;
 
     @Nullable
@@ -50,6 +52,8 @@ public class SignVideoFragment extends AbstractSignVideoFragment {
         this.signVideoName = (TextView) view.findViewById(R.id.signVideoName);
         this.videoView = (VideoView) view.findViewById(R.id.signVideoView);
         this.signVideoMnemonic = (TextView) view.findViewById(R.id.signVideoMnemonic);
+        this.signVideoExceptionMessage = (TextView) view.findViewById(R.id.signVideoExceptionMessage);
+        this.clickVideoToShowControls = (TextView) view.findViewById(R.id.clickVideoToShowControls);
         this.backToSignBrowserButton = (Button) view.findViewById(R.id.backToSignBrowserButton);
         this.backToSignBrowserButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,7 +61,7 @@ public class SignVideoFragment extends AbstractSignVideoFragment {
                 getActivity().onBackPressed();
             }
         });
-        this.progressBar = (ProgressBar) view.findViewById(R.id.signVideoLoadingProgressBar);
+        this.progressBar = (ProgressBar) view.findViewById(R.id.signVideoLoadingProgressCircle);
         this.videoView.setContentDescription(getActivity().getString(R.string.videoIsLoading));
         return view;
     }
@@ -70,9 +74,15 @@ public class SignVideoFragment extends AbstractSignVideoFragment {
         Validate.notNull(sign, "No sign to show provided via fragment arguments.");
         this.signVideoName.setText(sign.getNameLocaleDe());
         this.signVideoMnemonic.setText(sign.getMnemonic());
-        if (!isSetupVideoViewSuccessful(sign, SOUND.ON, CONTROLS.SHOW)) {
-            this.signVideoName.setText(getString(R.string.videoCouldNotBeLoaded));
-            this.signVideoMnemonic.setVisibility(View.INVISIBLE);
+        try {
+            setupVideoView(sign, SOUND.ON, CONTROLS.SHOW);
+        } catch (VideoSetupException ex) {
+            this.signVideoName.setText(getString(R.string.videoError));
+            this.signVideoMnemonic.setVisibility(View.GONE);
+            this.clickVideoToShowControls.setVisibility(View.GONE);
+            this.signVideoExceptionMessage.setText(ex.getMessage());
+            this.signVideoExceptionMessage.setVisibility(View.VISIBLE);
+            this.progressBar.setVisibility(View.GONE);
         }
     }
 

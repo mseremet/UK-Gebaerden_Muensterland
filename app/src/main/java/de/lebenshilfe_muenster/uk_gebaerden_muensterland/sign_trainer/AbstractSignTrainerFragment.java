@@ -21,6 +21,7 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.Sign;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.SignDAO;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_video_view.AbstractSignVideoFragment;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_video_view.VideoSetupException;
 
 /**
  * Copyright (c) 2016 Matthias Tonhäuser
@@ -169,8 +170,9 @@ public abstract class AbstractSignTrainerFragment extends AbstractSignVideoFragm
         this.signTrainerExplanationTextView.setText(getString(R.string.signTrainerExplanation));
     }
 
-    protected void handleVideoCouldNotBeLoaded() {
-        this.signQuestionText.setText(R.string.videoCouldNotBeLoaded);
+    protected void handleVideoCouldNotBeLoaded(VideoSetupException videoSetupException) {
+        // TODO: Show exception message here
+        this.signQuestionText.setText(R.string.videoError);
         setVisibility(this.questionViews, View.VISIBLE);
         setVisibility(this.answerViews, View.GONE);
     }

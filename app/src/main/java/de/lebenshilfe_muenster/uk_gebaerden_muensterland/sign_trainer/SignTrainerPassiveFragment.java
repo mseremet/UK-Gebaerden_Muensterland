@@ -12,6 +12,7 @@ import org.apache.commons.lang3.Validate;
 
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.Sign;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_video_view.VideoSetupException;
 
 import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_trainer.AbstractSignTrainerFragment.OnToggleLearningModeListener.LearningMode;
 
@@ -61,9 +62,10 @@ public class SignTrainerPassiveFragment extends AbstractSignTrainerFragment {
             final Sign parcelledSign = savedInstanceState.getParcelable(KEY_CURRENT_SIGN);
             if (null != parcelledSign) {
                 this.currentSign = parcelledSign;
-                if (!isSetupVideoViewSuccessful(this.currentSign, SOUND.OFF, CONTROLS.SHOW)) {
-                    handleVideoCouldNotBeLoaded();
-                    return;
+                try {
+                    setupVideoView(this.currentSign, SOUND.OFF, CONTROLS.SHOW);
+                } catch (VideoSetupException ex) {
+                    handleVideoCouldNotBeLoaded(ex);
                 }
             }
             final Boolean answerVisible = savedInstanceState.getBoolean(KEY_ANSWER_VISIBLE);
@@ -101,9 +103,10 @@ public class SignTrainerPassiveFragment extends AbstractSignTrainerFragment {
 
     @Override
     protected void handleLoadRandomSignTaskOnPostExecute() {
-        if (!isSetupVideoViewSuccessful(SignTrainerPassiveFragment.this.currentSign, SOUND.OFF, CONTROLS.SHOW)) {
-            handleVideoCouldNotBeLoaded();
-            return;
+        try {
+            setupVideoView(this.currentSign, SOUND.OFF, CONTROLS.SHOW);
+        } catch (VideoSetupException ex) {
+            handleVideoCouldNotBeLoaded(ex);
         }
         setVisibility(SignTrainerPassiveFragment.this.questionViews, View.VISIBLE);
         setVisibility(SignTrainerPassiveFragment.this.answerViews, View.GONE);

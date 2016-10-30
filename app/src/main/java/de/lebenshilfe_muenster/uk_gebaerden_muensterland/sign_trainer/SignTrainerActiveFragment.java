@@ -13,6 +13,7 @@ import org.apache.commons.lang3.Validate;
 
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.Sign;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_video_view.VideoSetupException;
 
 import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_trainer.AbstractSignTrainerFragment.OnToggleLearningModeListener.LearningMode;
 
@@ -69,9 +70,10 @@ public class SignTrainerActiveFragment extends AbstractSignTrainerFragment {
             if (answerVisible && (null != this.currentSign)) {
                 setVisibility(this.questionViews, View.GONE);
                 setVisibility(this.answerViews, View.VISIBLE);
-                if (!isSetupVideoViewSuccessful(this.currentSign, SOUND.ON, CONTROLS.SHOW)) {
-                    handleVideoCouldNotBeLoaded();
-                    return;
+                try {
+                    setupVideoView(this.currentSign, SOUND.ON, CONTROLS.SHOW);
+                } catch (VideoSetupException ex) {
+                    handleVideoCouldNotBeLoaded(ex);
                 }
                 setAnswerTextViews();
             } else {
@@ -98,9 +100,10 @@ public class SignTrainerActiveFragment extends AbstractSignTrainerFragment {
     protected void handleClickOnSolveQuestionButton() {
         setVisibility(this.questionViews, View.GONE);
         setVisibility(this.answerViews, View.VISIBLE);
-        if (!isSetupVideoViewSuccessful(this.currentSign, SOUND.ON, CONTROLS.SHOW)) {
-            handleVideoCouldNotBeLoaded();
-            return;
+        try {
+            setupVideoView(this.currentSign, SOUND.ON, CONTROLS.SHOW);
+        } catch (VideoSetupException ex) {
+            handleVideoCouldNotBeLoaded(ex);
         }
         setAnswerTextViews();
     }

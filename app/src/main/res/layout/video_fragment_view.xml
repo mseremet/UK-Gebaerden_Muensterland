@@ -44,8 +44,21 @@
         android:layout_marginBottom="6dip"
         android:layout_marginTop="6dip"
         android:ellipsize="marquee"
-        android:singleLine="true"
+        android:maxLines="1"
         android:text="@string/clickVideoToShowControls"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/signVideoExceptionMessage"
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/clickVideoToShowControls"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:layout_marginBottom="6dip"
+        android:layout_marginTop="6dip"
+        android:maxLines="12"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <Button
@@ -53,15 +66,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_below="@+id/clickVideoToShowControls"
+        android:layout_below="@+id/signVideoExceptionMessage"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="6dip"
         android:ellipsize="marquee"
-        android:singleLine="true"
+        android:maxLines="1"
         android:text="@string/back_to_sign_browser" />
 
     <ProgressBar
-        android:id="@+id/signVideoLoadingProgressBar"
+        android:id="@+id/signVideoLoadingProgressCircle"
         style="@android:style/Widget.ProgressBar.Large.Inverse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

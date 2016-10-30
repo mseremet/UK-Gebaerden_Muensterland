@@ -8,8 +8,8 @@ android {
         applicationId "de.lebenshilfe_muenster.uk_gebaerden_muensterland"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 4
-        versionName "1.0.1"
+        versionCode 5
+        versionName "1.0.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
