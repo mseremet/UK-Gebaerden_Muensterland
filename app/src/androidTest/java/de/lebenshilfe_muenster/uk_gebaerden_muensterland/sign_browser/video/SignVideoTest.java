@@ -127,11 +127,12 @@ public class SignVideoTest {
     }
 
     /**
-     * This test is disabled by default because it is meant to check the error message, which is
+     * This test is disabled by default because it is meant to check the error message which is
      * displayed when a video cannot be loaded. This is difficult to mock. It can be tested by
-     * deleting the 'afterwards.mp4' (Dann/Danach) video in thr res/raw folder and running the test.
+     * deleting the 'afterwards.mp4' (Dann/Danach) video in the res/raw folder and running the test.
+     * See this <a href="https://github.com/Scaronthesky/UK-Gebaerden_Muensterland/issues/65">Github issue</a>.
      */
-    // @Test
+    @Test
     public void checkErrorMessageIsDisplayedWhenVideoCannotBeLoaded() {
         // setup - navigate back to sign browser as @before method navigates to sign viewer
         checkUpButtonNavigatesToSignBrowserInternal();

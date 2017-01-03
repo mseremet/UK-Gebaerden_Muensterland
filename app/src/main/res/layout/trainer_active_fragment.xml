@@ -21,7 +21,6 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:text="@string/howDoesThisSignLookLike"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <TextView
@@ -64,10 +63,23 @@
                 android:layout_centerHorizontal="true" />
 
             <TextView
-                android:id="@+id/signTrainerMnemonic"
+                android:id="@+id/signTrainerExceptionMessage"
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/signTrainerVideoView"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:layout_marginTop="6dip"
+                android:maxLines="12"
+                android:contentDescription="@string/exceptionMessage"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/signTrainerMnemonic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/signTrainerExceptionMessage"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="6dip"
                 android:contentDescription="@string/trainerMnemonic"

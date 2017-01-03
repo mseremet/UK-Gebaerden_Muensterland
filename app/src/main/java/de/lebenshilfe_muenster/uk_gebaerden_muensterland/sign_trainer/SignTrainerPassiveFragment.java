@@ -43,13 +43,16 @@ public class SignTrainerPassiveFragment extends AbstractSignTrainerFragment {
         final View view = inflater.inflate(R.layout.trainer_passive_fragment, container, false);
         setHasOptionsMenu(true);
         initializeQuestionViews(view);
+        initializeExceptionViews(view);
         initializeAnswerViews(view);
         initializeVideoViews(view);
         this.questionViews = new View[]{this.signQuestionText, this.videoView, this.solveQuestionButton};
         this.answerViews = new View[]{this.signAnswerTextView, this.signMnemonicTextView,
                 this.signLearningProgressTextView, this.signHowHardWasQuestionTextView, this.signTrainerExplanationTextView,
                 this.questionWasEasyButton, this.questionWasFairButton, this.questionWasHardButton};
+        this.exceptionViews = new View [] {this.signTrainerExceptionMessageTextView};
         setVisibility(this.questionViews, View.VISIBLE);
+        setQuestionTextViews(getString(R.string.howDoesThisSignLookLike));
         setVisibility(this.answerViews, View.GONE);
         return view;
     }
@@ -97,8 +100,9 @@ public class SignTrainerPassiveFragment extends AbstractSignTrainerFragment {
     protected void handleClickOnSolveQuestionButton() {
         Log.d(TAG, "handleClickOnSolveQuestionButton " + hashCode());
         setVisibility(this.questionViews, View.GONE);
+        setVisibility(this.exceptionViews, View.GONE);
         setVisibility(this.answerViews, View.VISIBLE);
-        setAnswerTextViews();
+       setAnswerTextViews();
     }
 
     @Override
@@ -109,7 +113,17 @@ public class SignTrainerPassiveFragment extends AbstractSignTrainerFragment {
             handleVideoCouldNotBeLoaded(ex);
         }
         setVisibility(SignTrainerPassiveFragment.this.questionViews, View.VISIBLE);
+        setQuestionTextViews(getString(R.string.howDoesThisSignLookLike));
         setVisibility(SignTrainerPassiveFragment.this.answerViews, View.GONE);
+    }
+
+    @Override
+    protected void handleVideoCouldNotBeLoaded(VideoSetupException videoSetupException) {
+        this.signQuestionText.setText(R.string.videoError);
+        this.signTrainerExceptionMessageTextView.setText(videoSetupException.getMessage());
+        setVisibility(this.questionViews, View.VISIBLE); // also needed for the solve button
+        setVisibility(this.exceptionViews, View.VISIBLE);
+        setVisibility(this.answerViews, View.GONE);
     }
 }
 

@@ -17,21 +17,22 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.util.OrientationChangeAction.orientationLandscape;
 import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.util.OrientationChangeAction.orientationPortrait;
+import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.not;
 
 /**
  * Copyright (c) 2016 Matthias Tonhäuser
- *
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -89,6 +90,23 @@ public class SignTrainerPassiveTest extends AbstractSignTrainerTest {
         checkVideoIsLoadingInternal();
         checkStateAfterAnswerButtonClicked();
         onView(withId(R.id.signTrainerVideoView)).check(matches((isDisplayed())));
+    }
+
+    /**
+     * This test is disabled by default because it is meant to check the error message which is
+     * displayed when a video cannot be loaded. This is difficult to mock. It can be tested by
+     * deleting all videos in the res/raw folder and running the test.
+     * See this <a href="https://github.com/Scaronthesky/UK-Gebaerden_Muensterland/issues/65">Github issue</a>.
+     */
+    @Test
+    public void checkErrorMessageIsDisplayedWhenVideoCannotBeLoaded() {
+        onView(allOf(withId(R.id.signTrainerQuestionText), withText(getStringResource(R.string.videoError)))).check(matches(isDisplayed()));
+        onView(allOf(withId(R.id.signTrainerVideoView))).check(matches(not(isDisplayed())));
+        onView(allOf(withId(R.id.signTrainerExceptionMessage), withText(getStringResource(R.string.ASVF_1)))).check(matches(isDisplayed()));
+        onView(withId(R.id.signTrainerVideoLoadingProgressBar)).check(matches(not((isDisplayed()))));
+        onView(allOf(withId(R.id.signTrainerExceptionMessage), withText(getStringResource(R.string.ASVF_1)))).check(matches(isDisplayed()));
+        onView(withText(getStringResource(R.string.solveQuestion))).check(matches(isDisplayed())).perform(click());
+        checkStateAfterSolveButtonClicked(getStringResource(R.string.signQuestion));
     }
 
 }

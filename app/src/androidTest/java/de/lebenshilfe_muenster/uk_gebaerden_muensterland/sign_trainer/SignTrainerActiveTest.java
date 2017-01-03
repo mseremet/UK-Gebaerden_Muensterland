@@ -1,5 +1,6 @@
 package de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_trainer;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,6 +17,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.util.OrientationChangeAction.orientationLandscape;
 import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.util.OrientationChangeAction.orientationPortrait;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.allOf;
 
 /**
@@ -89,6 +91,25 @@ public class SignTrainerActiveTest extends  AbstractSignTrainerTest {
         onView(withText(getStringResource(R.string.questionWasFair))).perform(click());
         checkStateAfterAnswerButtonClicked();
     }
+
+    /**
+     * This test is disabled by default because it is meant to check the error message which is
+     * displayed when a video cannot be loaded. This is difficult to mock. It can be tested by
+     * deleting all videos in the res/raw folder and running the test.
+     * See this <a href="https://github.com/Scaronthesky/UK-Gebaerden_Muensterland/issues/65">Github issue</a>.
+     */
+    @Test
+    public void checkErrorMessageIsDisplayedWhenVideoCannotBeLoaded() {
+        onView(withText(getStringResource(R.string.solveQuestion))).check(matches(isDisplayed())).perform(click());
+        onView(CoreMatchers.allOf(withId(R.id.signTrainerAnswer), withText(getStringResource(R.string.videoError)))).check(matches(isDisplayed()));
+        onView(CoreMatchers.allOf(withId(R.id.signTrainerVideoView))).check(matches(not(isDisplayed())));
+        onView(CoreMatchers.allOf(withId(R.id.signTrainerExceptionMessage), withText(getStringResource(R.string.ASVF_1)))).check(matches(isDisplayed()));
+        onView(withId(R.id.signTrainerVideoLoadingProgressBar)).check(matches(not((isDisplayed()))));
+        onView(allOf(withId(R.id.signTrainerExceptionMessage), withText(getStringResource(R.string.ASVF_1)))).check(matches(isDisplayed()));
+        onView(withText(getStringResource(R.string.questionWasFair))).perform(click());
+        checkStateAfterAnswerButtonClicked();
+    }
+
 
     private void checkSignQuestionTextAndDetailIsDisplayed() {
         onView(withText(getStringResource(R.string.howDoesThisSignLookLike))).check(matches(isDisplayed()));

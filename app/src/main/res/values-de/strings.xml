@@ -44,7 +44,8 @@
     <string name="sign_viewer">Gebärden-Anzeige</string>
     <string name="ASVF_1">ASVF_1: Das Video konnte nicht geladen werden, weil es nicht in den Ressourcen
         der App gefunden wurde.</string>
-    <string name="ASVF_2">ASFV_2: Fehler beim Laden der Video-Metadaten. Detail: </string>
+    <string name="ASVF_2">ASFV_2: Fehler beim Laden der Video-Metadaten. Detail:</string>
     <string name="ASVF_3">ASFV_3: Fehler beim Laden der Video-Metadaten. Video-Breite ist null.</string>
     <string name="ASVF_4">ASVF_4: Fehler beim Laden der Video-Metadaten. Video-Höhe ist null.</string>
+    <string name="exceptionMessage">Fehlermeldung</string>
 </resources>

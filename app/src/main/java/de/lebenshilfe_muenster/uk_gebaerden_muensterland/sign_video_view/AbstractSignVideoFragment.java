@@ -12,7 +12,7 @@ import android.widget.MediaController;
 import android.widget.ProgressBar;
 import android.widget.VideoView;
 
-import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang3.StringUtils;
 
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.Sign;
@@ -97,34 +97,33 @@ public abstract class AbstractSignVideoFragment extends Fragment {
             metadataVideoWidth = metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH);
             metadataVideoHeight = metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT);
             metaRetriever.release();
-            Validate.notEmpty(metadataVideoWidth);
-            Validate.notEmpty(metadataVideoHeight);
         } catch (NullPointerException | IllegalArgumentException ex) {
-            throw new VideoSetupException(getActivity().getString(R.string.ASVF_2) + ex.getLocalizedMessage(), ex);
+            throw new VideoSetupException(getActivity().getString(R.string.ASVF_2)
+                    + StringUtils.SPACE + ex.getLocalizedMessage(), ex);
         }
-        if (null == metadataVideoWidth) {
+        if (StringUtils.isEmpty(metadataVideoWidth)) {
             throw new VideoSetupException(getActivity().getString(R.string.ASVF_3));
         }
-        if (null == metadataVideoHeight) {
+        if (StringUtils.isEmpty(metadataVideoHeight)) {
             throw new VideoSetupException(getActivity().getString(R.string.ASVF_4));
         }
         final double videoWidth = Double.valueOf(metadataVideoWidth);
         final double videoHeight = Double.valueOf(metadataVideoHeight);
         final double videoRatio = videoWidth / videoHeight;
-        Log.d(TAG, String.format("videoWidth: %s, videoHeight: %s, videoRatio: %s", videoWidth, videoHeight, videoRatio));
+        Log.d(TAG, String.format("Video meta data: videoWidth: %s, videoHeight: %s, videoRatio: %s", videoWidth, videoHeight, videoRatio));
         boolean isOrientationPortrait = Configuration.ORIENTATION_PORTRAIT == getResources().getConfiguration().orientation;
         int displayHeight = getResources().getDisplayMetrics().heightPixels;
         int displayWidth = getResources().getDisplayMetrics().widthPixels;
-        Log.d(TAG, String.format("displayHeight: %s, displayWidth: %s", displayHeight, displayWidth));
+        Log.d(TAG, String.format("Display metrics: displayHeight: %s, displayWidth: %s", displayHeight, displayWidth));
         final double desiredVideoWidth, desiredVideoHeight;
         if (isOrientationPortrait) {
             desiredVideoWidth = displayWidth * MAXIMUM_VIDEO_WIDTH_ON_PORTRAIT;
             desiredVideoHeight = 1 / (videoRatio / desiredVideoWidth);
-            Log.d(TAG, String.format("OrientationPortrait: desiredVideoWidth: %s, desiredVideoHeight: %s", desiredVideoWidth, desiredVideoHeight));
-        } else { // orientation is Landscape
+            Log.d(TAG, String.format("Orientation portrait: desiredVideoWidth: %s, desiredVideoHeight: %s", desiredVideoWidth, desiredVideoHeight));
+        } else { // orientation is landscape
             desiredVideoHeight = displayHeight * MAXMIMUM_VIDEO_HEIGHT_ON_LANDSCAPE;
             desiredVideoWidth = desiredVideoHeight * videoRatio;
-            Log.d(TAG, String.format("OrientationLandscape: desiredVideoWidth: %s, desiredVideoHeight: %s", desiredVideoWidth, desiredVideoHeight));
+            Log.d(TAG, String.format("Orientation landscape: desiredVideoWidth: %s, desiredVideoHeight: %s", desiredVideoWidth, desiredVideoHeight));
         }
         final ViewGroup.LayoutParams layoutParams = videoView.getLayoutParams();
         layoutParams.width = (int) desiredVideoWidth;

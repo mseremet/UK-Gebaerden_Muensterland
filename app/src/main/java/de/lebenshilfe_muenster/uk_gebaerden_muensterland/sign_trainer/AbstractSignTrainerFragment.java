@@ -51,12 +51,14 @@ public abstract class AbstractSignTrainerFragment extends AbstractSignVideoFragm
     protected TextView signLearningProgressTextView;
     protected TextView signHowHardWasQuestionTextView;
     protected TextView signTrainerExplanationTextView;
+    protected TextView signTrainerExceptionMessageTextView;
     protected Button questionWasEasyButton;
     protected Button questionWasFairButton;
     protected Button questionWasHardButton;
     protected TextView signQuestionText;
     protected View[] questionViews;
     protected View[] answerViews;
+    protected View[] exceptionViews;
     protected Button solveQuestionButton;
     protected LoadRandomSignTask loadRandomSignTask;
 
@@ -144,7 +146,7 @@ public abstract class AbstractSignTrainerFragment extends AbstractSignVideoFragm
         });
     }
 
-    protected void initializeQuestionViews(View view) {
+    protected void initializeQuestionViews(View view ) {
         this.signQuestionText = (TextView) view.findViewById(R.id.signTrainerQuestionText);
         this.solveQuestionButton = (Button) view.findViewById(R.id.signTrainerSolveQuestionButton);
         this.solveQuestionButton.setOnClickListener(new View.OnClickListener() {
@@ -153,6 +155,10 @@ public abstract class AbstractSignTrainerFragment extends AbstractSignVideoFragm
                 handleClickOnSolveQuestionButton();
             }
         });
+    }
+
+    protected void initializeExceptionViews(View view) {
+        this.signTrainerExceptionMessageTextView = (TextView) view.findViewById(R.id.signTrainerExceptionMessage);
     }
 
     protected void initializeVideoViews(View view) {
@@ -170,11 +176,8 @@ public abstract class AbstractSignTrainerFragment extends AbstractSignVideoFragm
         this.signTrainerExplanationTextView.setText(getString(R.string.signTrainerExplanation));
     }
 
-    protected void handleVideoCouldNotBeLoaded(VideoSetupException videoSetupException) {
-        // TODO: Show exception message here
-        this.signQuestionText.setText(R.string.videoError);
-        setVisibility(this.questionViews, View.VISIBLE);
-        setVisibility(this.answerViews, View.GONE);
+    protected void setQuestionTextViews(String questionText) {
+        this.signQuestionText.setText(questionText);
     }
 
     private void handleClickOnQuestionWasEasyButton() {
@@ -210,6 +213,8 @@ public abstract class AbstractSignTrainerFragment extends AbstractSignVideoFragm
     protected abstract void handleClickOnSolveQuestionButton();
 
     protected abstract void handleLoadRandomSignTaskOnPostExecute();
+
+    protected abstract void handleVideoCouldNotBeLoaded(VideoSetupException videoSetupException);
 
     /**
      * Has to be implemented by parent activity.

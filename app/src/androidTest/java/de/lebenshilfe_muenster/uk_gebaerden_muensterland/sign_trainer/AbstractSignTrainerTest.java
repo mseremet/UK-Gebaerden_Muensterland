@@ -106,6 +106,7 @@ public abstract class AbstractSignTrainerTest {
         onView(withContentDescription(getStringResource(R.string.learningProgress))).check(matches(isCompletelyDisplayed()));
         onView(withContentDescription(getStringResource(R.string.howHardWasTheQuestion))).check(matches(isCompletelyDisplayed()));
         onView(withContentDescription(getStringResource(R.string.signTrainerExplanation))).check(matches(isCompletelyDisplayed()));
+        onView(withContentDescription(getStringResource(R.string.exceptionMessage))).check(matches(Matchers.not(isDisplayed())));
     }
 
     protected void checkStateAfterAnswerButtonClicked() {
@@ -116,5 +117,7 @@ public abstract class AbstractSignTrainerTest {
         onView(withContentDescription(getStringResource(R.string.learningProgress))).check(matches(Matchers.not(isDisplayed())));
         onView(withContentDescription(getStringResource(R.string.howHardWasTheQuestion))).check(matches(Matchers.not(isDisplayed())));
         onView(withContentDescription(getStringResource(R.string.signTrainerExplanation))).check(matches(Matchers.not(isDisplayed())));
+        onView(withContentDescription(getStringResource(R.string.exceptionMessage))).check(matches(Matchers.not(isDisplayed())));
     }
+
 }

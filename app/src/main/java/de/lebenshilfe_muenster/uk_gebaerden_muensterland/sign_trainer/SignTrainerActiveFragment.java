@@ -47,12 +47,14 @@ public class SignTrainerActiveFragment extends AbstractSignTrainerFragment {
         setHasOptionsMenu(true);
         initializeQuestionViews(view);
         this.signQuestionTextDetail = (TextView) view.findViewById(R.id.signTrainerQuestionTextDetail);
+        initializeExceptionViews(view);
         initializeAnswerViews(view);
         initializeVideoViews(view);
         this.questionViews = new View[]{this.signQuestionText, this.signQuestionTextDetail, this.solveQuestionButton};
         this.answerViews = new View[]{this.signAnswerTextView, this.videoView, this.signMnemonicTextView,
                 this.signLearningProgressTextView, this.signHowHardWasQuestionTextView, this.signTrainerExplanationTextView,
                 this.questionWasEasyButton, this.questionWasFairButton, this.questionWasHardButton};
+        this.exceptionViews = new View [] {this.signTrainerExceptionMessageTextView};
         setVisibility(this.questionViews, View.VISIBLE);
         setVisibility(this.answerViews, View.GONE);
         return view;
@@ -70,14 +72,15 @@ public class SignTrainerActiveFragment extends AbstractSignTrainerFragment {
             if (answerVisible && (null != this.currentSign)) {
                 setVisibility(this.questionViews, View.GONE);
                 setVisibility(this.answerViews, View.VISIBLE);
+                setAnswerTextViews();
                 try {
                     setupVideoView(this.currentSign, SOUND.ON, CONTROLS.SHOW);
                 } catch (VideoSetupException ex) {
                     handleVideoCouldNotBeLoaded(ex);
                 }
-                setAnswerTextViews();
             } else {
                 setVisibility(this.questionViews, View.VISIBLE);
+                setQuestionTextViews(getString(R.string.howDoesThisSignLookLike));
                 if (null != this.currentSign) this.signQuestionTextDetail.setText(this.currentSign.getNameLocaleDe());
                 setVisibility(this.answerViews, View.GONE);
             }
@@ -100,19 +103,29 @@ public class SignTrainerActiveFragment extends AbstractSignTrainerFragment {
     protected void handleClickOnSolveQuestionButton() {
         setVisibility(this.questionViews, View.GONE);
         setVisibility(this.answerViews, View.VISIBLE);
+        setAnswerTextViews();
         try {
             setupVideoView(this.currentSign, SOUND.ON, CONTROLS.SHOW);
         } catch (VideoSetupException ex) {
             handleVideoCouldNotBeLoaded(ex);
         }
-        setAnswerTextViews();
     }
 
     @Override
     protected void handleLoadRandomSignTaskOnPostExecute() {
         setVisibility(SignTrainerActiveFragment.this.questionViews, View.VISIBLE);
         setVisibility(SignTrainerActiveFragment.this.answerViews, View.GONE);
+        setVisibility(SignTrainerActiveFragment.this.exceptionViews, View.GONE);
+        setQuestionTextViews(getString(R.string.howDoesThisSignLookLike));
         this.signQuestionTextDetail.setText(this.currentSign.getNameLocaleDe());
     }
 
+    @Override
+    protected void handleVideoCouldNotBeLoaded(VideoSetupException videoSetupException) {
+        this.signAnswerTextView.setText(R.string.videoError);
+        this.signTrainerExceptionMessageTextView.setText(videoSetupException.getMessage());
+        setVisibility(this.answerViews, View.VISIBLE);
+        setVisibility(this.exceptionViews, View.VISIBLE);
+        setVisibility(this.questionViews, View.GONE);
+    }
 }
