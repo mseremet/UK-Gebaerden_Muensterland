@@ -98,18 +98,27 @@ public class SignTrainerActiveTest extends  AbstractSignTrainerTest {
      * deleting all videos in the res/raw folder and running the test.
      * See this <a href="https://github.com/Scaronthesky/UK-Gebaerden_Muensterland/issues/65">Github issue</a>.
      */
-    @Test
+    // @Test
     public void checkErrorMessageIsDisplayedWhenVideoCannotBeLoaded() {
         onView(withText(getStringResource(R.string.solveQuestion))).check(matches(isDisplayed())).perform(click());
-        onView(CoreMatchers.allOf(withId(R.id.signTrainerAnswer), withText(getStringResource(R.string.videoError)))).check(matches(isDisplayed()));
-        onView(CoreMatchers.allOf(withId(R.id.signTrainerVideoView))).check(matches(not(isDisplayed())));
-        onView(CoreMatchers.allOf(withId(R.id.signTrainerExceptionMessage), withText(getStringResource(R.string.ASVF_1)))).check(matches(isDisplayed()));
-        onView(withId(R.id.signTrainerVideoLoadingProgressBar)).check(matches(not((isDisplayed()))));
-        onView(allOf(withId(R.id.signTrainerExceptionMessage), withText(getStringResource(R.string.ASVF_1)))).check(matches(isDisplayed()));
+        checkErrorMessageIsDisplayedInternal();
+        onView(isRoot()).perform(orientationLandscape());
+        checkErrorMessageIsDisplayedInternal();
+        onView(isRoot()).perform(orientationPortrait());
+        checkErrorMessageIsDisplayedInternal();
         onView(withText(getStringResource(R.string.questionWasFair))).perform(click());
         checkStateAfterAnswerButtonClicked();
+        onView(isRoot()).perform(orientationLandscape());
+        checkStateAfterAnswerButtonClicked();
+        onView(withText(getStringResource(R.string.solveQuestion))).check(matches(isDisplayed())).perform(click());
+        checkErrorMessageIsDisplayedInternal();
     }
 
+    private void checkErrorMessageIsDisplayedInternal() {
+        onView(CoreMatchers.allOf(withId(R.id.signTrainerAnswer), withText(getStringResource(R.string.videoError)))).check(matches(isDisplayed()));
+        onView(CoreMatchers.allOf(withId(R.id.signTrainerExceptionMessage), withText(getStringResource(R.string.ASVF_1)))).check(matches(isDisplayed()));
+        onView(withId(R.id.signTrainerVideoLoadingProgressBar)).check(matches(not((isDisplayed()))));
+    }
 
     private void checkSignQuestionTextAndDetailIsDisplayed() {
         onView(withText(getStringResource(R.string.howDoesThisSignLookLike))).check(matches(isDisplayed()));

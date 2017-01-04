@@ -73,6 +73,8 @@ public class SignTrainerActiveFragment extends AbstractSignTrainerFragment {
                 setVisibility(this.questionViews, View.GONE);
                 setVisibility(this.answerViews, View.VISIBLE);
                 setAnswerTextViews();
+                // just to make the SignTrainerActiveTest happy - was hard-coded in xml before.
+                setQuestionTextViews(getString(R.string.howDoesThisSignLookLike));
                 try {
                     setupVideoView(this.currentSign, SOUND.ON, CONTROLS.SHOW);
                 } catch (VideoSetupException ex) {

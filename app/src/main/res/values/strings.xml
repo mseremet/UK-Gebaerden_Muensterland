@@ -41,10 +41,9 @@
     <string name="signTrainerQuestionTextDetail">Sign trainer question text detail</string>
     <string name="back_to_sign_browser">Back to sign browser</string>
     <string name="sign_viewer">Sign viewer</string>
-    <string name="ASVF_1">ASVF_1: The video could not be loaded because it could not be found in
-        the ressources of the app.</string>
-    <string name="ASVF_2">ASFV_2: Exception caught while loading video metadata. Detail:</string>
-    <string name="ASVF_3">ASVF_3: Exception caught while loading video meta data. Video width is null.</string>
-    <string name="ASVF_4">ASVF_4: Exception caught while loading video meta data. Video height is null.</string>
+    <string name="ASVF_1">ASVF_1: Video not found.</string>
+    <string name="ASVF_2">ASFV_2: Video metadata could not be loaded. Detail:</string>
+    <string name="ASVF_3">ASVF_3: Video width is null.</string>
+    <string name="ASVF_4">ASVF_4: Video height is null.</string>
     <string name="exceptionMessage">Exception message</string>
 </resources>

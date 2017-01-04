@@ -50,9 +50,9 @@ public class SignTrainerPassiveFragment extends AbstractSignTrainerFragment {
         this.answerViews = new View[]{this.signAnswerTextView, this.signMnemonicTextView,
                 this.signLearningProgressTextView, this.signHowHardWasQuestionTextView, this.signTrainerExplanationTextView,
                 this.questionWasEasyButton, this.questionWasFairButton, this.questionWasHardButton};
-        this.exceptionViews = new View [] {this.signTrainerExceptionMessageTextView};
+        this.exceptionViews = new View[]{this.signTrainerExceptionMessageTextView};
         setVisibility(this.questionViews, View.VISIBLE);
-        setQuestionTextViews(getString(R.string.howDoesThisSignLookLike));
+        setQuestionTextViews(getString(R.string.signQuestion));
         setVisibility(this.answerViews, View.GONE);
         return view;
     }
@@ -75,6 +75,7 @@ public class SignTrainerPassiveFragment extends AbstractSignTrainerFragment {
             Validate.notNull(answerVisible, "AnswerVisible should always be non-null in savedInstance bundle.");
             if (answerVisible && (null != this.currentSign)) {
                 setVisibility(this.questionViews, View.GONE);
+                setVisibility(this.exceptionViews, View.GONE);
                 setVisibility(this.answerViews, View.VISIBLE);
                 setAnswerTextViews();
             } else {
@@ -102,19 +103,19 @@ public class SignTrainerPassiveFragment extends AbstractSignTrainerFragment {
         setVisibility(this.questionViews, View.GONE);
         setVisibility(this.exceptionViews, View.GONE);
         setVisibility(this.answerViews, View.VISIBLE);
-       setAnswerTextViews();
+        setAnswerTextViews();
     }
 
     @Override
     protected void handleLoadRandomSignTaskOnPostExecute() {
+        setVisibility(SignTrainerPassiveFragment.this.questionViews, View.VISIBLE);
+        setQuestionTextViews(getString(R.string.signQuestion));
+        setVisibility(SignTrainerPassiveFragment.this.answerViews, View.GONE);
         try {
             setupVideoView(this.currentSign, SOUND.OFF, CONTROLS.SHOW);
         } catch (VideoSetupException ex) {
             handleVideoCouldNotBeLoaded(ex);
         }
-        setVisibility(SignTrainerPassiveFragment.this.questionViews, View.VISIBLE);
-        setQuestionTextViews(getString(R.string.howDoesThisSignLookLike));
-        setVisibility(SignTrainerPassiveFragment.this.answerViews, View.GONE);
     }
 
     @Override

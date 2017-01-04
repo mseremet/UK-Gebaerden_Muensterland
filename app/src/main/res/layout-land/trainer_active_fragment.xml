@@ -56,10 +56,10 @@
                 android:contentDescription="@string/answer"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
-            <VideoView
+           <VideoView
                 android:id="@+id/signTrainerVideoView"
-                android:layout_width="0dip"
-                android:layout_height="0dip"
+                android:layout_width="200dip"
+                android:layout_height="100dip"
                 android:layout_below="@+id/signTrainerAnswer"
                 android:layout_marginEnd="6dip"
                 android:layout_marginRight="6dip" />
@@ -70,9 +70,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/signTrainerVideoView"
-                android:layout_centerHorizontal="true"
                 android:layout_gravity="center"
-                android:layout_marginTop="6dip"
+                android:layout_marginLeft="6dip"
+                android:layout_marginStart="6dip"
+                android:ellipsize="marquee"
                 android:maxLines="12"
                 android:contentDescription="@string/exceptionMessage"
                 android:textAppearance="?android:attr/textAppearanceSmall" />

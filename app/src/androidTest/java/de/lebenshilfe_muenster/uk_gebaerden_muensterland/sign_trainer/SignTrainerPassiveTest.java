@@ -98,15 +98,26 @@ public class SignTrainerPassiveTest extends AbstractSignTrainerTest {
      * deleting all videos in the res/raw folder and running the test.
      * See this <a href="https://github.com/Scaronthesky/UK-Gebaerden_Muensterland/issues/65">Github issue</a>.
      */
-    @Test
+    // @Test
     public void checkErrorMessageIsDisplayedWhenVideoCannotBeLoaded() {
+        checkErrorMessageIsDisplayedInternal();
+        onView(isRoot()).perform(orientationLandscape());
+        checkErrorMessageIsDisplayedInternal();
+        onView(withText(getStringResource(R.string.solveQuestion))).check(matches(isDisplayed())).perform(click());
+        checkStateAfterSolveButtonClicked(getStringResource(R.string.videoError));
+        onView(isRoot()).perform(orientationPortrait());
+        checkStateAfterSolveButtonClicked(getStringResource(R.string.videoError));
+        onView(withText(getStringResource(R.string.questionWasFair))).perform(click());
+        checkErrorMessageIsDisplayedInternal();
+        onView(isRoot()).perform(orientationLandscape());
+        checkErrorMessageIsDisplayedInternal();
+    }
+
+    private void checkErrorMessageIsDisplayedInternal() {
         onView(allOf(withId(R.id.signTrainerQuestionText), withText(getStringResource(R.string.videoError)))).check(matches(isDisplayed()));
         onView(allOf(withId(R.id.signTrainerVideoView))).check(matches(not(isDisplayed())));
         onView(allOf(withId(R.id.signTrainerExceptionMessage), withText(getStringResource(R.string.ASVF_1)))).check(matches(isDisplayed()));
         onView(withId(R.id.signTrainerVideoLoadingProgressBar)).check(matches(not((isDisplayed()))));
-        onView(allOf(withId(R.id.signTrainerExceptionMessage), withText(getStringResource(R.string.ASVF_1)))).check(matches(isDisplayed()));
-        onView(withText(getStringResource(R.string.solveQuestion))).check(matches(isDisplayed())).perform(click());
-        checkStateAfterSolveButtonClicked(getStringResource(R.string.signQuestion));
     }
 
 }

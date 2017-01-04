@@ -132,7 +132,7 @@ public class SignVideoTest {
      * deleting the 'afterwards.mp4' (Dann/Danach) video in the res/raw folder and running the test.
      * See this <a href="https://github.com/Scaronthesky/UK-Gebaerden_Muensterland/issues/65">Github issue</a>.
      */
-    @Test
+    //@Test
     public void checkErrorMessageIsDisplayedWhenVideoCannotBeLoaded() {
         // setup - navigate back to sign browser as @before method navigates to sign viewer
         checkUpButtonNavigatesToSignBrowserInternal();

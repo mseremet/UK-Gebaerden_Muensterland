@@ -71,6 +71,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="center"
                 android:layout_marginTop="6dip"
+                android:layout_marginBottom="6dip"
                 android:maxLines="12"
                 android:contentDescription="@string/exceptionMessage"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
