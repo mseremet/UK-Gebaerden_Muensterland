@@ -26,10 +26,13 @@ package de.lebenshilfe_muenster.uk_gebaerden_muensterland.util;
  */
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.pm.ActivityInfo;
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
 import android.view.View;
+import android.view.ViewGroup;
 
 import org.hamcrest.Matcher;
 
@@ -68,7 +71,24 @@ public class OrientationChangeAction implements ViewAction {
     @Override
     public void perform(UiController uiController, View view) {
         uiController.loopMainThreadUntilIdle();
-        final Activity activity = (Activity) view.getContext();
+        Activity activity = getActivity(view.getContext());
+        if (activity == null && view instanceof ViewGroup) {
+            ViewGroup v = (ViewGroup) view;
+            int c = v.getChildCount();
+            for (int i = 0; i < c && activity == null; ++i) {
+                activity = getActivity(v.getChildAt(i).getContext());
+            }
+        }
         activity.setRequestedOrientation(orientation);
+    }
+
+    public Activity getActivity(Context context) {
+        while (context instanceof ContextWrapper) {
+            if (context instanceof Activity) {
+                return (Activity) context;
+            }
+            context = ((ContextWrapper) context).getBaseContext();
+        }
+        return null;
     }
 }
