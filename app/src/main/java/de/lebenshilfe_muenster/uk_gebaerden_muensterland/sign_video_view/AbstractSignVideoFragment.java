@@ -2,7 +2,6 @@ package de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_video_view;
 
 import android.app.Fragment;
 import android.content.res.Configuration;
-import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.util.Log;
@@ -11,8 +10,6 @@ import android.view.ViewGroup;
 import android.widget.MediaController;
 import android.widget.ProgressBar;
 import android.widget.VideoView;
-
-import org.apache.commons.lang3.StringUtils;
 
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.Sign;
@@ -35,12 +32,15 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.Sign;
  */
 public abstract class AbstractSignVideoFragment extends Fragment {
 
+    private static final double VIDEO_WIDTH = 720d;
+    private static final double VIDEO_HEIGHT = 720d;
     private static final double MAXMIMUM_VIDEO_HEIGHT_ON_LANDSCAPE = 0.4;
     private static final double MAXIMUM_VIDEO_WIDTH_ON_PORTRAIT = 0.8;
     private final static String TAG = AbstractSignVideoFragment.class.getSimpleName();
     private static final String ANDROID_RESOURCE = "android.resource://";
     private static final String SLASH = "/";
     private static final String RAW = "raw";
+
     protected VideoView videoView;
     protected ProgressBar progressBar;
 
@@ -89,26 +89,8 @@ public abstract class AbstractSignVideoFragment extends Fragment {
     }
 
     private void setVideoViewDimensionToMatchVideoMetadata(VideoView videoView, Uri uri) {
-        String metadataVideoWidth;
-        String metadataVideoHeight;
-        try {
-            final MediaMetadataRetriever metaRetriever = new MediaMetadataRetriever();
-            metaRetriever.setDataSource(getActivity(), uri);
-            metadataVideoWidth = metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH);
-            metadataVideoHeight = metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT);
-            metaRetriever.release();
-        } catch (NullPointerException | IllegalArgumentException ex) {
-            throw new VideoSetupException(getActivity().getString(R.string.ASVF_2)
-                    + StringUtils.SPACE + ex.getLocalizedMessage(), ex);
-        }
-        if (StringUtils.isEmpty(metadataVideoWidth)) {
-            throw new VideoSetupException(getActivity().getString(R.string.ASVF_3));
-        }
-        if (StringUtils.isEmpty(metadataVideoHeight)) {
-            throw new VideoSetupException(getActivity().getString(R.string.ASVF_4));
-        }
-        final double videoWidth = Double.valueOf(metadataVideoWidth);
-        final double videoHeight = Double.valueOf(metadataVideoHeight);
+        final double videoWidth = VIDEO_WIDTH;
+        final double videoHeight = VIDEO_HEIGHT;
         final double videoRatio = videoWidth / videoHeight;
         Log.d(TAG, String.format("Video meta data: videoWidth: %s, videoHeight: %s, videoRatio: %s", videoWidth, videoHeight, videoRatio));
         boolean isOrientationPortrait = Configuration.ORIENTATION_PORTRAIT == getResources().getConfiguration().orientation;
