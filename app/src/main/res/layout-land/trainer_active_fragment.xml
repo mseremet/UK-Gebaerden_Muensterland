@@ -105,7 +105,7 @@
                 android:id="@+id/signTrainerHowHardWasTheQuestion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/signTrainerAnswer"
+                android:layout_below="@+id/signTrainerAnswer"
                 android:layout_marginLeft="6dip"
                 android:layout_marginStart="6dip"
                 android:layout_toRightOf="@id/signTrainerVideoView"

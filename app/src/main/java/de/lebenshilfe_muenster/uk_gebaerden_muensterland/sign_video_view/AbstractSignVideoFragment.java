@@ -32,8 +32,6 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.Sign;
  */
 public abstract class AbstractSignVideoFragment extends Fragment {
 
-    private static final double VIDEO_WIDTH = 720d;
-    private static final double VIDEO_HEIGHT = 720d;
     private static final double MAXMIMUM_VIDEO_HEIGHT_ON_LANDSCAPE = 0.4;
     private static final double MAXIMUM_VIDEO_WIDTH_ON_PORTRAIT = 0.8;
     private final static String TAG = AbstractSignVideoFragment.class.getSimpleName();
@@ -52,7 +50,7 @@ public abstract class AbstractSignVideoFragment extends Fragment {
             throw new VideoSetupException(getActivity().getString(R.string.ASVF_1));
         }
         final Uri uri = Uri.parse(ANDROID_RESOURCE + mainActivityPackageName + SLASH + signIdentifier);
-        setVideoViewDimensionToMatchVideoMetadata(this.videoView, uri);
+        setVideoViewDimensionToMatchDisplaySize(this.videoView, uri);
         this.videoView.setVideoURI(uri);
         this.videoView.requestFocus();
         this.videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -88,11 +86,7 @@ public abstract class AbstractSignVideoFragment extends Fragment {
         this.videoView.setMediaController(mediaController);
     }
 
-    private void setVideoViewDimensionToMatchVideoMetadata(VideoView videoView, Uri uri) {
-        final double videoWidth = VIDEO_WIDTH;
-        final double videoHeight = VIDEO_HEIGHT;
-        final double videoRatio = videoWidth / videoHeight;
-        Log.d(TAG, String.format("Video meta data: videoWidth: %s, videoHeight: %s, videoRatio: %s", videoWidth, videoHeight, videoRatio));
+    private void setVideoViewDimensionToMatchDisplaySize(VideoView videoView, Uri uri) {
         boolean isOrientationPortrait = Configuration.ORIENTATION_PORTRAIT == getResources().getConfiguration().orientation;
         int displayHeight = getResources().getDisplayMetrics().heightPixels;
         int displayWidth = getResources().getDisplayMetrics().widthPixels;
@@ -100,11 +94,11 @@ public abstract class AbstractSignVideoFragment extends Fragment {
         final double desiredVideoWidth, desiredVideoHeight;
         if (isOrientationPortrait) {
             desiredVideoWidth = displayWidth * MAXIMUM_VIDEO_WIDTH_ON_PORTRAIT;
-            desiredVideoHeight = 1 / (videoRatio / desiredVideoWidth);
+            desiredVideoHeight =  desiredVideoWidth;
             Log.d(TAG, String.format("Orientation portrait: desiredVideoWidth: %s, desiredVideoHeight: %s", desiredVideoWidth, desiredVideoHeight));
         } else { // orientation is landscape
             desiredVideoHeight = displayHeight * MAXMIMUM_VIDEO_HEIGHT_ON_LANDSCAPE;
-            desiredVideoWidth = desiredVideoHeight * videoRatio;
+            desiredVideoWidth = desiredVideoHeight;
             Log.d(TAG, String.format("Orientation landscape: desiredVideoWidth: %s, desiredVideoHeight: %s", desiredVideoWidth, desiredVideoHeight));
         }
         final ViewGroup.LayoutParams layoutParams = videoView.getLayoutParams();
