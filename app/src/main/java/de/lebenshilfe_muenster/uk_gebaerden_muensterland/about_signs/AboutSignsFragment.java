@@ -38,6 +38,8 @@ public class AboutSignsFragment extends Fragment {
         Log.d(TAG, "onCreateView " + hashCode());
         final View view = inflater.inflate(R.layout.about_signs_fragment, container, false);
         this.webView = (WebView) view.findViewById(R.id.aboutSignsWebView);
+        this.webView.getSettings().setJavaScriptEnabled(true);
+        this.webView.getSettings().setDefaultTextEncodingName("UTF-8");
         return view;
     }
 

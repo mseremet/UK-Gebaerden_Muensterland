@@ -1,6 +1,7 @@
 package de.lebenshilfe_muenster.uk_gebaerden_muensterland.about_signs;
 
 import android.support.annotation.NonNull;
+import android.support.test.espresso.web.webdriver.Locator;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -20,7 +21,12 @@ import static android.support.test.espresso.matcher.ViewMatchers.withContentDesc
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static android.support.test.espresso.web.assertion.WebViewAssertions.webMatches;
+import static android.support.test.espresso.web.sugar.Web.onWebView;
+import static android.support.test.espresso.web.webdriver.DriverAtoms.findElement;
+import static android.support.test.espresso.web.webdriver.DriverAtoms.getText;
 import static org.hamcrest.CoreMatchers.allOf;
+import static org.junit.matchers.JUnitMatchers.containsString;
 
 /**
  * Copyright (c) 2016 Matthias Tonhäuser
@@ -58,6 +64,13 @@ public class AboutSignsTest {
     @Test
     public void checkWebViewIsPresent() {
         onView(withId(R.id.aboutSignsWebView)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void checkWebViewHtmlIsProperlyRendered() {
+        onWebView().withElement(findElement(Locator.ID, "firstHeader")).check(webMatches(getText(), containsString("Was sind die UK-Gebärden Münsterland?")));
+        onWebView().withElement(findElement(Locator.ID, "firstParagraph")).check(webMatches(getText(), containsString("UK steht für \"Unterstützte Kommunikation\"")));
+        onWebView().withElement(findElement(Locator.ID, "lastHeader")).check(webMatches(getText(), containsString("Welche Open-Source-Bibliotheken wurden benutzt?")));
     }
 
     @NonNull
