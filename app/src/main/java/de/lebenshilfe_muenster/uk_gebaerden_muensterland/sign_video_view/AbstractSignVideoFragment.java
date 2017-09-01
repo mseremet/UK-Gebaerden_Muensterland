@@ -33,7 +33,7 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.Sign;
 public abstract class AbstractSignVideoFragment extends Fragment {
 
     private static final double MAXMIMUM_VIDEO_HEIGHT_ON_LANDSCAPE = 0.4;
-    private static final double MAXIMUM_VIDEO_WIDTH_ON_PORTRAIT = 0.8;
+    private static final double MAXIMUM_VIDEO_WIDTH_ON_PORTRAIT = 0.7;
     private final static String TAG = AbstractSignVideoFragment.class.getSimpleName();
     private static final String ANDROID_RESOURCE = "android.resource://";
     private static final String SLASH = "/";
