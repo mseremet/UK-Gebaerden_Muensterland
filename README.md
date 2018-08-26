@@ -8,7 +8,17 @@ This is an Android app for browsing and learning the sign language "Unterstützt
 * A sign trainer with two learning modes (passive and active) and learning progress tracking
 
 ## Project structure
-Main entry point is the class de.lebenshilfe_muenster.uk_gebaerden_muensterland.activities.MainActivity. Project organization and source code follow standard Android development patterns. The SQLite database containing the names of the signs and further information resides in src/database/signs.db.sqlite and has to be zipped and copied to src/app/src/main/assets/databases/signs.db.zip in order to be incorporated into the app. The test suite de.lebenshilfe_muenster.uk_gebaerden_muensterland.suite.AllEspressoUITests contains all the Android Espresso UI tests.
+Main entry point is the class MainActivity. Project organization and source code follow standard Android development patterns. The SQLite database containing the names of the signs and further information resides in [this location](src/database/signs.db.sqlite) and has to be zipped and copied to [this location](src/app/src/main/assets/databases/signs.db.zip) in order to be incorporated into the app. The test suite AllEspressoUITests contains all the Android Espresso UI tests.
+
+## Repository structure
+This repository is using the [Git Workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow) structure:
+* A develop branch is created from master
+* A release branch is created from develop
+* Feature branches are created from develop
+* When a feature is complete it is merged into the develop branch
+* When the release branch is done it is merged into develop and master
+* If an issue in master is detected a hotfix branch is created from master
+* Once the hotfix is complete it is merged to both develop and master
 
 ## Supporting the development
 If you want to support the development of the app, don't hesitate to get in contact.
