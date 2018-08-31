@@ -103,8 +103,13 @@ public class SignVideoTest {
 
     @Test
     public void checkManualBackButtonNavigatesToSignBrowser() {
-        onView(ViewMatchers.withText(getStringResource(R.string.back_to_sign_browser))).check(matches(isDisplayed())).perform(click());
-        onView(ViewMatchers.withText(getStringResource(R.string.sign_browser))).check(matches(isDisplayed()));
+        clickManualBackButton();
+    }
+
+    @Test
+    public void checkManualBackButtonNavigatesToSignBrowserInLandscapeOrientation() {
+        onView(isRoot()).perform(orientationLandscape());
+        clickManualBackButton();
     }
 
     /**
@@ -121,11 +126,6 @@ public class SignVideoTest {
         checkVideoIsLoadingAndPlaying();
     }
 
-    @Test
-    public void checkControlInfoTextIsPresent() {
-        onView(withText(getStringResource(R.string.clickVideoToShowControls))).check(matches(isDisplayed()));
-    }
-
     /**
      * This test is disabled by default because it is meant to check the error message which is
      * displayed when a video cannot be loaded. This is difficult to mock. It can be tested by
@@ -134,7 +134,7 @@ public class SignVideoTest {
      */
     //@Test
     public void checkErrorMessageIsDisplayedWhenVideoCannotBeLoaded() {
-        // setup - navigate back to sign browser as @before method navigates to sign viewer
+        // setup - navigate back to sign browser as @Before method navigates to sign viewer
         checkUpButtonNavigatesToSignBrowserInternal();
         // do the test
         final String missingSignName = "Dann/Danach";
@@ -142,7 +142,6 @@ public class SignVideoTest {
         onView(allOf(withText(missingSignName))).check(matches(isDisplayed())).perform(click());
         onView(allOf(withId(R.id.signVideoName), withText(getStringResource(R.string.videoError)))).check(matches(isDisplayed()));
         onView(allOf(withId(R.id.signVideoView))).check(matches(not(isDisplayed())));
-        onView(allOf(withId(R.id.clickVideoToShowControls))).check(matches(not(isDisplayed())));
         onView(allOf(withId(R.id.signVideoExceptionMessage), withText(getStringResource(R.string.ASVF_1)))).check(matches(isDisplayed()));
         onView(withId(R.id.signVideoLoadingProgressCircle)).check(matches(not((isDisplayed()))));
         onView(allOf(withId(R.id.backToSignBrowserButton), withText(getStringResource(R.string.back_to_sign_browser)))).check(matches(isDisplayed()));
@@ -159,6 +158,10 @@ public class SignVideoTest {
         onView(ViewMatchers.withText(R.string.sign_browser)).check(matches(isDisplayed()));
     }
 
+    private void clickManualBackButton() {
+        onView(ViewMatchers.withText(getStringResource(R.string.back_to_sign_browser))).check(matches(isDisplayed())).perform(click());
+        onView(ViewMatchers.withText(getStringResource(R.string.sign_browser))).check(matches(isDisplayed()));
+    }
 
     private void videoIsLoadingAndPlaying() {
         onView(allOf(withId(R.id.signVideoName), withText(MAMA))).check(matches(isDisplayed()));

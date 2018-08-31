@@ -41,7 +41,6 @@ public class SignVideoFragment extends AbstractSignVideoFragment {
     private TextView signVideoName;
     private TextView signVideoMnemonic;
     private TextView signVideoExceptionMessage;
-    private TextView clickVideoToShowControls;
     private Button backToSignBrowserButton;
 
     @Nullable
@@ -53,7 +52,6 @@ public class SignVideoFragment extends AbstractSignVideoFragment {
         this.videoView = (VideoView) view.findViewById(R.id.signVideoView);
         this.signVideoMnemonic = (TextView) view.findViewById(R.id.signVideoMnemonic);
         this.signVideoExceptionMessage = (TextView) view.findViewById(R.id.signVideoExceptionMessage);
-        this.clickVideoToShowControls = (TextView) view.findViewById(R.id.clickVideoToShowControls);
         this.backToSignBrowserButton = (Button) view.findViewById(R.id.backToSignBrowserButton);
         this.backToSignBrowserButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,7 +77,6 @@ public class SignVideoFragment extends AbstractSignVideoFragment {
         } catch (VideoSetupException ex) {
             this.signVideoName.setText(getString(R.string.videoError));
             this.signVideoMnemonic.setVisibility(View.GONE);
-            this.clickVideoToShowControls.setVisibility(View.GONE);
             this.signVideoExceptionMessage.setText(ex.getMessage());
             this.signVideoExceptionMessage.setVisibility(View.VISIBLE);
             this.progressBar.setVisibility(View.GONE);

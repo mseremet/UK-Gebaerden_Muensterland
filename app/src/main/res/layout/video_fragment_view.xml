@@ -30,30 +30,16 @@
         android:layout_below="@id/signVideoView"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"
-        android:layout_marginBottom="6dip"
         android:layout_marginTop="6dip"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
-    <TextView
-        android:id="@+id/clickVideoToShowControls"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/signVideoMnemonic"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center"
-        android:layout_marginBottom="6dip"
-        android:layout_marginTop="6dip"
-        android:ellipsize="marquee"
-        android:maxLines="1"
-        android:text="@string/clickVideoToShowControls"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <TextView
         android:id="@+id/signVideoExceptionMessage"
         android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/clickVideoToShowControls"
+        android:layout_below="@+id/signVideoMnemonic"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"
         android:layout_marginTop="6dip"
@@ -67,10 +53,9 @@
         android:layout_gravity="center"
         android:layout_below="@+id/signVideoExceptionMessage"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="6dip"
         android:ellipsize="marquee"
-        android:maxLines="1"
-        android:text="@string/back_to_sign_browser" />
+        android:text="@string/back_to_sign_browser"
+        android:singleLine="true" />
 
     <ProgressBar
         android:id="@+id/signVideoLoadingProgressCircle"
