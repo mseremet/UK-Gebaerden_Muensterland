@@ -31,10 +31,9 @@
     <string name="questionWasHard">Hard</string>
     <string name="answer">Answer</string>
     <string name="trainerMnemonic">mnemomic</string>
-    <string name="versionName">Version: 1.1.1</string>
+    <string name="versionName">Version: 1.2.0-BETA</string>
     <string name="howHardWasTheQuestion">This question was…</string>
     <string name="signTrainerExplanation">\'Easy\': learning progress +1, \'Hard\': -1.</string>
-    <string name="clickVideoToShowControls">Click video to show controls.</string>
     <string name="action_toggle_learning_mode">Toggle mode</string>
     <string name="howDoesThisSignLookLike">How does this sign look like?</string>
     <string name="sign_trainer_passive">Sign trainer passive</string>

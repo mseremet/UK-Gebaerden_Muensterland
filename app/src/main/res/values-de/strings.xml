@@ -32,10 +32,9 @@
     <string name="questionWasHard">Schwer</string>
     <string name="answer">Antwort</string>
     <string name="trainerMnemonic">Eselbrücke</string>
-    <string name="versionName">Version: 1.1.1</string>
+    <string name="versionName">Version: 1.2.0-BETA</string>
     <string name="progress">Fortschritt</string>
     <string name="signTrainerExplanation">\'Einfach\': Lernfortschritt +1, \'Schwer\': -1.</string>
-    <string name="clickVideoToShowControls">Für Steuerung Video anklicken.</string>
     <string name="action_toggle_learning_mode">Modus wechseln</string>
     <string name="howDoesThisSignLookLike">Wie sieht die Gebärde aus?</string>
     <string name="sign_trainer_passive">Gebärden-Trainer (Passiv)</string>
