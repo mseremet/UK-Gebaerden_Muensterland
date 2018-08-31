@@ -75,8 +75,8 @@
                 android:layout_centerHorizontal="true"
                 android:contentDescription="@string/trainerMnemonic"
                 android:ellipsize="marquee"
-                android:maxLines="1"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:singleLine="true" />
 
             <TextView
                 android:id="@+id/signTrainerLearningProgress"
@@ -140,8 +140,8 @@
                 android:layout_centerHorizontal="true"
                 android:contentDescription="@string/signTrainerExplanation"
                 android:ellipsize="marquee"
-                android:maxLines="1"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:singleLine="true" />
 
             <ProgressBar
                 android:id="@+id/signTrainerVideoLoadingProgressBar"
