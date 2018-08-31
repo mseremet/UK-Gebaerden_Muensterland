@@ -28,8 +28,8 @@
         android:layout_toRightOf="@+id/icon"
         android:layout_alignBaseline="@+id/icon"
         android:ellipsize="marquee"
-        android:maxLines="1"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:singleLine="true" />
 
   <TextView
         android:id="@+id/learningProgressLabel"
