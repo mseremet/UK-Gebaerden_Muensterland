@@ -46,4 +46,5 @@
     <string name="ASVF_3">ASFV_3: Video-Breite ist null.</string>
     <string name="ASVF_4">ASVF_4: Video-Höhe ist null.</string>
     <string name="exceptionMessage">Fehlermeldung</string>
+    <string name="action_sign_filter">Filter</string>
 </resources>
