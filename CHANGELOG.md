@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Changed
 - Die App unterstützt nun Android API Level 27 (Oreo).
+
+### Fixed
 - Die Aktion "Zurück zum Katalog" auf der Seite "Gebärden-Anzeige" wurde bei horizontaler Ansicht nicht dargestellt.
 
 ### Removed
@@ -19,5 +21,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - TODO
 
+### Fixed
+- TODO
+
+### Deprecated
+- TODO
+
 ### Removed
 - TODO
+
+
