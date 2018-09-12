@@ -10,6 +10,9 @@ This is an Android app for browsing and learning the sign language "Unterstützt
 ## Project structure
 Main entry point is the class MainActivity. Project organization and source code follow standard Android development patterns. The SQLite database containing the names of the signs and further information resides in [this location](src/database/signs.db.sqlite) and has to be zipped and copied to [this location](src/app/src/main/assets/databases/signs.db.zip) in order to be incorporated into the app. The test suite AllEspressoUITests contains all the Android Espresso UI tests.
 
+## Changelog
+The changelog can be found [here](CHANGELOG.md).
+
 ## Repository structure
 This repository is using the [Git Workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow) structure:
 * A develop branch is created from master
