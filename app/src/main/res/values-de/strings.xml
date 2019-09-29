@@ -14,9 +14,9 @@
     <string name="search_hint">Gebärden suchen</string>
     <string name="search_results">Suche nach: </string>
     <string name="settings">Einstellungen</string>
-    <string name="signIconDescription">Gebärden-Symbol</string>
-    <string name="sign_browser">Gebärden-Katalog</string>
-    <string name="sign_trainer_active">Gebärden-Trainer (Aktiv)</string>
+    <string name="signIconDescription">Symbol</string>
+    <string name="sign_browser">Katalog</string>
+    <string name="sign_trainer_active">Trainer (Aktiv)</string>
     <string name="starredButton">Merken-Knopf</string>
     <string name="train_signs_passive">Gebärden passiv üben</string>
     <string name="train_signs_active">Gebärden aktiv üben</string>
@@ -37,10 +37,10 @@
     <string name="signTrainerExplanation">\'Einfach\': Lernfortschritt +1, \'Schwer\': -1.</string>
     <string name="action_toggle_learning_mode">Modus wechseln</string>
     <string name="howDoesThisSignLookLike">Wie sieht die Gebärde aus?</string>
-    <string name="sign_trainer_passive">Gebärden-Trainer (Passiv)</string>
-    <string name="signTrainerQuestionTextDetail">Gebärden-Trainer Frage Detail</string>
+    <string name="sign_trainer_passive">Trainer (Passiv)</string>
+    <string name="signTrainerQuestionTextDetail">Trainer Frage Detail</string>
     <string name="back_to_sign_browser">Zurück zum Katalog</string>
-    <string name="sign_viewer">Gebärden-Anzeige</string>
+    <string name="sign_viewer">Anzeige</string>
     <string name="ASVF_1">ASVF_1: Video nicht gefunden.</string>
     <string name="ASVF_2">ASFV_2: Video-Metadaten konnten nicht geladen werden. Detail:</string>
     <string name="ASVF_3">ASFV_3: Video-Breite ist null.</string>
