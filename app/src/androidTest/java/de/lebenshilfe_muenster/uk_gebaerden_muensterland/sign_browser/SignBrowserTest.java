@@ -83,15 +83,9 @@ public class SignBrowserTest extends AbstractSignBrowserTest {
         onView(withId(R.id.action_search)).check(matches(isDisplayed()));
     }
 
-    // TODO #84: Remove the button?
     @Test
-    public void checkToggleStarredButtonIsPresent() {
+    public void checkToggleStarredButtonsIsPresent() {
         onView(withId(R.id.action_toggle_starred)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void checkFilterButtonIsPresent() {
-        onView(withId(R.id.action_sign_filter)).check(matches(isDisplayed()));
     }
 
     @Test
