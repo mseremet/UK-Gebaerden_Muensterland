@@ -21,7 +21,7 @@ import android.provider.BaseColumns;
 class DbContract {
 
     public static final String DATABASE_NAME = "signs.db";
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
     public static final String EQUAL_SIGN = " = ";
     public static final String QUESTION_MARK = "?";
     public static final String LIKE = " LIKE ?";
