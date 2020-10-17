@@ -7,9 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.VideoView;
 
 import org.apache.commons.lang3.Validate;
 
@@ -40,6 +38,7 @@ public class SignVideoFragment extends AbstractSignVideoFragment {
     private static final String TAG = SignVideoFragment.class.getSimpleName();
     private TextView signVideoName;
     private TextView signVideoMnemonic;
+    private TextView signVideoTags;
     private TextView signVideoExceptionMessage;
     private Button backToSignBrowserButton;
 
@@ -48,18 +47,19 @@ public class SignVideoFragment extends AbstractSignVideoFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
         final View view = inflater.inflate(R.layout.video_fragment_view, container, false);
-        this.signVideoName = (TextView) view.findViewById(R.id.signVideoName);
-        this.videoView = (VideoView) view.findViewById(R.id.signVideoView);
-        this.signVideoMnemonic = (TextView) view.findViewById(R.id.signVideoMnemonic);
-        this.signVideoExceptionMessage = (TextView) view.findViewById(R.id.signVideoExceptionMessage);
-        this.backToSignBrowserButton = (Button) view.findViewById(R.id.backToSignBrowserButton);
+        this.signVideoName = view.findViewById(R.id.signVideoName);
+        this.videoView = view.findViewById(R.id.signVideoView);
+        this.signVideoMnemonic = view.findViewById(R.id.signVideoMnemonic);
+        this.signVideoTags = view.findViewById(R.id.signVideoTags);
+        this.signVideoExceptionMessage = view.findViewById(R.id.signVideoExceptionMessage);
+        this.backToSignBrowserButton = view.findViewById(R.id.backToSignBrowserButton);
         this.backToSignBrowserButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().onBackPressed();
             }
         });
-        this.progressBar = (ProgressBar) view.findViewById(R.id.signVideoLoadingProgressCircle);
+        this.progressBar = view.findViewById(R.id.signVideoLoadingProgressCircle);
         this.videoView.setContentDescription(getActivity().getString(R.string.videoIsLoading));
         return view;
     }
@@ -72,6 +72,7 @@ public class SignVideoFragment extends AbstractSignVideoFragment {
         Validate.notNull(sign, "No sign to show provided via fragment arguments.");
         this.signVideoName.setText(sign.getNameLocaleDe());
         this.signVideoMnemonic.setText(sign.getMnemonic());
+        this.signVideoTags.setText(sign.getTags());
         try {
             setupVideoView(sign, SOUND.ON, CONTROLS.SHOW);
         } catch (VideoSetupException ex) {

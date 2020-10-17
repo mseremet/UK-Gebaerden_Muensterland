@@ -20,28 +20,35 @@ import android.provider.BaseColumns;
  */
 class DbContract {
 
-    public static final String DATABASE_NAME = "signs.db";
-    public static final int DATABASE_VERSION = 2;
-    public static final String EQUAL_SIGN = " = ";
-    public static final String QUESTION_MARK = "?";
-    public static final String LIKE = " LIKE ?";
+    static final String DATABASE_NAME = "signs.db";
+    static final int DATABASE_VERSION = 2;
+    static final String EQUAL_SIGN = " = ";
+    static final String QUESTION_MARK = "?";
+    static final String LIKE = " LIKE ?";
     private static final String ASCENDING = " ASC";
-    public static final String BOOLEAN_TRUE = "1";
+    static final String BOOLEAN_TRUE = "1";
+    static final String OR = " OR ";
 
-    public static abstract class SignTable implements BaseColumns {
+    static abstract class SignTable implements BaseColumns {
 
-        public static final String TABLE_NAME = "signs";
-        public static final String COLUMN_NAME_SIGN_NAME = "name";
-        public static final String COLUMN_NAME_SIGN_NAME_DE = "name_de";
-        public static final String COLUMN_NAME_MNEMONIC = "mnemonic";
-        public static final String COLUMN_NAME_LEARNING_PROGRESS = "learning_progress";
-        public static final String COLUMN_NAME_STARRED = "starred";
-        public static final String[] ALL_COLUMNS = {_ID, COLUMN_NAME_SIGN_NAME, COLUMN_NAME_SIGN_NAME_DE,
-                COLUMN_NAME_MNEMONIC, COLUMN_NAME_LEARNING_PROGRESS, COLUMN_NAME_STARRED};
-        public static final String NAME_LOCALE_DE_LIKE = "LOWER(" + COLUMN_NAME_SIGN_NAME_DE + ") LIKE LOWER(?)";
-        public static final String IS_STARRED = COLUMN_NAME_STARRED + EQUAL_SIGN + QUESTION_MARK;
-        public static final String ORDER_BY_NAME_DE_ASC = COLUMN_NAME_SIGN_NAME_DE + ASCENDING;
-        public static final String ORDER_BY_LEARNING_PROGRESS_ASC = COLUMN_NAME_LEARNING_PROGRESS + ASCENDING;
+        static final String TABLE_NAME = "signs";
+        static final String COLUMN_NAME_SIGN_NAME = "name";
+        static final String COLUMN_NAME_SIGN_NAME_DE = "name_de";
+        static final String COLUMN_NAME_MNEMONIC = "mnemonic";
+        static final String COLUMN_NAME_TAG1 = "tag1";
+        static final String COLUMN_NAME_TAG2 = "tag2";
+        static final String COLUMN_NAME_TAG3 = "tag3";
+        static final String COLUMN_NAME_LEARNING_PROGRESS = "learning_progress";
+        static final String COLUMN_NAME_STARRED = "starred";
+        static final String[] ALL_COLUMNS = {_ID, COLUMN_NAME_SIGN_NAME, COLUMN_NAME_SIGN_NAME_DE,
+                COLUMN_NAME_MNEMONIC, COLUMN_NAME_TAG1, COLUMN_NAME_TAG2, COLUMN_NAME_TAG3, COLUMN_NAME_LEARNING_PROGRESS, COLUMN_NAME_STARRED};
+        static final String NAME_LOCALE_DE_LIKE = "LOWER(" + COLUMN_NAME_SIGN_NAME_DE + ") LIKE LOWER(?)";
+        static final String TAG1_LOCALE_DE_LIKE = "LOWER(" + COLUMN_NAME_TAG1 + ") LIKE LOWER(?)";
+        static final String TAG2_LOCALE_DE_LIKE = "LOWER(" + COLUMN_NAME_TAG2 + ") LIKE LOWER(?)";
+        static final String TAG3_LOCALE_DE_LIKE = "LOWER(" + COLUMN_NAME_TAG3 + ") LIKE LOWER(?)";
+        static final String IS_STARRED = COLUMN_NAME_STARRED + EQUAL_SIGN + QUESTION_MARK;
+        static final String ORDER_BY_NAME_DE_ASC = COLUMN_NAME_SIGN_NAME_DE + ASCENDING;
+        static final String ORDER_BY_LEARNING_PROGRESS_ASC = COLUMN_NAME_LEARNING_PROGRESS + ASCENDING;
     }
 
 }

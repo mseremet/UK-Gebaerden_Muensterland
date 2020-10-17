@@ -21,19 +21,22 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.Sign;
 public class TestConstants {
     public static final String MAMA = "Mama";
     public static final String MAMA_MNEMONIC = "Wange kreisend streicheln";
+    public static final String MAMA_TAGS = "Person, Teil 1";
+    public static final String MAMA_TAG_PERSON = "Person";
+    public static final String MAMA_TAG_TEIL1 = "Teil 1";
     public static final String PAPA = "Papa";
-    public static final String FOOTBALL = "Fußball Spielen";
-    public static final String PROGRESS_0 = "0";
+    public static final String FOOTBALL = "Fußball spielen";
+    public static final String PROGRESS = "Fortschritt";
     public static final String ENTER = "\n";
     public static final String MAM = "mam";
     public static final String PAP = "paP";
     public static final Sign FOOTBALL_SIGN = new Sign.Builder().setId(0).setName("football").setNameLocaleDe("Fußball spielen")
-            .setMnemonic("Faust tritt in Handfläche").setStarred(false).setLearningProgress(0).create();
+            .setMnemonic("Faust tritt in Handfläche").setTags("Freizeit, Verb").setStarred(false).setLearningProgress(0).create();
     public static final Sign MAMA_SIGN = new Sign.Builder().setId(0).setName("mama").setNameLocaleDe("Mama")
-            .setMnemonic("Wange kreisend streicheln").setStarred(false).setLearningProgress(0).create();
+            .setMnemonic("Wange kreisend streicheln").setTags("Person, Teil 1").setStarred(false).setLearningProgress(0).create();
     public static final Sign PAPA_SIGN = new Sign.Builder().setId(0).setName("papa").setNameLocaleDe("Papa")
-            .setMnemonic("Schnauzbart andeuten").setStarred(false).setLearningProgress(0).create();
+            .setMnemonic("Schnauzbart andeuten").setTags("Person, Teil 1").setStarred(false).setLearningProgress(0).create();
     public static final Sign TEST_SIGN = new Sign.Builder().setId(0).setName("test_sign").setNameLocaleDe("test_sign_de")
-            .setMnemonic("test_sign_mnemonic").setStarred(false).setLearningProgress(0).create();
+            .setMnemonic("test_sign_mnemonic").setTags("Tags1, Tags2").setStarred(false).setLearningProgress(0).create();
     public static final int INITIAL_NUMBER_OF_SIGNS = 210;
 }

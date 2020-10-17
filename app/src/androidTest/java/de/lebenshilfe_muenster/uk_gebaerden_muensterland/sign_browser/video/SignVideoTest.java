@@ -28,6 +28,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants.MAMA;
 import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants.MAMA_MNEMONIC;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants.MAMA_TAGS;
 import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.util.OrientationChangeAction.orientationLandscape;
 import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.util.OrientationChangeAction.orientationPortrait;
 import static org.hamcrest.CoreMatchers.allOf;
@@ -51,7 +52,7 @@ import static org.hamcrest.CoreMatchers.not;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-@SuppressWarnings({"unchecked", "WeakerAccess", "unused"})
+@SuppressWarnings({"unchecked", "unused"})
 @RunWith(AndroidJUnit4.class)
 public class SignVideoTest {
 
@@ -169,6 +170,7 @@ public class SignVideoTest {
                 containsString(getStringResource(R.string.videoIsPlaying)))))).check(matches(isDisplayed()));
         // while the video is loading, the mnemonic is not shown completely to the user.
         onView(allOf(withId(R.id.signVideoMnemonic), withText(MAMA_MNEMONIC))).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+        onView(allOf(withId(R.id.signVideoTags), withText(MAMA_TAGS))).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
     }
 
     @NonNull

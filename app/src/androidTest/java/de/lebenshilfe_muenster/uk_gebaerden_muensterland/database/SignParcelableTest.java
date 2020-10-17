@@ -36,8 +36,9 @@ public class SignParcelableTest {
     private static final String MNEMONIC = "Faust tritt in Handfläche";
     private static final boolean STARRED = false;
     private static final int PROGRESS = 3;
+    private static final String TAGS = "Freizeit, Verb, Teil 3";
     private static final Sign FOOTBALL = new Sign.Builder().setId(ID).setName(NAME).setNameLocaleDe(NAME_LOCALE_DE)
-            .setMnemonic(MNEMONIC).setStarred(STARRED).setLearningProgress(PROGRESS).create();
+            .setMnemonic(MNEMONIC).setTags(TAGS).setStarred(STARRED).setLearningProgress(PROGRESS).create();
 
     @Test
     public void testParcelableIsImplementedCorrect() {
@@ -45,11 +46,12 @@ public class SignParcelableTest {
         FOOTBALL.writeToParcel(parcel, FOOTBALL.describeContents());
         parcel.setDataPosition(0);
         final Sign createdFromParcel = Sign.CREATOR.createFromParcel(parcel);
-        assertThat(createdFromParcel,is(notNullValue()));
+        assertThat(createdFromParcel, is(notNullValue()));
         assertThat(createdFromParcel.getId(), is(ID));
         assertThat(createdFromParcel.getName(), is(NAME));
         assertThat(createdFromParcel.getNameLocaleDe(), is(NAME_LOCALE_DE));
         assertThat(createdFromParcel.getMnemonic(), is(MNEMONIC));
+        assertThat(createdFromParcel.getTags(), is(TAGS));
         assertThat(createdFromParcel.isStarred(), is(STARRED));
         assertThat(createdFromParcel.getLearningProgress(), is(PROGRESS));
     }

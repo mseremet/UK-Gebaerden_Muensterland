@@ -18,6 +18,30 @@ import java.util.Queue;
 import java.util.Random;
 import java.util.concurrent.ArrayBlockingQueue;
 
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.DbContract.BOOLEAN_TRUE;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.DbContract.EQUAL_SIGN;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.DbContract.LIKE;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.DbContract.OR;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.DbContract.QUESTION_MARK;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.DbContract.SignTable.ALL_COLUMNS;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.DbContract.SignTable.COLUMN_NAME_LEARNING_PROGRESS;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.DbContract.SignTable.COLUMN_NAME_MNEMONIC;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.DbContract.SignTable.COLUMN_NAME_SIGN_NAME;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.DbContract.SignTable.COLUMN_NAME_SIGN_NAME_DE;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.DbContract.SignTable.COLUMN_NAME_STARRED;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.DbContract.SignTable.COLUMN_NAME_TAG1;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.DbContract.SignTable.COLUMN_NAME_TAG2;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.DbContract.SignTable.COLUMN_NAME_TAG3;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.DbContract.SignTable.IS_STARRED;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.DbContract.SignTable.NAME_LOCALE_DE_LIKE;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.DbContract.SignTable.ORDER_BY_LEARNING_PROGRESS_ASC;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.DbContract.SignTable.ORDER_BY_NAME_DE_ASC;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.DbContract.SignTable.TABLE_NAME;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.DbContract.SignTable.TAG1_LOCALE_DE_LIKE;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.DbContract.SignTable.TAG2_LOCALE_DE_LIKE;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.DbContract.SignTable.TAG3_LOCALE_DE_LIKE;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.database.DbContract.SignTable._ID;
+
 /**
  * Copyright (c) 2016 Matthias Tonhäuser
  * <p/>
@@ -80,7 +104,7 @@ public class SignDAO {
      * @return a list of persisted signs.
      */
     @SuppressWarnings("UnusedReturnValue")
-    public List<Sign> create(List<Sign> signs) {
+    List<Sign> create(List<Sign> signs) {
         final List<Sign> createdSigns = new ArrayList<>();
         for (Sign sign : signs) {
             createdSigns.add(create(sign));
@@ -94,22 +118,24 @@ public class SignDAO {
      * @param sign a Sign, which has not been persisted yet.
      * @return the persisted sign, <code>null</code> if persisting failed.
      */
-    public Sign create(Sign sign) {
+    Sign create(Sign sign) {
         Log.d(TAG, "Creating sign: " + sign);
         this.database.beginTransaction();
-        Sign createdSign = null;
+        Sign createdSign;
         try {
             final ContentValues values = new ContentValues();
-            values.put(DbContract.SignTable.COLUMN_NAME_SIGN_NAME, sign.getName());
-            values.put(DbContract.SignTable.COLUMN_NAME_SIGN_NAME_DE, sign.getNameLocaleDe());
-            values.put(DbContract.SignTable.COLUMN_NAME_MNEMONIC, sign.getMnemonic());
+            values.put(COLUMN_NAME_SIGN_NAME, sign.getName());
+            values.put(COLUMN_NAME_SIGN_NAME_DE, sign.getNameLocaleDe());
+            values.put(COLUMN_NAME_MNEMONIC, sign.getMnemonic());
+            // For testing purposes, the tags are saved in a single column here
+            values.put(COLUMN_NAME_TAG1, sign.getTags());
             if (sign.isStarred()) {
-                values.put(DbContract.SignTable.COLUMN_NAME_STARRED, 1);
+                values.put(COLUMN_NAME_STARRED, 1);
             } else {
-                values.put(DbContract.SignTable.COLUMN_NAME_STARRED, 0);
+                values.put(COLUMN_NAME_STARRED, 0);
             }
-            values.put(DbContract.SignTable.COLUMN_NAME_LEARNING_PROGRESS, sign.getLearningProgress());
-            final long insertId = this.database.insert(DbContract.SignTable.TABLE_NAME, null,
+            values.put(COLUMN_NAME_LEARNING_PROGRESS, sign.getLearningProgress());
+            final long insertId = this.database.insert(TABLE_NAME, null,
                     values);
             if (-1 == insertId) {
                 throw new IllegalStateException(MessageFormat.format("Inserting sign: {0} failed due to" +
@@ -134,13 +160,13 @@ public class SignDAO {
     }
 
     /**
-     * Read the signs where the name_locale_de matches the parameter.
+     * Read the signs where the name_locale_de or the tags matches the parameter.
      *
-     * @param whereSignNameLocaleDeLike the sign name with locale de to look for.
+     * @param whereSignNameLocaleDeOrTagsLike the sign name or the tags with locale de to look for.
      * @return a list of signs, may be empty but not null.
      */
-    public List<Sign> read(String whereSignNameLocaleDeLike) {
-        return readInternal(whereSignNameLocaleDeLike, false, false);
+    public List<Sign> read(String whereSignNameLocaleDeOrTagsLike) {
+        return readInternal(whereSignNameLocaleDeOrTagsLike, false, false);
     }
 
     /**
@@ -171,7 +197,7 @@ public class SignDAO {
         if (null != currentSign) {
             this.randomSignsQueue.offer(currentSign);
         }
-        final Sign[] upToTheLastFiveRandomSigns = this.randomSignsQueue.toArray(new Sign[this.randomSignsQueue.size()]);
+        final Sign[] upToTheLastFiveRandomSigns = this.randomSignsQueue.toArray(new Sign[0]);
         for (Sign upToTheLastFiveRandomSign : upToTheLastFiveRandomSigns) {
             signsOrderedByLearningProgress.remove(upToTheLastFiveRandomSign);
         }
@@ -192,28 +218,30 @@ public class SignDAO {
     }
 
     @NonNull
-    private List<Sign> readInternal(String whereSignNameLocaleDeLike, boolean readStarredSignsOnly, boolean readOrderedByLearningProgress) {
+    private List<Sign> readInternal(String signNameLocaleDeOrTagsLike, boolean readStarredSignsOnly, boolean readOrderedByLearningProgress) {
         final List<Sign> signs = new ArrayList<>();
         Cursor cursor;
-        if (StringUtils.isNotEmpty(whereSignNameLocaleDeLike)) {
-            Log.d(TAG, MessageFormat.format("Reading signs with name_locale_de like: {0}", whereSignNameLocaleDeLike));
-            cursor = database.query(DbContract.SignTable.TABLE_NAME,
-                    DbContract.SignTable.ALL_COLUMNS, DbContract.SignTable.NAME_LOCALE_DE_LIKE,
-                    new String[]{"%" + whereSignNameLocaleDeLike + "%"}, null, null, DbContract.SignTable.ORDER_BY_NAME_DE_ASC);
+        if (StringUtils.isNotEmpty(signNameLocaleDeOrTagsLike)) {
+            Log.d(TAG, MessageFormat.format("Reading signs with name_locale_de like: {0}", signNameLocaleDeOrTagsLike));
+            String selectionArgument = "%" + signNameLocaleDeOrTagsLike + "%";
+            String[] selectionArgs = {selectionArgument, selectionArgument, selectionArgument, selectionArgument};
+            cursor = database.query(TABLE_NAME,
+                    ALL_COLUMNS, NAME_LOCALE_DE_LIKE + OR + TAG1_LOCALE_DE_LIKE + OR + TAG2_LOCALE_DE_LIKE + OR + TAG3_LOCALE_DE_LIKE,
+                    selectionArgs, null, null, ORDER_BY_NAME_DE_ASC);
         } else if (readStarredSignsOnly) {
             Log.d(TAG, "Reading starred signs only");
-            cursor = database.query(DbContract.SignTable.TABLE_NAME,
-                    DbContract.SignTable.ALL_COLUMNS, DbContract.SignTable.IS_STARRED,
-                    new String[]{DbContract.BOOLEAN_TRUE}, null, null, DbContract.SignTable.ORDER_BY_NAME_DE_ASC);
+            cursor = database.query(TABLE_NAME,
+                    ALL_COLUMNS, IS_STARRED,
+                    new String[]{BOOLEAN_TRUE}, null, null, ORDER_BY_NAME_DE_ASC);
         } else if (readOrderedByLearningProgress) {
             Log.d(TAG, "Reading signs ordered by learning progress ascending");
-            cursor = database.query(DbContract.SignTable.TABLE_NAME,
-                    DbContract.SignTable.ALL_COLUMNS, null,
-                    null, null, null, DbContract.SignTable.ORDER_BY_LEARNING_PROGRESS_ASC);
+            cursor = database.query(TABLE_NAME,
+                    ALL_COLUMNS, null,
+                    null, null, null, ORDER_BY_LEARNING_PROGRESS_ASC);
         } else {
             Log.d(TAG, "Reading all signs");
-            cursor = database.query(DbContract.SignTable.TABLE_NAME,
-                    DbContract.SignTable.ALL_COLUMNS, null, null, null, null, DbContract.SignTable.ORDER_BY_NAME_DE_ASC);
+            cursor = database.query(TABLE_NAME,
+                    ALL_COLUMNS, null, null, null, null, ORDER_BY_NAME_DE_ASC);
         }
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -228,15 +256,15 @@ public class SignDAO {
     public Sign update(Sign sign) {
         Log.d(TAG, "Updating sign: " + sign);
         this.database.beginTransaction();
-        Sign updatedSign = null;
+        Sign updatedSign;
         try {
             final ContentValues values = new ContentValues();
-            values.put(DbContract.SignTable.COLUMN_NAME_LEARNING_PROGRESS, sign.getLearningProgress());
-            values.put(DbContract.SignTable.COLUMN_NAME_STARRED, sign.isStarred());
-            final String selection = DbContract.SignTable._ID + DbContract.LIKE;
+            values.put(COLUMN_NAME_LEARNING_PROGRESS, sign.getLearningProgress());
+            values.put(COLUMN_NAME_STARRED, sign.isStarred());
+            final String selection = _ID + LIKE;
             final String[] selectionArgs = {String.valueOf(sign.getId())};
             int rowsUpdated = this.database.update(
-                    DbContract.SignTable.TABLE_NAME,
+                    TABLE_NAME,
                     values,
                     selection,
                     selectionArgs);
@@ -258,7 +286,7 @@ public class SignDAO {
     /**
      * For <strong>testing</strong> purposes only!
      */
-    public void delete(List<Sign> signs) {
+    void delete(List<Sign> signs) {
         for (Sign sign : signs) {
             delete(sign);
         }
@@ -267,12 +295,12 @@ public class SignDAO {
     /**
      * For <strong>testing</strong> purposes only!
      */
-    public void delete(Sign sign) {
+    void delete(Sign sign) {
         Log.d(TAG, MessageFormat.format("Deleting sign {0}", sign));
         this.database.beginTransaction();
         try {
-            this.database.delete(DbContract.SignTable.TABLE_NAME,
-                    DbContract.SignTable.COLUMN_NAME_SIGN_NAME + DbContract.EQUAL_SIGN + DbContract.QUESTION_MARK,
+            this.database.delete(TABLE_NAME,
+                    COLUMN_NAME_SIGN_NAME + EQUAL_SIGN + QUESTION_MARK,
                     new String[]{sign.getName()});
             this.database.setTransactionSuccessful();
         } finally {
@@ -282,8 +310,8 @@ public class SignDAO {
 
     private Sign readSingleSign(long id) {
         final Sign createdSign;
-        final Cursor cursor = this.database.query(DbContract.SignTable.TABLE_NAME,
-                DbContract.SignTable.ALL_COLUMNS, DbContract.SignTable._ID + DbContract.EQUAL_SIGN + id, null,
+        final Cursor cursor = this.database.query(TABLE_NAME,
+                ALL_COLUMNS, _ID + EQUAL_SIGN + id, null,
                 null, null, null);
         if (0 == cursor.getCount()) {
             throw new IllegalStateException(MessageFormat.format("Querying for sign with id: {1} " +
@@ -297,18 +325,39 @@ public class SignDAO {
 
     private Sign cursorToSign(Cursor cursor) {
         final Sign.Builder signBuilder = new Sign.Builder();
-        signBuilder.setId(cursor.getInt(cursor.getColumnIndex(DbContract.SignTable._ID)));
-        signBuilder.setName(cursor.getString(cursor.getColumnIndex(DbContract.SignTable.COLUMN_NAME_SIGN_NAME)));
-        signBuilder.setNameLocaleDe(cursor.getString(cursor.getColumnIndex(DbContract.SignTable.COLUMN_NAME_SIGN_NAME_DE)));
-        signBuilder.setMnemonic(cursor.getString(cursor.getColumnIndex(DbContract.SignTable.COLUMN_NAME_MNEMONIC)));
-        signBuilder.setLearningProgress(cursor.getInt(cursor.getColumnIndex(DbContract.SignTable.COLUMN_NAME_LEARNING_PROGRESS)));
-        final int starred = cursor.getInt(cursor.getColumnIndex(DbContract.SignTable.COLUMN_NAME_STARRED));
+        signBuilder.setId(cursor.getInt(cursor.getColumnIndex(_ID)));
+        signBuilder.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME_SIGN_NAME)));
+        signBuilder.setNameLocaleDe(cursor.getString(cursor.getColumnIndex(COLUMN_NAME_SIGN_NAME_DE)));
+        signBuilder.setMnemonic(cursor.getString(cursor.getColumnIndex(COLUMN_NAME_MNEMONIC)));
+        signBuilder.setTags(getTagsText(cursor));
+        signBuilder.setLearningProgress(cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_LEARNING_PROGRESS)));
+        final int starred = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_STARRED));
         if (1 == starred) {
             signBuilder.setStarred(true);
         } else {
             signBuilder.setStarred(false);
         }
         return signBuilder.create();
+    }
+
+    private String getTagsText(Cursor cursor) {
+
+        final List<String> tagColumns = new ArrayList<>();
+        tagColumns.add(COLUMN_NAME_TAG1);
+        tagColumns.add(COLUMN_NAME_TAG2);
+        tagColumns.add(COLUMN_NAME_TAG3);
+
+        final StringBuilder tags = new StringBuilder();
+        final String separator = ", ";
+        for (String tagColumn : tagColumns) {
+            final String tagColumnValue = cursor.getString(cursor.getColumnIndex(tagColumn));
+            if (StringUtils.isNotEmpty(tagColumnValue)) {
+                tags.append(tagColumnValue);
+                tags.append(separator);
+            }
+        }
+        final String tag = tags.toString();
+        return StringUtils.removeEnd(tag, separator);
     }
 
 }
