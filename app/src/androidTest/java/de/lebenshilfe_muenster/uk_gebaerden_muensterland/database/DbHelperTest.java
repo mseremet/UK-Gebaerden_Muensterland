@@ -15,6 +15,7 @@ import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.activities.MainActivity;
@@ -256,7 +257,7 @@ public class DbHelperTest {
 
     @Test
     public void testGetRandomSignDoesNotRetrieveAnyOfTheLastFiveSigns() {
-        final String name = "Test_Sign_A";
+        final String name = "Test_Sign_" + UUID.randomUUID();
         final Sign testSignA = new Sign.Builder().setId(0).setName("name").setNameLocaleDe(name + "_de")
                 .setMnemonic(name + "_mnemonic").setTags(name + "_tags").setStarred(false).setLearningProgress(-5).create();
         try {
