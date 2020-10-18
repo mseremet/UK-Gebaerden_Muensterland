@@ -8,8 +8,8 @@
     <string name="train_signs_active">Train signs (active)</string>
     <string name="about_signs">About signs</string>
     <string name="settings">Settings</string>
-    <string name="sign_browser">Sign browser</string>
-    <string name="sign_trainer_active">Sign trainer active</string>
+    <string name="sign_browser">Browser</string>
+    <string name="sign_trainer_active">Trainer (active)</string>
     <string name="signIconDescription">signIcon</string>
     <string name="action_search">Search</string>
     <string name="search_hint">Search signs</string>
@@ -36,10 +36,10 @@
     <string name="signTrainerExplanation">\'Easy\': learning progress +1, \'Hard\': -1.</string>
     <string name="action_toggle_learning_mode">Toggle mode</string>
     <string name="howDoesThisSignLookLike">How does this sign look like?</string>
-    <string name="sign_trainer_passive">Sign trainer passive</string>
+    <string name="sign_trainer_passive">Trainer (passive)</string>
     <string name="signTrainerQuestionTextDetail">Sign trainer question text detail</string>
     <string name="back_to_sign_browser">Back to sign browser</string>
-    <string name="sign_viewer">Sign viewer</string>
+    <string name="sign_viewer">Viewer</string>
     <string name="ASVF_1">ASVF_1: Video not found.</string>
     <string name="ASVF_2">ASFV_2: Video metadata could not be loaded. Detail:</string>
     <string name="ASVF_3">ASVF_3: Video width is null.</string>
