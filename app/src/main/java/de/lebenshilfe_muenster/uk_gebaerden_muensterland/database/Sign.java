@@ -26,7 +26,7 @@ public class Sign implements Parcelable {
     /**
      * Parcelable Creator.
      */
-    public static final Parcelable.Creator<Sign> CREATOR = new Parcelable.Creator<Sign>() {
+    public static final Creator<Sign> CREATOR = new Creator<Sign>() {
         public Sign createFromParcel(Parcel in) {
             return new Sign(in);
         }
@@ -41,6 +41,7 @@ public class Sign implements Parcelable {
     private final int id;
     private final String name;
     private final String mnemonic;
+    private final String tags;
     private final String nameLocaleDe;
     private int learningProgress;
     private boolean starred;
@@ -52,15 +53,17 @@ public class Sign implements Parcelable {
      * @param name             the name, has to be unique within the app
      * @param nameLocaleDe     the German name
      * @param mnemonic         the mnemonic ('Eselsbrücke')
+     * @param tags             the tags ('Stichworte') for this sign. In the database, up to three tags are allowed. They are concatenated for displaying purposes.
      * @param starred          whether the user has starred this sign (added to his favorites)
      * @param learningProgress the learning progress for this sign. Must not be < -5 or > 5
      */
-    private Sign(int id, String name, String nameLocaleDe, String mnemonic, boolean starred, int learningProgress) {
-        validateParameters(name, nameLocaleDe, mnemonic, learningProgress);
+    private Sign(int id, String name, String nameLocaleDe, String mnemonic, String tags, boolean starred, int learningProgress) {
+        validateParameters(name, nameLocaleDe, mnemonic, tags, learningProgress);
         this.id = id;
         this.name = name;
         this.nameLocaleDe = nameLocaleDe;
         this.mnemonic = mnemonic;
+        this.tags = tags;
         this.starred = starred;
         this.learningProgress = learningProgress;
     }
@@ -75,17 +78,19 @@ public class Sign implements Parcelable {
         this.name = in.readString();
         this.nameLocaleDe = in.readString();
         this.mnemonic = in.readString();
+        this.tags = in.readString();
         this.starred = (boolean) in.readValue(getClass().getClassLoader());
         this.learningProgress = in.readInt();
     }
 
-    private void validateParameters(String name, String nameLocaleDe, String mnemonic, int learningProgress) {
+    private void validateParameters(String name, String nameLocaleDe, String mnemonic, String tags, int learningProgress) {
         Validate.notNull(name, "Name must not be null");
         Validate.notBlank(name, "Name must not be empty.");
         Validate.notNull(nameLocaleDe, "NameLocaleDe must not be null");
         Validate.notBlank(nameLocaleDe, "NameLocaleDe must not be empty.");
         Validate.notNull(mnemonic, "Mnemonic must not be null");
         Validate.notBlank(mnemonic, "Mnemonic must not be empty.");
+        Validate.notBlank(tags, "Tags must not be empty.");
         Validate.inclusiveBetween(LEARNING_PROGRESS_LOWER_BOUNDARY, LEARNING_PROGRESS_UPPER_BOUNDARY, learningProgress, "Learning progress cannot be < -5 or > 5");
     }
 
@@ -129,6 +134,10 @@ public class Sign implements Parcelable {
         return mnemonic;
     }
 
+    public String getTags() {
+        return tags;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -149,6 +158,7 @@ public class Sign implements Parcelable {
                 ", name='" + name + '\'' +
                 ", nameLocaleDe='" + nameLocaleDe + '\'' +
                 ", mnemonic='" + mnemonic + '\'' +
+                ", tags='" + tags + '\'' +
                 ", starred=" + starred +
                 ", learningProgress=" + learningProgress +
                 '}';
@@ -165,15 +175,18 @@ public class Sign implements Parcelable {
         out.writeString(this.name);
         out.writeString(this.nameLocaleDe);
         out.writeString(this.mnemonic);
+        out.writeString(this.tags);
         out.writeValue(this.starred);
         out.writeInt(this.learningProgress);
     }
+
 
     public static class Builder {
         private int id = 0;
         private String name;
         private String nameLocaleDe;
         private String mnemonic;
+        private String tags;
         private boolean starred = false;
         private int learningProgress = 0;
 
@@ -197,6 +210,11 @@ public class Sign implements Parcelable {
             return this;
         }
 
+        public Builder setTags(String tags) {
+            this.tags = tags;
+            return this;
+        }
+
         public Builder setStarred(boolean starred) {
             this.starred = starred;
             return this;
@@ -208,7 +226,7 @@ public class Sign implements Parcelable {
         }
 
         public Sign create() {
-            return new Sign(id, name, nameLocaleDe, mnemonic, starred, learningProgress);
+            return new Sign(id, name, nameLocaleDe, mnemonic, tags, starred, learningProgress);
         }
 
     }

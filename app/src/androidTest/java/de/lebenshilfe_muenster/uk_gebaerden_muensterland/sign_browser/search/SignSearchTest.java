@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.AbstractSignBrowserTest;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -31,9 +32,10 @@ import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants.EN
 import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants.FOOTBALL;
 import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants.MAM;
 import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants.MAMA;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants.MAMA_TAG_TEIL1;
 import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants.PAP;
 import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants.PAPA;
-import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants.PROGRESS_0;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants.PROGRESS;
 import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.util.OrientationChangeAction.orientationLandscape;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.Matchers.allOf;
@@ -93,14 +95,29 @@ public class SignSearchTest extends AbstractSignBrowserTest {
 
     @Test
     public void checkSearchStringsCanIncludeLeadingOrTrailingSpaces() {
-       performSearch("Mam ");
-       onView(allOf(withId(R.id.signRecyclerView), hasDescendant((withText(MAMA))))).check(matches(isDisplayed()));
-       performSearch("Mama ");
-       onView(allOf(withId(R.id.signRecyclerView), hasDescendant((withText(MAMA))))).check(matches(isDisplayed()));
-       performSearch(" Mam");
-       onView(allOf(withId(R.id.signRecyclerView), hasDescendant((withText(MAMA))))).check(matches(isDisplayed()));
-       performSearch(" Mama ");
-       onView(allOf(withId(R.id.signRecyclerView), hasDescendant((withText(MAMA))))).check(matches(isDisplayed()));
+        performSearch("Mam ");
+        onView(allOf(withId(R.id.signRecyclerView), hasDescendant((withText(MAMA))))).check(matches(isDisplayed()));
+        performSearch("Mama ");
+        onView(allOf(withId(R.id.signRecyclerView), hasDescendant((withText(MAMA))))).check(matches(isDisplayed()));
+        performSearch(" Mam");
+        onView(allOf(withId(R.id.signRecyclerView), hasDescendant((withText(MAMA))))).check(matches(isDisplayed()));
+        performSearch(" Mama ");
+        onView(allOf(withId(R.id.signRecyclerView), hasDescendant((withText(MAMA))))).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void checkSearchingForTagsWorks() {
+        // when: searching for a tag
+        performSearch(TestConstants.MAMA_TAG_PERSON);
+
+        // then: is the sign with this tag present
+        onView(withId(R.id.signRecyclerView)).perform(scrollToHolder(getHolderForSignWithName(MAMA)));
+
+        // when: searching for a tag
+        performSearch(MAMA_TAG_TEIL1);
+
+        // then: is the sign with this tag present
+        onView(withId(R.id.signRecyclerView)).perform(scrollToHolder(getHolderForSignWithName(MAMA)));
     }
 
     @Test
@@ -149,7 +166,7 @@ public class SignSearchTest extends AbstractSignBrowserTest {
     @Test
     public void checkSignHasLearningProgressInformation() {
         performSearch(MAMA);
-        onView(CoreMatchers.allOf(withId(R.id.signBrowserSingleRow), hasDescendant(withText(MAMA)), hasDescendant(withText(containsString(PROGRESS_0))))).check(matches(isDisplayed()));
+        onView(CoreMatchers.allOf(withId(R.id.signBrowserSingleRow), hasDescendant(withText(MAMA)), hasDescendant(withText(containsString(PROGRESS))))).check(matches(isDisplayed()));
     }
 
     private void performSearch(String query) {

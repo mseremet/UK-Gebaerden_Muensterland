@@ -26,7 +26,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants.FOOTBALL;
 import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants.MAMA;
 import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants.PAPA;
-import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants.PROGRESS_0;
+import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants.PROGRESS;
 import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.util.OrientationChangeAction.orientationLandscape;
 import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.util.OrientationChangeAction.orientationPortrait;
 import static org.hamcrest.CoreMatchers.allOf;
@@ -49,7 +49,7 @@ import static org.hamcrest.CoreMatchers.not;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-@SuppressWarnings({"unchecked", "WeakerAccess", "unused"})
+@SuppressWarnings({"unchecked", "unused"})
 @RunWith(AndroidJUnit4.class)
 public class SignBrowserTest extends AbstractSignBrowserTest {
 
@@ -151,11 +151,11 @@ public class SignBrowserTest extends AbstractSignBrowserTest {
     @Test
     public void checkSignHasLearningProgressInformation() {
         onView(withId(R.id.signRecyclerView)).perform(scrollToHolder(getHolderForSignWithName(MAMA)));
-        onView(allOf(withId(R.id.signBrowserSingleRow), hasDescendant(withText(MAMA)), hasDescendant(withText(containsString(PROGRESS_0))))).check(matches(isDisplayed()));
+        onView(allOf(withId(R.id.signBrowserSingleRow), hasDescendant(withText(MAMA)), hasDescendant(withText(containsString(PROGRESS))))).check(matches(isDisplayed()));
         onView(withId(R.id.signRecyclerView)).perform(scrollToHolder(getHolderForSignWithName(PAPA)));
-        onView(allOf(withId(R.id.signBrowserSingleRow), hasDescendant(withText(PAPA)), hasDescendant(withText(containsString(PROGRESS_0))))).check(matches(isDisplayed()));
+        onView(allOf(withId(R.id.signBrowserSingleRow), hasDescendant(withText(PAPA)), hasDescendant(withText(containsString(PROGRESS))))).check(matches(isDisplayed()));
         onView(withId(R.id.signRecyclerView)).perform(scrollToHolder(getHolderForSignWithName(FOOTBALL)));
-        onView(allOf(withId(R.id.signBrowserSingleRow), hasDescendant(withText(FOOTBALL)), hasDescendant(withText(containsString(PROGRESS_0))))).check(matches(isDisplayed()));
+        onView(allOf(withId(R.id.signBrowserSingleRow), hasDescendant(withText(FOOTBALL)), hasDescendant(withText(containsString(PROGRESS))))).check(matches(isDisplayed()));
     }
 
     @Test

@@ -16,6 +16,7 @@ import org.junit.runner.RunWith;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.activities.MainActivity;
 
 import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants.FOOTBALL_SIGN;
@@ -26,6 +27,7 @@ import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants.TE
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.startsWith;
@@ -110,7 +112,7 @@ public class DbHelperTest {
         signsFromDb.remove(FOOTBALL_SIGN);
         signsFromDb.remove(MAMA_SIGN);
         signsFromDb.remove(PAPA_SIGN);
-        assertThat(signsFromDb, containsInAnyOrder(signs.toArray(new Sign[signs.size()])));
+        assertThat(signsFromDb, containsInAnyOrder(signs.toArray(new Sign[0])));
         signDAO.delete(signs);
     }
 
@@ -128,7 +130,16 @@ public class DbHelperTest {
         List<Sign> signs = new ArrayList<>();
         signs.add(MAMA_SIGN);
         List<Sign> signsFromDb = signDAO.read("mam");
-        assertThat(signsFromDb, containsInAnyOrder(signs.toArray(new Sign[signs.size()])));
+        assertThat(signsFromDb, containsInAnyOrder(signs.toArray(new Sign[0])));
+    }
+
+    @Test
+    public void testReadWithTagLocalDeReturnsResults() {
+        // when: a tag is searched
+        List<Sign> signsFromDb = signDAO.read(TestConstants.MAMA_TAG_PERSON);
+
+        // then: is the expected sign among the list of returned signs
+        assertThat(signsFromDb, hasItem(MAMA_SIGN));
     }
 
     @Test
@@ -147,7 +158,7 @@ public class DbHelperTest {
             List<Sign> signs = new ArrayList<>();
             signs.add(updatedSign);
             List<Sign> signsFromDb = signDAO.readStarredSignsOnly();
-            assertThat(signsFromDb, containsInAnyOrder(signs.toArray(new Sign[signs.size()])));
+            assertThat(signsFromDb, containsInAnyOrder(signs.toArray(new Sign[0])));
         } finally {
             if (null != createdSign) {
                 signDAO.delete(createdSign);
@@ -178,14 +189,14 @@ public class DbHelperTest {
             for (int j = -5; j < 6; j++) {
                 final String name = "Test_Sign_" + k;
                 signs.add(new Sign.Builder().setId(0).setName(name).setNameLocaleDe(name + "_de")
-                        .setMnemonic(name + "_mnemonic").setStarred(false).setLearningProgress(j).create());
+                        .setMnemonic(name + "_mnemonic").setTags(name + "_tags").setStarred(false).setLearningProgress(j).create());
                 k++;
             }
         }
         try {
             signDAO.create(signs);
             final List<Sign> signsFromDbBeforeTest = getTestSigns();
-            assertThat(signsFromDbBeforeTest, containsInAnyOrder(signs.toArray(new Sign[signs.size()])));
+            assertThat(signsFromDbBeforeTest, containsInAnyOrder(signs.toArray(new Sign[0])));
             // do the test
             final Sign firstSign = signDAO.readRandomSign(null);
             assertThat(firstSign.getLearningProgress(), is(equalTo(-5)));
@@ -247,7 +258,7 @@ public class DbHelperTest {
     public void testGetRandomSignDoesNotRetrieveAnyOfTheLastFiveSigns() {
         final String name = "Test_Sign_A";
         final Sign testSignA = new Sign.Builder().setId(0).setName("name").setNameLocaleDe(name + "_de")
-                .setMnemonic(name + "_mnemonic").setStarred(false).setLearningProgress(-5).create();
+                .setMnemonic(name + "_mnemonic").setTags(name + "_tags").setStarred(false).setLearningProgress(-5).create();
         try {
             signDAO.create(testSignA);
             Sign randomSign = signDAO.readRandomSign(testSignA);
@@ -301,7 +312,7 @@ public class DbHelperTest {
         thrown.expect(IllegalStateException.class);
         thrown.expectMessage(allOf(startsWith("Updating sign"), endsWith("no rows!")));
         final Sign illegalSign = new Sign.Builder().setId(Integer.MAX_VALUE).setName("football").setNameLocaleDe("Fußball")
-                .setMnemonic("Kick a ball").setStarred(false).setLearningProgress(0).create();
+                .setMnemonic("Kick a ball").setTags("tags").setStarred(false).setLearningProgress(0).create();
         signDAO.update(illegalSign);
     }
 
