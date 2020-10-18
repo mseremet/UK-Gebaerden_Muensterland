@@ -32,7 +32,7 @@
     <string name="answer">Answer</string>
     <string name="trainerMnemonic">mnemomic</string>
     <string name="tags">tags</string>
-    <string name="versionName">Version: 1.2.0-BETA</string>
+    <string name="versionName">Version: 1.2.0</string>
     <string name="howHardWasTheQuestion">This question was…</string>
     <string name="signTrainerExplanation">\'Easy\': learning progress +1, \'Hard\': -1.</string>
     <string name="action_toggle_learning_mode">Toggle mode</string>
