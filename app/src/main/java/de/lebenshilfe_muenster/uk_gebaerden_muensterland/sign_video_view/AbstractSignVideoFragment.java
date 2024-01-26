@@ -1,9 +1,9 @@
 package de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_video_view;
 
-import android.app.Fragment;
 import android.content.res.Configuration;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;

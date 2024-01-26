@@ -1,10 +1,10 @@
 package de.lebenshilfe_muenster.uk_gebaerden_muensterland.activities;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -14,6 +14,7 @@ import org.apache.commons.lang3.Validate;
 
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.video.SignVideoFragment;
+
 /**
  * Copyright (c) 2016 Matthias Tonhäuser
  * <p/>
@@ -73,7 +74,7 @@ public class LevelOneActivity extends AppCompatActivity {
 
     private void setFragment(Fragment fragment, String fragmentTag) {
         Log.d(TAG, "setFragment: " + fragmentTag);
-        final FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        final FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.content_frame_level_one, fragment, fragmentTag);
         transaction.addToBackStack(null);
         transaction.commit();

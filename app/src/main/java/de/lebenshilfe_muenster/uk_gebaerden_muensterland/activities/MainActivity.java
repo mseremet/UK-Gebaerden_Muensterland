@@ -1,11 +1,11 @@
 package de.lebenshilfe_muenster.uk_gebaerden_muensterland.activities;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -27,6 +27,7 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.video.Sign
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_trainer.AbstractSignTrainerFragment;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_trainer.SignTrainerActiveFragment;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_trainer.SignTrainerPassiveFragment;
+
 /**
  * Copyright (c) 2016 Matthias Tonhäuser
  * <p/>
@@ -122,7 +123,7 @@ public class MainActivity extends AppCompatActivity
         Validate.notNull(drawer);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else if (1 < getFragmentManager().getBackStackEntryCount()) {
+        } else if (1 < getSupportFragmentManager().getBackStackEntryCount()) {
             popBackStack();
         } else {
             finish();
@@ -173,14 +174,14 @@ public class MainActivity extends AppCompatActivity
 
     private void setFragment(Fragment fragment, String actionBarTitle) {
         Log.d(TAG, "setFragment: " + actionBarTitle + StringUtils.SPACE + hashCode());
-        final FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        final FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.content_frame, fragment, actionBarTitle);
         transaction.addToBackStack(actionBarTitle);
         transaction.commit();
     }
 
     private void popBackStack() {
-        final FragmentManager fragmentManager = getFragmentManager();
+        final FragmentManager fragmentManager = getSupportFragmentManager();
         final int backStackEntryCount = fragmentManager.getBackStackEntryCount();
         final FragmentManager.BackStackEntry previousFragment = fragmentManager.getBackStackEntryAt(backStackEntryCount - 2);
         final String previousFragmentActionBarTitle = previousFragment.getName();

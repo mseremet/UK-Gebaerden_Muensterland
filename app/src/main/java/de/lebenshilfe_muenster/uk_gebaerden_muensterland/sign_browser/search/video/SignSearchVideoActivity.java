@@ -1,11 +1,11 @@
 package de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.search.video;
 
-import android.app.FragmentTransaction;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -17,6 +17,7 @@ import org.apache.commons.lang3.Validate;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.search.SignSearchActivity;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.video.SignVideoFragment;
+
 /**
  * Copyright (c) 2016 Matthias Tonhäuser
  * <p/>
@@ -68,7 +69,7 @@ public class SignSearchVideoActivity extends AppCompatActivity {
     }
 
     private void showSignVideoFragment(SignVideoFragment signVideoFragment) {
-        final FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        final FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.searchVideoActivityContentFrame, signVideoFragment, "SIGN_VIDEO_TAG");
         transaction.addToBackStack(null);
         transaction.commit();

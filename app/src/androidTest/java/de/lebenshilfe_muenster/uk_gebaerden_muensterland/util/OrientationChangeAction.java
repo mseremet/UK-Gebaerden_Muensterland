@@ -25,18 +25,19 @@ package de.lebenshilfe_muenster.uk_gebaerden_muensterland.util;
  *
  */
 
+import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.pm.ActivityInfo;
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 
 import org.hamcrest.Matcher;
-
-import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 
 /**
  * An Espresso ViewAction that changes the orientation of the screen. Use like this:
@@ -82,10 +83,10 @@ public class OrientationChangeAction implements ViewAction {
         activity.setRequestedOrientation(orientation);
     }
 
-    public Activity getActivity(Context context) {
+    public AppCompatActivity getActivity(Context context) {
         while (context instanceof ContextWrapper) {
-            if (context instanceof Activity) {
-                return (Activity) context;
+            if (context instanceof AppCompatActivity) {
+                return (AppCompatActivity) context;
             }
             context = ((ContextWrapper) context).getBaseContext();
         }
