@@ -1,8 +1,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/signBrowserSingleRow"
     android:layout_width="fill_parent"
-    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:layout_height="?attr/listPreferredItemHeight"
     android:orientation="horizontal"
     android:padding="6dip">
 
@@ -17,7 +18,7 @@
         android:layout_marginEnd="6dip"
         android:layout_marginRight="6dip"
         android:contentDescription="@string/signIconDescription"
-        android:src="@drawable/ic_ondemand_video" />
+        app:srcCompat="@drawable/ic_ondemand_video" />
 
 
     <TextView
