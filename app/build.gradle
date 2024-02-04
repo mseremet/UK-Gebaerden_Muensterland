@@ -13,7 +13,7 @@ android {
         targetSdkVersion 28
         versionCode 8
         versionName "1.2.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
     buildTypes {
         release {
@@ -29,30 +29,30 @@ android {
         targetCompatibility JavaVersion.VERSION_1_7
     }
     lint {
-        disable 'WrongConstant'
+        //disable 'WrongConstant'
     }
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'org.apache.commons:commons-lang3:3.14.0'
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.android.support:design:28.0.0'
-    implementation 'com.android.support:support-annotations:28.0.0'
+    implementation 'org.apache.commons:commons-lang3:3.8.1'
+    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.annotation:annotation:1.0.0'
     implementation 'com.github.ranaparamveer:android-sqlite-asset-helper:v2.0.7'
     testImplementation 'org.mockito:mockito-core:5.10.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'com.android.support:support-annotations:28.0.0'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test:rules:1.0.2'
+    androidTestImplementation 'androidx.annotation:annotation:1.0.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test:rules:1.1.1'
     androidTestImplementation 'org.hamcrest:hamcrest-library:2.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-web:3.0.2'
-    androidTestImplementation ('com.android.support.test.espresso:espresso-contrib:3.0.2'){
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-web:3.1.0'
+    androidTestImplementation ('androidx.test.espresso:espresso-contrib:3.1.0'){
         exclude group: 'com.android.support', module: 'appcompat'
         exclude group: 'com.android.support', module: 'support-v4'
         exclude module: 'recyclerview-v7'
     }
-    androidTestImplementation 'com.readystatesoftware.sqliteasset:sqliteassethelper:+'
+    androidTestImplementation 'com.readystatesoftware.sqliteasset:sqliteassethelper:2.0.1'
 }

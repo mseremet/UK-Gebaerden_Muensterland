@@ -1,7 +1,7 @@
 package de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_trainer;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;

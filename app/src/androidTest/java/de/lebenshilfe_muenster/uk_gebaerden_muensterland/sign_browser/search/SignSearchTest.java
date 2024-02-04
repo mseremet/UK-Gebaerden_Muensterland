@@ -1,6 +1,6 @@
 package de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.search;
 
-import android.support.test.runner.AndroidJUnit4;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 import android.util.Log;
 
 import org.apache.commons.lang3.StringUtils;
@@ -12,22 +12,22 @@ import de.lebenshilfe_muenster.uk_gebaerden_muensterland.R;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants;
 import de.lebenshilfe_muenster.uk_gebaerden_muensterland.sign_browser.AbstractSignBrowserTest;
 
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.pressBack;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.typeText;
-import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.contrib.RecyclerViewActions.scrollToHolder;
-import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
-import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.isNotChecked;
-import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
-import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withParent;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.Espresso.pressBack;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.typeText;
+import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.contrib.RecyclerViewActions.scrollToHolder;
+import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static androidx.test.espresso.matcher.ViewMatchers.isChecked;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isNotChecked;
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
+import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withParent;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants.ENTER;
 import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants.FOOTBALL;
 import static de.lebenshilfe_muenster.uk_gebaerden_muensterland.TestConstants.MAM;
@@ -172,12 +172,12 @@ public class SignSearchTest extends AbstractSignBrowserTest {
     private void performSearch(String query) {
         Log.d(TAG, "Perform search");
         onView(withId(R.id.action_search)).check(matches(isDisplayed())).perform(click());
-        onView(withId(android.support.design.R.id.search_src_text)).check(matches(isDisplayed())).perform(typeText(query + ENTER));
+        onView(withId(com.google.android.material.R.id.search_src_text)).check(matches(isDisplayed())).perform(typeText(query + ENTER));
     }
 
     private void checkActivityTitle(String query) {
         onView(allOf(withText(getStringResource(R.string.search_results) + StringUtils.SPACE + query),
-                withParent((withId(android.support.design.R.id.action_bar))))).check(matches(isDisplayed()));
+                withParent((withId(com.google.android.material.R.id.action_bar))))).check(matches(isDisplayed()));
     }
 
     /**

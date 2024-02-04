@@ -25,15 +25,15 @@ package de.lebenshilfe_muenster.uk_gebaerden_muensterland.util;
  *
  */
 
-import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.pm.ActivityInfo;
-import android.support.test.espresso.UiController;
-import android.support.test.espresso.ViewAction;
-import android.support.v7.app.AppCompatActivity;
+import androidx.test.espresso.UiController;
+import androidx.test.espresso.ViewAction;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 
